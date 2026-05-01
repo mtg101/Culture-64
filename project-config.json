@@ -1,0 +1,13 @@
+{
+    "name": "Culture-64",
+    "description": "Project Culture-64",
+    "toolkit": "acme",
+    "sources": [
+        "src/main.asm"
+    ],
+    "build": "debug",
+    "definitions": [],
+    "includes": [],
+    "args": [],
+    "compiler": ""
+}
