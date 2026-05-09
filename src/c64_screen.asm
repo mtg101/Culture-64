@@ -12,6 +12,12 @@ SCREEN_ON
     sta VIC_CR1
     rts    
 
+SCREEN_MCM_ON
+    lda VIC_CR2
+    ora #%00010000 ; Set Bit 4 
+    sta VIC_CR1
+    rts    
+
 
 SCREEN_CHAR_COPY_ROM_3000
      sei          ; Disable interrupts to prevent the Kernal 

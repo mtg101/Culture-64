@@ -52,42 +52,37 @@ RASTER_INTERRUPT_SETUP
 
     ; Set the line number where the interrupt triggers
     ; default to row 0
-    +RASTER_INTERRUPT_SET_ROW 36
+    +RASTER_INTERRUPT_SET_ROW 250
 
     ; Point the Vector to our custom routine
-    +SET_IRQ RASTER_IRQ_LATE_TOP_BORDER
+    +SET_IRQ RASTER_IRQ_END_MAIN_SCREEN
     rts             
 
 
 ; --- INTERRUPT ROUTINES ---
 
-RASTER_IRQ_LATE_TOP_BORDER
+RASTER_IRQ_END_MAIN_SCREEN
     +PUSH_ALL
 
-    ; update scroll values
-    lda TILE_BG_CR1
-    sta VIC_CR1
+    lda #01
+    sta RASTER_BOTTOM_BORDER
 
-    ; update which screen is active (yeah every frame even though only need when flips...)
-    lda TILE_BG_MEM_SETUP
-    sta MEM_SETUP
-
-    +RASTER_INTERRUPT_SET_ROW 54
+    +RASTER_INTERRUPT_SET_ROW 50
     +ACK_IRQ
-    +SET_IRQ RASTER_IRQ_MAIN_SCREEN
+    +SET_IRQ RASTER_IRQ_START_MAIN_SCREEN
     +PULL_ALL
     rti
 
 
-RASTER_IRQ_MAIN_SCREEN
+RASTER_IRQ_START_MAIN_SCREEN
     +PUSH_ALL
 
     lda #01
-    sta RASTER_CHASE_BEAM   ; tell main loop to go!
+    sta RASTER_CHASE_BEAM 
 
-    +RASTER_INTERRUPT_SET_ROW 36
+    +RASTER_INTERRUPT_SET_ROW 250
     +ACK_IRQ
-    +SET_IRQ RASTER_IRQ_LATE_TOP_BORDER
+    +SET_IRQ RASTER_IRQ_END_MAIN_SCREEN
     +PULL_ALL
     rti
 
@@ -96,4 +91,6 @@ RASTER_IRQ_MAIN_SCREEN
 RASTER_CHASE_BEAM
     !byte   $00
 
+RASTER_BOTTOM_BORDER
+    !byte   $00
 
