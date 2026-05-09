@@ -17,20 +17,23 @@
 !source "src/c64_screen.asm"
 !source "src/c64_system.asm"
 !source "src/cul64_raster.asm"
-
-!source "rsc/cul64 map.asm"
+!source "src/cul64_text.asm"
+!source "src/cul64_screen_title.asm"
 
 
 MAIN
     jsr SCREEN_OFF
-    jsr SCREEN_MCM_ON
     jsr ROM_CLR_SCREEN
+    jsr SCREEN_MCM_ON
     jsr MATHS_SETUP_RNG
-    jsr SCREEN_CHAR_COPY_FROM_MAP
+    jsr SCREEN_CHAR_COPY_ROM_3000
 
     jmp SYS_NO_BASIC_NO_KERNEL_ROM  ; also does raster irq setup - jmp as it's reclaiming the stack
 SYS_NO_BASIC_NO_KERNEL_ROM_DONE    
     jsr SCREEN_ON
+
+    jsr SCREEN_TITLE_SHOW
+
 
 MAIN_LOOP
     ; is bottom border?
@@ -62,4 +65,5 @@ MAIN_LOOP
         }
     }
 }
+
 

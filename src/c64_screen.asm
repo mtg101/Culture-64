@@ -15,7 +15,7 @@ SCREEN_ON
 SCREEN_MCM_ON
     lda VIC_CR2
     ora #%00010000 ; Set Bit 4 
-    sta VIC_CR1
+    sta VIC_CR2
     rts    
 
 
@@ -58,47 +58,38 @@ rom_loop:
      sta $01
      cli          ; Re-enable interrupts
 
-    rts
-
-SCREEN_CHAR_COPY_FROM_MAP
-     sei          ; Disable interrupts to prevent the Kernal 
-                  ; from trying to read I/O while we hide it.
-
-    ; --- Setup Pointers in Zero Page ---
-    lda #<charset_data
-    sta ZP_PTR_1       ; Source Low
-
-    lda #$00
-    sta ZP_PTR_2       ; Destination Low ($00 of $3000)
-    
-    lda #>charset_data   ; Source High
-    sta ZP_PTR_1_PAIR
-    lda #$30            ; Destination High ($30 of $3000)
-    sta ZP_PTR_2_PAIR
-
-    ; --- The 512byte Copy Loop (first 64 chars chars, udgs beyond) ---
-    ldx #$08            ; all 256 chars: 8 pages of 256 bytes = 2,148 bytes
-    ldy #$00            ; Clear Y index
-    
-map_loop:
-    lda (ZP_PTR_1),y   ; Grab byte from ROM
-    sta (ZP_PTR_2),y   ; Write byte to RAM
-    iny           ; Next byte
-    bne map_loop ; Loop until Y wraps to 0 (256 bytes)
-    
-    inc ZP_PTR_1_PAIR       ; Move source to next page
-    inc ZP_PTR_2_PAIR       ; Move destination to next page
-    dex           ; Decrease page count
-    bne map_loop ; Repeat for all 8 pages
-
-     ; --- Restore Memory Map ---
-     cli          ; Re-enable interrupts
-
-    rts
-    
 SCREEN_CHAR_SET_3000
     lda MEM_SETUP      ; Get current Screen/Char settings
     and #%11110001     ; Clear bits 1, 2, and 3 (Keep the Screen pointer)
     ora #%00001100     ; Set bits 1-3 to %110 (Binary 6)
     sta MEM_SETUP      ; Apply changes
     rts
+
+
+    ; Screen RAM Row Start Addresses (Low Bytes)
+SCREEN_ROW_LOW
+    !byte $00, $28, $50, $78, $a0, $c8, $f0, $18
+    !byte $40, $68, $90, $b8, $e0, $08, $30, $58
+    !byte $80, $a8, $d0, $f8, $20, $48, $70, $98
+    !byte $c0
+
+; Screen RAM Row Start Addresses (High Bytes)
+SCREEN_ROW_HIGH
+    !byte $04, $04, $04, $04, $04, $04, $04, $05
+    !byte $05, $05, $05, $05, $05, $06, $06, $06
+    !byte $06, $06, $06, $06, $07, $07, $07, $07
+    !byte $07
+
+    ; Color RAM Row Start Addresses (Low Bytes)
+SCREEN_COL_LOW
+    !byte $00, $28, $50, $78, $a0, $c8, $f0, $18
+    !byte $40, $68, $90, $b8, $e0, $08, $30, $58
+    !byte $80, $a8, $d0, $f8, $20, $48, $70, $98
+    !byte $c0
+
+; Color RAM Row Start Addresses (High Bytes)
+SCREEN_COL_HIGH
+    !byte $d8, $d8, $d8, $d8, $d8, $d8, $d8, $d9
+    !byte $d9, $d9, $d9, $d9, $d9, $da, $da, $da
+    !byte $da, $da, $da, $da, $db, $db, $db, $db
+    !byte $db
