@@ -1,8 +1,4 @@
 
-
-
-
-
 SCREEN_JUMP_SHOW
     ; turn on blue box mode
     lda #1

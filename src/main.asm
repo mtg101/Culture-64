@@ -13,7 +13,6 @@
 *=$4000
 
 !source "src/c64_defs.asm"
-!source "src/c64_maths.asm"
 !source "src/c64_screen.asm"
 !source "src/c64_system.asm"
 
@@ -21,6 +20,7 @@
 !source "src/cul64_text.asm"
 !source "src/cul64_stars.asm"
 !source "src/cul64_blue_box.asm"
+!source "src/cul64_lfsr.asm"
 
 !source "src/cul64_screen_title.asm"
 !source "src/cul64_screen_jump.asm"
@@ -31,7 +31,6 @@ MAIN
     jsr SCREEN_OFF
     jsr ROM_CLR_SCREEN
     jsr SCREEN_MCM_ON
-    jsr MATHS_SETUP_RNG
     jsr SCREEN_CHAR_COPY_ROM_3000_ALL
 
     jmp SYS_NO_BASIC_NO_KERNEL_ROM  ; also does raster irq setup - jmp as it's reclaiming the stack

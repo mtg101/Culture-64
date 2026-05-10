@@ -1,6 +1,4 @@
-
 ; ROM routines
-
 ROM_CLR_SCREEN = $E544
 
 ; as the AI said: I’ve got you. Typing out 16 constants is the exact kind of "busy work" 

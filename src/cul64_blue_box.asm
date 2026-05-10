@@ -1,8 +1,3 @@
-
-
-
-
-
 BB_SHOW_TEXT_BOX
     jsr BB_DRAW_BOX
 
