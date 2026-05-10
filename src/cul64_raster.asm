@@ -36,6 +36,13 @@
     pla         ; Pull original Accumulator from stack
 }
 
+!macro NOPS .count {
+    !if .count > 0 {
+        !for .i, 1, .count {
+            nop
+        }
+    }
+}
 
 ; SEI before called as we're in process of turning off kernel... (and re-anable after)
 RASTER_INTERRUPT_SETUP
@@ -61,6 +68,54 @@ RASTER_INTERRUPT_SETUP
 
 ; --- INTERRUPT ROUTINES ---
 
+RASTER_IRQ_START_MAIN_SCREEN
+    +PUSH_ALL
+
+    lda #01
+    sta RASTER_CHASE_BEAM 
+
+    +RASTER_INTERRUPT_SET_ROW 145
+    +ACK_IRQ
+    +SET_IRQ RASTER_IRQ_START_BLUE_BOX
+    +PULL_ALL
+    rti
+
+RASTER_IRQ_START_BLUE_BOX
+    +PUSH_ALL
+
+    ; stall for hblank of line 145 into 146
+    +NOPS 12
+
+    lda RASTER_BLUE_BOX_STATUS
+    beq +
+    ; flip bg to blue
+    lda #BLUE
+    sta BG_COL
++    
+   +RASTER_INTERRUPT_SET_ROW 169
+    +ACK_IRQ
+    +SET_IRQ RASTER_IRQ_END_BLUE_BOX
+    +PULL_ALL
+    rti
+
+RASTER_IRQ_END_BLUE_BOX
+    +PUSH_ALL
+
+    ; stall for hblank of line 169 into 170
+    +NOPS 12
+
+    lda RASTER_BLUE_BOX_STATUS
+    beq +
+    ; flip bg back to black
+    lda #BLACK
+    sta BG_COL
++
+    +RASTER_INTERRUPT_SET_ROW 250
+    +ACK_IRQ
+    +SET_IRQ RASTER_IRQ_END_MAIN_SCREEN
+    +PULL_ALL
+    rti
+
 RASTER_IRQ_END_MAIN_SCREEN
     +PUSH_ALL
 
@@ -74,23 +129,13 @@ RASTER_IRQ_END_MAIN_SCREEN
     rti
 
 
-RASTER_IRQ_START_MAIN_SCREEN
-    +PUSH_ALL
-
-    lda #01
-    sta RASTER_CHASE_BEAM 
-
-    +RASTER_INTERRUPT_SET_ROW 250
-    +ACK_IRQ
-    +SET_IRQ RASTER_IRQ_END_MAIN_SCREEN
-    +PULL_ALL
-    rti
 
 
 ; raster flags go 1 when they're ready for main loop (which will need to clear)
 RASTER_CHASE_BEAM
-    !byte   $00
-
+    !byte $00
 RASTER_BOTTOM_BORDER
-    !byte   $00
+    !byte $00
+RASTER_BLUE_BOX_STATUS
+    !byte $00
 

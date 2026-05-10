@@ -4,6 +4,10 @@
 
 
 SCREEN_JUMP_SHOW
+    ; turn on blue box mode
+    lda #1
+    sta RASTER_BLUE_BOX_STATUS
+
     ; title string
     lda #<SCREEN_JUMP_TITLE
     sta TEXT_STRING_PTR
@@ -38,6 +42,9 @@ SCREEN_JUMP_SHOW
     jsr TEXT_DRAW_STRING
 
     jsr TEXT_WAIT_FOR_ENTER
+    ; turn off blue box mode
+    lda #0
+    sta RASTER_BLUE_BOX_STATUS
     jmp SCREEN_SYSTEM_SHOW
  
 
