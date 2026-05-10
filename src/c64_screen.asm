@@ -19,7 +19,7 @@ SCREEN_MCM_ON
     rts    
 
 
-SCREEN_CHAR_COPY_ROM_3000
+SCREEN_CHAR_COPY_ROM_3000_ALL
      sei          ; Disable interrupts to prevent the Kernal 
                   ; from trying to read I/O while we hide it.
 
@@ -38,8 +38,8 @@ SCREEN_CHAR_COPY_ROM_3000
     lda #$30      ; Destination High ($30 of $3000)
     sta ZP_PTR_2_PAIR
 
-    ; --- The 512byte Copy Loop (first 64 chars chars, udgs beyond) ---
-    ldx #$02      ; only first 64 chars: 2 pages of 256 bytes = 512 bytes
+    ; copy all, can overwrite later with UDG
+    ldx #$08      ; copy all 256 chars: 8 pages of 256 bytes = 2048 bytes
     ldy #$00      ; Clear Y index
     
 rom_loop:

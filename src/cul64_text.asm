@@ -4,7 +4,7 @@
 
 
 
-
+; draws string to screen based on variables
 TEXT_DRAW_STRING
     ; y is row
     ldy TEXT_Y 
@@ -84,6 +84,43 @@ TEXT_DRAW_STRING
 .string_done
     rts
 
+; sets TEXT_X to centre the string at TEXT_STRING_PTR
+TEXT_CENTRE_STRING
+    ; how long is string?
+
+    ; zero page string
+    lda TEXT_STRING_PTR
+    sta ZP_PTR_TEMP_0
+    lda TEXT_STRING_PTR+1
+    sta ZP_PTR_TEMP_0_PAIR
+
+    ; y is offset
+    ldy #0
+
+.len_loop
+    ; load next char
+    lda (ZP_PTR_TEMP_0), y    
+    ; check for null terminator
+    beq .len_done
+
+    iny
+    jmp .len_loop
+
+.len_done
+    sty TEXT_STRING_LEN
+    
+    ; 40 screen width - string length
+    lda #40
+    sec
+    sbc TEXT_STRING_LEN
+
+    ; divide by 2 to centre
+    lsr
+
+    ; save
+    sta TEXT_X
+    rts
+
 
 
 
@@ -107,3 +144,5 @@ TEXT_SCR_PTR
 
 TEXT_COL_PTR
     !word 0
+TEXT_STRING_LEN
+    !byte 0
