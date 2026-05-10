@@ -4,17 +4,6 @@
 
 
 SCREEN_JUMP_SHOW
-    ; black bg
-    lda #BLACK
-    sta BG_COL
-
-    ; black border
-    lda #BLACK
-    sta BORDER_COL
-
-    ; stars
-    jsr STARS_FILL_SCREEN
-
     ; title string
     lda #<SCREEN_JUMP_TITLE
     sta TEXT_STRING_PTR
@@ -48,6 +37,8 @@ SCREEN_JUMP_SHOW
 
     jsr TEXT_DRAW_STRING
 
+    jsr TEXT_WAIT_FOR_ENTER
+    jsr SCREEN_SYSTEM_SHOW
  
     rts
 

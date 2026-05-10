@@ -1,0 +1,126 @@
+
+
+
+
+
+SCREEN_SYSTEM_SHOW
+    ; black bg
+    lda #BLACK
+    sta BG_COL
+
+    ; black border
+    lda #BLACK
+    sta BORDER_COL
+
+    ; stars
+    jsr STARS_FILL_SCREEN
+
+    ; title string
+    lda #<SCREEN_SYSTEM_TITLE
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_TITLE
+    sta TEXT_STRING_PTR+1
+    lda #0
+    sta TEXT_X
+    lda #0
+    sta TEXT_Y
+    lda #WHITE
+    sta TEXT_COLOUR
+    jsr TEXT_DRAW_STRING
+
+    ; all labels same x
+    lda #5
+    sta TEXT_X
+
+    lda #<SCREEN_SYSTEM_NAME_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_NAME_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #6
+    sta TEXT_Y
+    lda #WHITE
+    sta TEXT_COLOUR
+    jsr TEXT_DRAW_STRING
+
+    lda #<SCREEN_SYSTEM_COLOUR_1_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_COLOUR_1_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #8
+    sta TEXT_Y
+    lda #WHITE
+    sta TEXT_COLOUR
+    jsr TEXT_DRAW_STRING
+
+    lda #<SCREEN_SYSTEM_COLOUR_2_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_COLOUR_2_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #10
+    sta TEXT_Y
+    lda #WHITE
+    sta TEXT_COLOUR
+    jsr TEXT_DRAW_STRING
+
+    lda #<SCREEN_SYSTEM_SUN_TYPE_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_SUN_TYPE_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #12
+    sta TEXT_Y
+    lda #WHITE
+    sta TEXT_COLOUR
+    jsr TEXT_DRAW_STRING
+
+    lda #<SCREEN_SYSTEM_NUM_PLANETS_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_NUM_PLANETS_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #14
+    sta TEXT_Y
+    lda #WHITE
+    sta TEXT_COLOUR
+    jsr TEXT_DRAW_STRING
+
+    lda #<SCREEN_SYSTEM_TECH_LEVEL_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_TECH_LEVEL_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #16
+    sta TEXT_Y
+    lda #WHITE
+    sta TEXT_COLOUR
+    jsr TEXT_DRAW_STRING
+
+    lda #<SCREEN_SYSTEM_SEC_STATUS_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_SEC_STATUS_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #18
+    sta TEXT_Y
+    lda #WHITE
+    sta TEXT_COLOUR
+    jsr TEXT_DRAW_STRING
+
+    rts
+
+
+
+SCREEN_SYSTEM_TITLE
+    !scr "culture 64", 0
+SCREEN_SYSTEM_NAME_LABEL
+    !scr "name:", 0
+SCREEN_SYSTEM_SUN_TYPE_LABEL
+    !scr "sun type:", 0
+SCREEN_SYSTEM_COLOUR_1_LABEL
+    !scr "colour 1:", 0
+SCREEN_SYSTEM_COLOUR_2_LABEL
+    !scr "colour 2:", 0
+SCREEN_SYSTEM_NUM_PLANETS_LABEL
+    !scr "num planets:", 0
+SCREEN_SYSTEM_TECH_LEVEL_LABEL
+    !scr "tech level:", 0
+SCREEN_SYSTEM_SEC_STATUS_LABEL
+    !scr "security status:", 0
+
+

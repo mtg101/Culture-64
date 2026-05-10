@@ -22,6 +22,7 @@
 
 !source "src/cul64_screen_title.asm"
 !source "src/cul64_screen_jump.asm"
+!source "src/cul64_screen_system.asm"
 
 
 MAIN
