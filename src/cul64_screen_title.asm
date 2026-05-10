@@ -12,6 +12,9 @@ SCREEN_TITLE_SHOW
     lda #BLACK
     sta BORDER_COL
 
+    ; stars
+    jsr STARS_FILL_SCREEN
+
 
     ; title string
     lda #<SCREEN_TITLE_TITLE
