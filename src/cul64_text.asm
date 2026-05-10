@@ -121,8 +121,14 @@ TEXT_CENTRE_STRING
     sta TEXT_X
     rts
 
-
-
+TEXT_WAIT_FOR_ENTER
+    lda #KEY_ENTER_ROW
+    sta CIA1_PRA
+-
+    lda CIA1_PRB
+    and #KEY_ENTER_COL
+    bne -
+    rts
 
 
 ; variables

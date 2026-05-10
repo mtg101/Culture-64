@@ -161,6 +161,9 @@ SCREEN_TITLE_SHOW
 
     jsr TEXT_DRAW_STRING
 
+    jsr TEXT_WAIT_FOR_ENTER
+    jsr SCREEN_JUMP_SHOW
+
     rts
 
 
