@@ -14,7 +14,7 @@ SCREEN_JUMP_SHOW
     lda #>SCREEN_JUMP_WHERE
     sta TEXT_STRING_PTR+1
 
-    jsr BB_SHOW_TEXT_BOX
+    jsr BB_SHOW_TEXT_ENTRY_BOX
 
     ; turn off blue box mode
     lda #0
