@@ -25,7 +25,7 @@ SCREEN_SYSTEM_SHOW
     lda #0
     sta TEXT_Y
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
     ; all labels same x
@@ -39,27 +39,27 @@ SCREEN_SYSTEM_SHOW
     lda #6
     sta TEXT_Y
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SCREEN_SYSTEM_COLOUR_1_LABEL
+    lda #<SCREEN_SYSTEM_COLOR_1_LABEL
     sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_COLOUR_1_LABEL
+    lda #>SCREEN_SYSTEM_COLOR_1_LABEL
     sta TEXT_STRING_PTR+1
     lda #8
     sta TEXT_Y
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SCREEN_SYSTEM_COLOUR_2_LABEL
+    lda #<SCREEN_SYSTEM_COLOR_2_LABEL
     sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_COLOUR_2_LABEL
+    lda #>SCREEN_SYSTEM_COLOR_2_LABEL
     sta TEXT_STRING_PTR+1
     lda #10
     sta TEXT_Y
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
     lda #<SCREEN_SYSTEM_SUN_TYPE_LABEL
@@ -69,7 +69,7 @@ SCREEN_SYSTEM_SHOW
     lda #12
     sta TEXT_Y
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
     lda #<SCREEN_SYSTEM_NUM_PLANETS_LABEL
@@ -79,7 +79,7 @@ SCREEN_SYSTEM_SHOW
     lda #14
     sta TEXT_Y
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
     lda #<SCREEN_SYSTEM_TECH_LEVEL_LABEL
@@ -89,7 +89,7 @@ SCREEN_SYSTEM_SHOW
     lda #16
     sta TEXT_Y
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
     lda #<SCREEN_SYSTEM_SEC_STATUS_LABEL
@@ -99,7 +99,7 @@ SCREEN_SYSTEM_SHOW
     lda #18
     sta TEXT_Y
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
 
@@ -126,15 +126,15 @@ SCREEN_SYSTEM_NAME_LABEL
     !scr "name:", 0
 SCREEN_SYSTEM_SUN_TYPE_LABEL
     !scr "sun type:", 0
-SCREEN_SYSTEM_COLOUR_1_LABEL
-    !scr "colour 1:", 0
-SCREEN_SYSTEM_COLOUR_2_LABEL
-    !scr "colour 2:", 0
+SCREEN_SYSTEM_COLOR_1_LABEL
+    !scr "color 1:", 0
+SCREEN_SYSTEM_COLOR_2_LABEL
+    !scr "color 2:", 0
 SCREEN_SYSTEM_NUM_PLANETS_LABEL
     !scr "num planets:", 0
 SCREEN_SYSTEM_TECH_LEVEL_LABEL
     !scr "tech level:", 0
 SCREEN_SYSTEM_SEC_STATUS_LABEL
-    !scr "security status:", 0
+    !scr "security:", 0
 
 

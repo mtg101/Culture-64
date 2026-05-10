@@ -10,7 +10,7 @@ STARS_FILL_SCREEN
     jsr STARS_GEN_CHAR
     sta SCREEN_RAM_250_0, x
 
-    jsr STARS_GEN_COLOUR
+    jsr STARS_GEN_COLOR
     sta SCREEN_COL_RAM_250_0, x
 
     inx
@@ -22,7 +22,7 @@ STARS_FILL_SCREEN
     jsr STARS_GEN_CHAR
     sta SCREEN_RAM_250_1, x
 
-    jsr STARS_GEN_COLOUR
+    jsr STARS_GEN_COLOR
     sta SCREEN_COL_RAM_250_1, x
 
     inx
@@ -34,7 +34,7 @@ STARS_FILL_SCREEN
     jsr STARS_GEN_CHAR
     sta SCREEN_RAM_250_2, x
 
-    jsr STARS_GEN_COLOUR
+    jsr STARS_GEN_COLOR
     sta SCREEN_COL_RAM_250_2, x
 
     inx
@@ -46,7 +46,7 @@ STARS_FILL_SCREEN
     jsr STARS_GEN_CHAR
     sta SCREEN_RAM_250_3, x
 
-    jsr STARS_GEN_COLOUR
+    jsr STARS_GEN_COLOR
     sta SCREEN_COL_RAM_250_3, x
 
     inx
@@ -55,9 +55,9 @@ STARS_FILL_SCREEN
 
     rts
 
-; stores random colour in a
+; stores random COLOR in a
 ; 1 in 8 CYAN, 2 in 8 white, 5 in 8 yellow
-STARS_GEN_COLOUR
+STARS_GEN_COLOR
     lda MATHS_RNG
     and #%00000111  ; 0-7
     beq .star_col_cyan

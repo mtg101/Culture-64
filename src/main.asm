@@ -16,9 +16,11 @@
 !source "src/c64_maths.asm"
 !source "src/c64_screen.asm"
 !source "src/c64_system.asm"
+
 !source "src/cul64_raster.asm"
 !source "src/cul64_text.asm"
 !source "src/cul64_stars.asm"
+!source "src/cul64_blue_box.asm"
 
 !source "src/cul64_screen_title.asm"
 !source "src/cul64_screen_jump.asm"

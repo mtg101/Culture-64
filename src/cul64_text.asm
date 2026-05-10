@@ -31,7 +31,7 @@ TEXT_DRAW_STRING
     inc TEXT_SCR_PTR+1          ; carry so add one to high
 +
 
-    ; add col to colour
+    ; add col to COLOR
     lda TEXT_COL_PTR
     clc
     adc TEXT_X 
@@ -52,7 +52,7 @@ TEXT_DRAW_STRING
     lda TEXT_SCR_PTR+1
     sta ZP_PTR_1_PAIR
 
-    ; zero page colour
+    ; zero page COLOR
     lda TEXT_COL_PTR
     sta ZP_PTR_2
     lda TEXT_COL_PTR+1
@@ -72,7 +72,7 @@ TEXT_DRAW_STRING
     sta (ZP_PTR_1), y
 
     ; set col
-    lda TEXT_COLOUR
+    lda TEXT_COLOR
     sta (ZP_PTR_2), y
 
     ; next char
@@ -84,8 +84,8 @@ TEXT_DRAW_STRING
 .string_done
     rts
 
-; sets TEXT_X to centre the string at TEXT_STRING_PTR
-TEXT_CENTRE_STRING
+; sets TEXT_X to CENTER the string at TEXT_STRING_PTR
+TEXT_CENTER_STRING
     ; how long is string?
 
     ; zero page string
@@ -114,7 +114,7 @@ TEXT_CENTRE_STRING
     sec
     sbc TEXT_STRING_LEN
 
-    ; divide by 2 to centre
+    ; divide by 2 to CENTER
     lsr
 
     ; save
@@ -144,7 +144,7 @@ TEXT_X
 TEXT_Y
     !byte 0
 
-TEXT_COLOUR
+TEXT_COLOR
     !byte 0
 
 TEXT_STRING_PTR

@@ -92,7 +92,7 @@ RASTER_IRQ_START_BLUE_BOX
     lda #BLUE
     sta BG_COL
 +    
-   +RASTER_INTERRUPT_SET_ROW 169
+   +RASTER_INTERRUPT_SET_ROW 170
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_END_BLUE_BOX
     +PULL_ALL
@@ -101,7 +101,7 @@ RASTER_IRQ_START_BLUE_BOX
 RASTER_IRQ_END_BLUE_BOX
     +PUSH_ALL
 
-    ; stall for hblank of line 169 into 170
+    ; stall for hblank of line 170 into 171
     +NOPS 12
 
     lda RASTER_BLUE_BOX_STATUS

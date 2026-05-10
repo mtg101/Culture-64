@@ -28,7 +28,7 @@ SCREEN_TITLE_SHOW
     sta TEXT_Y
 
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
 
     jsr TEXT_DRAW_STRING
 
@@ -45,7 +45,7 @@ SCREEN_TITLE_SHOW
     sta TEXT_Y
 
     lda #BLUE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
 
     jsr TEXT_DRAW_STRING
 
@@ -61,7 +61,7 @@ SCREEN_TITLE_SHOW
     sta TEXT_Y
 
     lda #CYAN
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
 
     jsr TEXT_DRAW_STRING
 
@@ -77,7 +77,7 @@ SCREEN_TITLE_SHOW
     sta TEXT_Y
 
     lda #PURPLE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
 
     jsr TEXT_DRAW_STRING
 
@@ -93,7 +93,7 @@ SCREEN_TITLE_SHOW
     sta TEXT_Y
 
     lda #RED
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
 
     jsr TEXT_DRAW_STRING
 
@@ -109,7 +109,7 @@ SCREEN_TITLE_SHOW
     sta TEXT_Y
 
     lda #CYAN
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
 
     jsr TEXT_DRAW_STRING
 
@@ -125,7 +125,7 @@ SCREEN_TITLE_SHOW
     sta TEXT_Y
 
     lda #YELLOW
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
 
     jsr TEXT_DRAW_STRING
 
@@ -141,7 +141,7 @@ SCREEN_TITLE_SHOW
     sta TEXT_Y
 
     lda #GREEN
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
 
     jsr TEXT_DRAW_STRING
 
@@ -151,13 +151,13 @@ SCREEN_TITLE_SHOW
     lda #>SCREEN_TITLE_PROMPT
     sta TEXT_STRING_PTR+1
 
-    jsr TEXT_CENTRE_STRING
+    jsr TEXT_CENTER_STRING
 
     lda #13
     sta TEXT_Y
 
     lda #WHITE
-    sta TEXT_COLOUR
+    sta TEXT_COLOR
 
     jsr TEXT_DRAW_STRING
 
