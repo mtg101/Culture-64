@@ -38,11 +38,8 @@ SCREEN_JUMP_SHOW
     jsr TEXT_DRAW_STRING
 
     jsr TEXT_WAIT_FOR_ENTER
-    jsr SCREEN_SYSTEM_SHOW
+    jmp SCREEN_SYSTEM_SHOW
  
-    rts
-
-
 
 SCREEN_JUMP_TITLE
     !scr "culture 64", 0

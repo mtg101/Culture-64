@@ -36,18 +36,8 @@ MAIN
 SYS_NO_BASIC_NO_KERNEL_ROM_DONE    
     jsr SCREEN_ON
 
-    jsr SCREEN_TITLE_SHOW
-
-
-MAIN_LOOP
-    ; is bottom border?
-    lda RASTER_BOTTOM_BORDER
-    beq MAIN_LOOP                   ; not time yet...
-
-    ; clear raster flag
-    lda #$00
-    sta RASTER_BOTTOM_BORDER
-    jmp MAIN_LOOP
+    jmp SCREEN_TITLE_SHOW
+; screens have their own game loops
 
 ; --- End of code section ---
 

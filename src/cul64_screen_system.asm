@@ -102,8 +102,22 @@ SCREEN_SYSTEM_SHOW
     sta TEXT_COLOUR
     jsr TEXT_DRAW_STRING
 
-    rts
 
+SCREEN_SYSTEM_GAME_LOOP
+
+    lda #KEY_J_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_J_COL  ; check pressed
+    bne +           ; not pressed jump
+-
+    lda CIA1_PRB
+    and #KEY_J_COL  ; check released
+    beq -
+    jmp SCREEN_JUMP_SHOW
++
+    jmp SCREEN_SYSTEM_GAME_LOOP
 
 
 SCREEN_SYSTEM_TITLE
