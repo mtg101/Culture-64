@@ -181,7 +181,7 @@ SCREEN_TITLE_POST
 SCREEN_TITLE_DREAMS
     !scr "procedural dreams", 0
 SCREEN_TITLE_MATHS
-    !scr "where maths is the database", 0
+    !scr "where math stores the universe", 0
 SCREEN_TITLE_PROMPT
     !scr "> enter system <", 0
 
