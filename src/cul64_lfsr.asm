@@ -45,11 +45,17 @@ LFSR_SEED_FROM_NAME
     lda (ZP_PTR_TEMP_0), y      ; load next char
     beq .seed_name_loop_done    ; check for null terminator
 
-    ; the fuckery
-
-
-
-
+    ; the fuckery - just mess about with 3/6 bytes...
+    tax
+    adc LFSR_W0
+    sta LFSR_W0
+    txa
+    sbc LFSR_W1
+    sta LFSR_W1
+    txa
+    adc LFSR_W2
+    sta LFSR_W2
+    
     ; advance seed
     jsr LFSR_NEXT_SEED
 
