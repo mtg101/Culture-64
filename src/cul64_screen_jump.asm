@@ -15,6 +15,13 @@ SCREEN_JUMP_SHOW
     ; turn off blue box mode
     lda #0
     sta RASTER_BLUE_BOX_STATUS
+
+    ; jump effect
+    jsr STARS_FILL_SCREEN
+    jsr STARS_FILL_SCREEN
+    jsr STARS_FILL_SCREEN
+    jsr STARS_FILL_SCREEN
+
     jmp SCREEN_SYSTEM_SHOW
  
 

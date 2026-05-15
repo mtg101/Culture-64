@@ -104,12 +104,10 @@ RASTER_IRQ_END_BLUE_BOX
     ; stall for hblank of line 186 into 187
     +NOPS 12
 
-    lda RASTER_BLUE_BOX_STATUS
-    beq +
-    ; flip bg back to black
+    ; always flip bg back to black
     lda #BLACK
     sta BG_COL
-+
+
     +RASTER_INTERRUPT_SET_ROW 250
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_END_MAIN_SCREEN
