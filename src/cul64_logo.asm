@@ -60,7 +60,7 @@ LOGO_RENDER
     lda LOGO_X
     sta TEXT_X
     inc TEXT_Y
-    lda #116    
+    lda #66    
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR
 
@@ -82,7 +82,7 @@ LOGO_RENDER
 
     ; right border
     inc TEXT_X
-    lda #106
+    lda #66
     sta TEXT_CHAR
     lda LOGO_BORDER_COLOR
     sta TEXT_COLOR
@@ -92,7 +92,7 @@ LOGO_RENDER
     lda LOGO_X
     sta TEXT_X
     inc TEXT_Y
-    lda #116    
+    lda #66    
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR
 
@@ -114,7 +114,7 @@ LOGO_RENDER
 
     ; right border
     inc TEXT_X
-    lda #106
+    lda #66
     sta TEXT_CHAR
     lda LOGO_BORDER_COLOR
     sta TEXT_COLOR
@@ -158,6 +158,6 @@ LOGO_Y
 LOGO_BORDER_COLOR
     !byte 0
 LOGO_BORDER_TOP
-    !byte 79, 119, 119, 80, 0
+    !byte 112, 67, 67, 110, 0
 LOGO_BORDER_BOTTOM
-    !byte 76, 111, 111, 122, 0
+    !byte 109, 67, 67, 125, 0
