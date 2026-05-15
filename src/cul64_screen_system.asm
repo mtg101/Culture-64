@@ -12,6 +12,13 @@ SCREEN_SYSTEM_SHOW
     lda #BLACK
     sta BORDER_COL
 
+    ; seed from name
+    lda #<SCREEN_SYSTEM_NAME_BUFFER
+    sta LFSR_NAME_PTR
+    lda #>SCREEN_SYSTEM_NAME_BUFFER
+    sta LFSR_NAME_PTR+1
+    jsr LFSR_SEED_FROM_NAME
+
     ; stars
     jsr STARS_FILL_SCREEN
 

@@ -31,6 +31,33 @@ LFSR_NEXT_SEED
 ; name is pointed to by ZP_PTR_1, null terminated
 LFSR_SEED_FROM_NAME
     jsr LFSR_RESET
+
+    ; zero page string
+    lda LFSR_NAME_PTR
+    sta ZP_PTR_TEMP_0
+    lda LFSR_NAME_PTR+1
+    sta ZP_PTR_TEMP_0_PAIR
+
+    ldy #0                      ; y is zp offset
+    clc                         ; always start from same position
+
+.seed_name_loop:
+    lda (ZP_PTR_TEMP_0), y      ; load next char
+    beq .seed_name_loop_done    ; check for null terminator
+
+    ; the fuckery
+
+
+
+
+    ; advance seed
+    jsr LFSR_NEXT_SEED
+
+    iny                         ; next char
+    jmp .string_loop
+
+
+.seed_name_loop_done:
     rts
 
 LFSR_RESET
@@ -62,3 +89,6 @@ LFSR_W2
 LFSR_W0_START = 42
 LFSR_W1_START = 23
 LFSR_W2_START = 187
+
+LFSR_NAME_PTR
+    !word 0
