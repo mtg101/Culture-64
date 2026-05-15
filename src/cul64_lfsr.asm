@@ -2,7 +2,7 @@
 ; you use that next seed for some procgen, then next seed again
 LFSR_NEXT_SEED
     ; w0 = w0 + w1
-    clc
+    clc                 ; clear carry so we start clean
     lda LFSR_W0         ; load low
     adc LFSR_W1         ; add low
     sta LFSR_W0         ; store low
@@ -10,8 +10,7 @@ LFSR_NEXT_SEED
     adc LFSR_W1+1       ; add high with carry
     sta LFSR_W0+1       ; store high
 
-    ; w1 = w1 + w2
-    clc
+    ; w1 = w1 + w2      ; don't clear carry to things propagate properly
     lda LFSR_W1         ; load low
     adc LFSR_W2         ; add low
     sta LFSR_W1         ; store low
@@ -19,8 +18,7 @@ LFSR_NEXT_SEED
     adc LFSR_W2+1       ; add high with carry
     sta LFSR_W1+1       ; store high
 
-    ; w2 = w0 + w2
-    clc
+    ; w2 = w0 + w2      ; don't clear carry to things propagate properly
     lda LFSR_W0         ; load low
     adc LFSR_W2         ; add low
     sta LFSR_W2         ; store low
