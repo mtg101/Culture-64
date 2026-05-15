@@ -60,7 +60,7 @@ LFSR_SEED_FROM_NAME
     jsr LFSR_NEXT_SEED
 
     iny                         ; next char
-    jmp .string_loop
+    jmp .seed_name_loop
 
 
 .seed_name_loop_done:
