@@ -22,6 +22,15 @@ SCREEN_JUMP_SHOW
     jsr STARS_FILL_SCREEN
     jsr STARS_FILL_SCREEN
 
+    ; save system name
+    ldx #0
+.char_loop
+    lda BB_TEXT_ENTRY_BUFFER, x
+    sta SCREEN_SYSTEM_NAME_BUFFER, x
+    inx
+    cpx #BB_MAX_CHARS
+    bne .char_loop
+    
     jmp SCREEN_SYSTEM_SHOW
  
 
