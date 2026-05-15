@@ -1,5 +1,3 @@
-
-
 !macro ACK_IRQ {
     asl VIC_INTER
 }
@@ -104,7 +102,6 @@ RASTER_IRQ_END_BLUE_BOX
     ; stall for hblank of line 186 into 187
     +NOPS 12
 
-
     lda BG_COL
     beq +
     ; flip bg back to black
@@ -128,9 +125,6 @@ RASTER_IRQ_END_MAIN_SCREEN
     +SET_IRQ RASTER_IRQ_START_MAIN_SCREEN
     +PULL_ALL
     rti
-
-
-
 
 ; raster flags go 1 when they're ready for main loop (which will need to clear)
 RASTER_CHASE_BEAM

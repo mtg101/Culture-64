@@ -1,7 +1,63 @@
+; draws TEXT_CHAR to screen based on variables TEXT_X, TEXT_Y, TEXT_COLOR
+; copy/pasta TODO don't waste bytes ;)
+TEXT_DRAW_CHAR
+    ; y is row
+    ldy TEXT_Y 
 
+    ; char ptr row
+    lda SCREEN_ROW_LOW, y
+    sta TEXT_SCR_PTR
+    lda SCREEN_ROW_HIGH, y
+    sta TEXT_SCR_PTR+1
 
+    ; col ptr row
+    lda SCREEN_COL_LOW, y
+    sta TEXT_COL_PTR
+    lda SCREEN_COL_HIGH, y
+    sta TEXT_COL_PTR+1
 
+    ; add col to screen
+    lda TEXT_SCR_PTR
+    clc
+    adc TEXT_X 
+    sta TEXT_SCR_PTR
 
+    bcc +                       ; no carry
+    inc TEXT_SCR_PTR+1          ; carry so add one to high
++
+
+    ; add col to COLOR
+    lda TEXT_COL_PTR
+    clc
+    adc TEXT_X 
+    sta TEXT_COL_PTR
+
+    bcc +                       ; no carry
+    inc TEXT_COL_PTR+1          ; carry so add one to high
++
+    ; zero page screen
+    lda TEXT_SCR_PTR
+    sta ZP_PTR_1
+    lda TEXT_SCR_PTR+1
+    sta ZP_PTR_1_PAIR
+
+    ; zero page COLOR
+    lda TEXT_COL_PTR
+    sta ZP_PTR_2
+    lda TEXT_COL_PTR+1
+    sta ZP_PTR_2_PAIR
+
+    ldy #0                      ; need an offset...
+
+    ; draw char
+    lda TEXT_CHAR
+    sta (ZP_PTR_1), y
+
+    ; set col
+    lda TEXT_COLOR
+    sta (ZP_PTR_2), y
+
+    rts
 
 
 ; draws string to screen based on variables
@@ -156,4 +212,7 @@ TEXT_SCR_PTR
 TEXT_COL_PTR
     !word 0
 TEXT_STRING_LEN
+    !byte 0
+
+TEXT_CHAR 
     !byte 0

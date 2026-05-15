@@ -22,14 +22,15 @@ SCREEN_SYSTEM_SHOW
     ; stars
     jsr STARS_FILL_SCREEN
 
-    ; generate system
     jsr SYSTEM_GEN_SYS          ; huh 'gen sys' / 'genesis' 
-
-    ; show labels
     jsr SYSTEM_SHOW_LABELS
-
-    ; show values
     jsr SYSTEM_SHOW_VALUES
+    jsr LOGO_GENERATE
+    lda #2
+    sta LOGO_X
+    lda #3
+    sta LOGO_Y
+    jsr LOGO_RENDER
 
     jmp SCREEN_SYSTEM_GAME_LOOP
 
