@@ -1,8 +1,3 @@
-
-
-
-
-
 SCREEN_SYSTEM_SHOW
     ; black bg
     lda #BLACK
@@ -30,6 +25,8 @@ SCREEN_SYSTEM_SHOW
     sta LOGO_X
     lda #3
     sta LOGO_Y
+    lda SCREEN_SYSTEM_COLOR_1
+    sta LOGO_BORDER_COLOR
     jsr LOGO_RENDER
 
     jmp SCREEN_SYSTEM_GAME_LOOP
@@ -106,7 +103,7 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_NAME_BUFFER
     sta TEXT_STRING_PTR+1
-    lda #6
+    lda #10
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -118,7 +115,7 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR
     lda SCREEN_SYSTEM_COLOR_STRING_LUT_HIGH, x
     sta TEXT_STRING_PTR+1
-    lda #8
+    lda #12
     sta TEXT_Y
     lda SCREEN_SYSTEM_COLOR_1
     sta TEXT_COLOR
@@ -130,7 +127,7 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR
     lda SCREEN_SYSTEM_COLOR_STRING_LUT_HIGH, x
     sta TEXT_STRING_PTR+1
-    lda #10
+    lda #14
     sta TEXT_Y
     lda SCREEN_SYSTEM_COLOR_2
     sta TEXT_COLOR
@@ -142,7 +139,7 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR
     lda SCREEN_SYSTEM_SUN_TYPE_STRING_LUT_HIGH, x
     sta TEXT_STRING_PTR+1
-    lda #12
+    lda #16
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -153,7 +150,7 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_NUM_PLANETS_CHAR
     sta TEXT_STRING_PTR+1
-    lda #14
+    lda #18
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -165,7 +162,7 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR
     lda SCREEN_SYSTEM_TECH_LEVEL_STRING_LUT_HIGH, x
     sta TEXT_STRING_PTR+1
-    lda #16
+    lda #20
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -177,7 +174,7 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR
     lda SCREEN_SYSTEM_CUL_STATUS_STRING_LUT_HIGH, x
     sta TEXT_STRING_PTR+1
-    lda #18
+    lda #22
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -207,7 +204,7 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_NAME_LABEL
     sta TEXT_STRING_PTR+1
-    lda #6
+    lda #10
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -217,7 +214,7 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_COLOR_1_LABEL
     sta TEXT_STRING_PTR+1
-    lda #8
+    lda #12
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -227,7 +224,7 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_COLOR_2_LABEL
     sta TEXT_STRING_PTR+1
-    lda #10
+    lda #14
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -237,7 +234,7 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_SUN_TYPE_LABEL
     sta TEXT_STRING_PTR+1
-    lda #12
+    lda #16
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -247,7 +244,7 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_NUM_PLANETS_LABEL
     sta TEXT_STRING_PTR+1
-    lda #14
+    lda #18
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -257,7 +254,7 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_TECH_LEVEL_LABEL
     sta TEXT_STRING_PTR+1
-    lda #16
+    lda #20
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -267,7 +264,7 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_CUL_STATUS_LABEL
     sta TEXT_STRING_PTR+1
-    lda #18
+    lda #22
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR

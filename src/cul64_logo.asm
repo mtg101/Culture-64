@@ -41,11 +41,31 @@ LOGO_GENERATE
 
 ; renders at LOGO_X / LOGO_Y
 LOGO_RENDER
-    ; tl
+    ; set location
     lda LOGO_X
     sta TEXT_X
     lda LOGO_Y
     sta TEXT_Y
+
+    ; top border
+    lda #<LOGO_BORDER_TOP
+    sta TEXT_STRING_PTR
+    lda #>LOGO_BORDER_TOP
+    sta TEXT_STRING_PTR+1
+    lda LOGO_BORDER_COLOR
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    ; left border
+    lda LOGO_X
+    sta TEXT_X
+    inc TEXT_Y
+    lda #116    
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+
+    ; tl
+    inc TEXT_X
     lda LOGO_TL_CHAR
     sta TEXT_CHAR
     lda LOGO_TL_COL
@@ -60,9 +80,24 @@ LOGO_RENDER
     sta TEXT_COLOR
     jsr TEXT_DRAW_CHAR
 
-    ; bl
-    dec TEXT_X
+    ; right border
+    inc TEXT_X
+    lda #106
+    sta TEXT_CHAR
+    lda LOGO_BORDER_COLOR
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_CHAR
+
+    ; left border
+    lda LOGO_X
+    sta TEXT_X
     inc TEXT_Y
+    lda #116    
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+
+    ; bl
+    inc TEXT_X
     lda LOGO_BL_CHAR
     sta TEXT_CHAR
     lda LOGO_BL_COL
@@ -77,8 +112,28 @@ LOGO_RENDER
     sta TEXT_COLOR
     jsr TEXT_DRAW_CHAR
 
-    rts
+    ; right border
+    inc TEXT_X
+    lda #106
+    sta TEXT_CHAR
+    lda LOGO_BORDER_COLOR
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_CHAR
 
+    ; bottom border
+    lda LOGO_X
+    sta TEXT_X
+    inc TEXT_Y
+    lda #<LOGO_BORDER_BOTTOM
+    sta TEXT_STRING_PTR
+    lda #>LOGO_BORDER_BOTTOM
+    sta TEXT_STRING_PTR+1
+    lda LOGO_BORDER_COLOR
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+
+    rts
 
 LOGO_TL_CHAR
     !byte 0
@@ -96,8 +151,13 @@ LOGO_BL_COL
     !byte 0
 LOGO_BR_COL
     !byte 0
-
 LOGO_X
     !byte 0
 LOGO_Y
     !byte 0
+LOGO_BORDER_COLOR
+    !byte 0
+LOGO_BORDER_TOP
+    !byte 79, 119, 119, 80, 0
+LOGO_BORDER_BOTTOM
+    !byte 76, 111, 111, 122, 0
