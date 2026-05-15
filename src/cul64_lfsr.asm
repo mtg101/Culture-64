@@ -34,17 +34,17 @@ LFSR_SEED_FROM_NAME
     rts
 
 LFSR_RESET
-    lda #187
+    lda #LFSR_W0_START
     sta LFSR_W0
     lda #0
     sta LFSR_W0+1
 
-    lda #23
+    lda #LFSR_W1_START
     sta LFSR_W1
     lda #0
     sta LFSR_W1+1
 
-    lda #42
+    lda #LFSR_W1_START
     sta LFSR_W2
     lda #0
     sta LFSR_W2+1
@@ -53,8 +53,12 @@ LFSR_RESET
 
 ; the 48bit seed 
 LFSR_W0
-    !word 42
+    !word LFSR_W0_START
 LFSR_W1
-    !word 68
+    !word LFSR_W1_START
 LFSR_W2
-    !word 7000
+    !word LFSR_W2_START
+
+LFSR_W0_START = 42
+LFSR_W1_START = 23
+LFSR_W2_START = 187
