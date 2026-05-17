@@ -14,9 +14,9 @@ SCREEN_SYSTEM_SHOW
     jsr SYSTEM_SHOW_LABELS
     jsr SYSTEM_SHOW_VALUES
     jsr LOGO_GENERATE
-    lda #36
+    lda #14
     sta LOGO_X
-    lda #21
+    lda #17
     sta LOGO_Y
     jsr LOGO_RENDER
 
@@ -100,11 +100,9 @@ SYSTEM_SHOW_VALUES
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    ; sun type
-    ldx SCREEN_SYSTEM_SUN_TYPE
-    lda SCREEN_SYSTEM_SUN_TYPE_STRING_LUT_LOW, x
+    lda #<SCREEN_SYSTEM_ADMINISTRATOR_BUFFER
     sta TEXT_STRING_PTR
-    lda SCREEN_SYSTEM_SUN_TYPE_STRING_LUT_HIGH, x
+    lda #>SCREEN_SYSTEM_ADMINISTRATOR_BUFFER
     sta TEXT_STRING_PTR+1
     lda #18
     sta TEXT_Y
@@ -112,18 +110,6 @@ SYSTEM_SHOW_VALUES
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    ; num planets
-    lda #<SCREEN_SYSTEM_NUM_PLANETS_CHAR
-    sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_NUM_PLANETS_CHAR
-    sta TEXT_STRING_PTR+1
-    lda #20
-    sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
-    jsr TEXT_DRAW_STRING
-
-    ; tech level
     ldx SCREEN_SYSTEM_TECH_LEVEL
     lda SCREEN_SYSTEM_TECH_LEVEL_STRING_LUT_LOW, x
     sta TEXT_STRING_PTR
@@ -135,7 +121,6 @@ SYSTEM_SHOW_VALUES
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    ; culture status
     ldx SCREEN_SYSTEM_CUL_STATUS
     lda SCREEN_SYSTEM_CUL_STATUS_STRING_LUT_LOW, x
     sta TEXT_STRING_PTR
@@ -164,21 +149,11 @@ SYSTEM_SHOW_LABELS
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SCREEN_SYSTEM_SUN_TYPE_LABEL
+    lda #<SCREEN_SYSTEM_ADMINISTRATOR_LABEL
     sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_SUN_TYPE_LABEL
+    lda #>SCREEN_SYSTEM_ADMINISTRATOR_LABEL
     sta TEXT_STRING_PTR+1
     lda #18
-    sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
-    jsr TEXT_DRAW_STRING
-
-    lda #<SCREEN_SYSTEM_NUM_PLANETS_LABEL
-    sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_NUM_PLANETS_LABEL
-    sta TEXT_STRING_PTR+1
-    lda #20
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -224,18 +199,19 @@ SCREEN_SYSTEM_GAME_LOOP
 
 
 SCREEN_SYSTEM_NAME_LABEL
-    !scr "system:", 0
+    !scr "system", 0
 ; add $80 to each char to invert    
 ;    !scr 'n'+$80, 'a'+$80, 'm'+$80, 'e'+$80, ':'+$80, 0
 SCREEN_SYSTEM_SUN_TYPE_LABEL
-    !scr "sun type:", 0
+    !scr "sun type", 0
 SCREEN_SYSTEM_NUM_PLANETS_LABEL
-    !scr "planets:", 0
+    !scr "planets", 0
 SCREEN_SYSTEM_TECH_LEVEL_LABEL
-    !scr "tech level:", 0
+    !scr "tech level", 0
 SCREEN_SYSTEM_CUL_STATUS_LABEL
-    !scr "culture status:", 0
-
+    !scr "culture status", 0
+SCREEN_SYSTEM_ADMINISTRATOR_LABEL
+    !scr "diplomat", 0
 
 SCREEN_SYSTEM_NUM_PLANETS
     !byte 0
@@ -401,4 +377,6 @@ SCREEN_SYSTEM_COLOR_1
 SCREEN_SYSTEM_COLOR_2
     !byte 0
 SCREEN_SYSTEM_NAME_BUFFER
+    !fill BB_MAX_CHARS+1, 0
+SCREEN_SYSTEM_ADMINISTRATOR_BUFFER
     !fill BB_MAX_CHARS+1, 0
