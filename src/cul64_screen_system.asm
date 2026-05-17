@@ -57,6 +57,17 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
 +
     sta SCREEN_SYSTEM_COLOR_3
 
+    ; 0-15 color 3 (not same as 3)
+-
+    lda LFSR_W0+1
+    and #%00001111
+    cmp SCREEN_SYSTEM_COLOR_3   ; check not same color
+    bne +                       ; are different
+    jsr LFSR_NEXT_SEED          ; try next seed
+    jmp -
++
+    sta SCREEN_SYSTEM_COLOR_4
+
  
     ; 0-7 sun type
     lda LFSR_W1
@@ -574,6 +585,8 @@ SCREEN_SYSTEM_COLOR_1
 SCREEN_SYSTEM_COLOR_2
     !byte 0
 SCREEN_SYSTEM_COLOR_3
+    !byte 0
+SCREEN_SYSTEM_COLOR_4
     !byte 0
 SCREEN_SYSTEM_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
