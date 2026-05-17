@@ -69,6 +69,18 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     adc #$30                    ; start of numbers in charset
     sta SCREEN_SYSTEM_NUM_PLANETS_CHAR
 
+    ; diplomat name
+    jsr NAME_GENERATE
+    lda #<NAME_BUFFER
+    sta ZP_PTR_1
+    lda #>NAME_BUFFER
+    sta ZP_PTR_1_PAIR
+    lda #<SCREEN_SYSTEM_DIPLOMAT_BUFFER
+    sta ZP_PTR_2
+    lda #>SCREEN_SYSTEM_DIPLOMAT_BUFFER
+    sta ZP_PTR_2_PAIR
+    jsr SYS_MEM_COPY
+
     ; 0-7 tech level
     lda LFSR_W2
     and #%00011111              ; 0-31
@@ -100,9 +112,9 @@ SYSTEM_SHOW_VALUES
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SCREEN_SYSTEM_ADMINISTRATOR_BUFFER
+    lda #<SCREEN_SYSTEM_DIPLOMAT_BUFFER
     sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_ADMINISTRATOR_BUFFER
+    lda #>SCREEN_SYSTEM_DIPLOMAT_BUFFER
     sta TEXT_STRING_PTR+1
     lda #18
     sta TEXT_Y
@@ -378,5 +390,5 @@ SCREEN_SYSTEM_COLOR_2
     !byte 0
 SCREEN_SYSTEM_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
-SCREEN_SYSTEM_ADMINISTRATOR_BUFFER
+SCREEN_SYSTEM_DIPLOMAT_BUFFER
     !fill BB_MAX_CHARS+1, 0

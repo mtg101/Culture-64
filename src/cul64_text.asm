@@ -191,9 +191,6 @@ TEXT_WAIT_FOR_ENTER
     beq -
     rts
 
-
-; variables
-
 TEXT_X
     !byte 0
 

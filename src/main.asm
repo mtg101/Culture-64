@@ -22,6 +22,7 @@
 !source "src/cul64_logo.asm"
 !source "src/cul64_blue_box.asm"
 !source "src/cul64_lfsr.asm"
+!source "src/cul64_name.asm"
 
 !source "src/cul64_screen_title.asm"
 !source "src/cul64_screen_jump.asm"
