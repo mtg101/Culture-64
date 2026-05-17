@@ -322,7 +322,7 @@ BB_KEY_MATRIX
 ; Row 7:   1      left   CTRL   2      SPACE  C=     Q      STOP
 !byte      $31,   $00,   $00,   $32,   $20,   $00,   $11,   $00
 
-BB_MAX_CHARS = 16
+BB_MAX_CHARS = 20
 BB_TEXT_ENTRY_BUFFER
     !fill BB_MAX_CHARS+1, 0
 BB_KEY_PRESSED
@@ -332,4 +332,4 @@ BB_LAST_KEY_PRESSED
 BB_CHAR_COUNT
     !byte 0
 BB_TEXT_BLANK
-    !scr ">                  <", 0
+    !scr ">                      <", 0

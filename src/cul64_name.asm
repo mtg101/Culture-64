@@ -1,29 +1,61 @@
 NAME_GENERATE
-    jsr LFSR_NEXT_SEED              ; start fresh
+    jsr LFSR_NEXT_SEED          ; start fresh
 
-    ; TODO style? one long, two med, three small, med-single-med, etc
+    ; setup zptr
+    lda #<NAME_PATTERN_LUT
+    sta ZP_PTR_1
+    lda #>NAME_PATTERN_LUT
+    sta ZP_PTR_1_PAIR
 
-    ; test with max length 
-    lda #BB_MAX_CHARS/2         ; specifies number of pairs, max 8
-    sta NAME_LEN
-    jsr NAME_GEN_MAX_LEN
+    ; which pattern?
+    lda LFSR_W0
+    and #%00000111              ; 0-7
+    asl                         ; double for word
+    tay                         ; into y for zero page indirect
+
+    ; ZP_PTR_2 points to pattern
+    lda (ZP_PTR_1), y
+    sta ZP_PTR_2
+    iny
+    lda (ZP_PTR_1), y
+    sta ZP_PTR_2_PAIR
+
+    ldy #0                      ; 0 for actual pattern address
+    ldx #0                      ; start of name buffer
+.name_generate_loop
+    lda (ZP_PTR_2), y           ; how many pairs?
+    beq +                       ; null terminated pattern
+    sta NAME_NUM_PAIRS
+    jsr NAME_GEN_MAX_LEN        ; this incs x within NAME_BUFFER, and we leave it alone (next will overwrite the null terminator)
+                                ; it preserves y on stack for us
+    lda #$20                    ; space
+    sta NAME_BUFFER, x          ; add space (null terminator added at end)
+    inx                         ; move index over space
+    iny                         ; next in pattern
+    jmp .name_generate_loop
++
+    lda #0                      ; null terminator
+    sta NAME_BUFFER, x
 
     rts 
 
-; generates NAME_LEN pairs
+; generates NAME_NUM_PAIRS pairs
+; x is offset into NAME_BUFFER
+; 0 for single long nem, but can split into other types
 NAME_GEN_LEN
+    tya                         ; save y
+    pha
     ldy #0                      ; loop counter
-    ldx #0                      ; name buf index
 
 .name_gen_len_loop
-    cpy NAME_LEN
+    cpy NAME_NUM_PAIRS
     beq .name_gen_len_done
 
     tya
     pha                         ; save loop counter
 
     ; first char of pair
-    lda LFSR_W0
+    lda LFSR_W2
     and #%01111111              ; 0-127
     asl                         ; shift left, multiple by 2 = 0-254 index
     tay                         
@@ -42,27 +74,29 @@ NAME_GEN_LEN
     pla                         ; restore loop counter
     tay
     iny                         ; inc loop counter
-    jsr LFSR_NEXT_SEED          ; wasteful as we only used w0 but easy...
+    jsr LFSR_NEXT_SEED          ; it's ok we're not in a hurry, just cycle every time after just using w0...
     jmp .name_gen_len_loop
 
 .name_gen_len_done:
-   lda #0              ; null terminator
+    lda #0                      ; null terminator
     sta NAME_BUFFER, x
+    pla
+    tay                         ; restore y
     rts 
 
 ; max num of pairs
 NAME_GEN_MAX_LEN        
-    dec NAME_LEN        ; make 0 to max-1, eg len is 6, so make 0-5
-    lda NAME_LEN
-    and LFSR_W0         ; simple and randomly maxes it - cute trick!
-    sta NAME_LEN
-    inc NAME_LEN        ; and makes it back to 1 to max
+    dec NAME_NUM_PAIRS          ; make 0 to max-1, eg len is 6, so make 0-5
+    lda NAME_NUM_PAIRS
+    and LFSR_W1                 ; simple and randomly maxes it - cute trick!
+    sta NAME_NUM_PAIRS
+    inc NAME_NUM_PAIRS          ; and makes it back to 1 to max
     jsr NAME_GEN_LEN
     rts
 
 NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
-NAME_LEN
+NAME_NUM_PAIRS
     !byte 0
 
 NAME_THE_ONE_STRING     ; 128 pairs of chars
@@ -71,5 +105,23 @@ NAME_THE_ONE_STRING     ; 128 pairs of chars
     !scr "qucldrbrtrchstthfafifofulaleliloly/ ' - . : + "   ; 46
     !byte 73, $20, 75, $20      ; 4
 
-
+NAME_PATTERN_10
+    !byte 10, 0
+NAME_PATTERN_4_5
+    !byte 4, 5, 0
+NAME_PATTERN_5_4
+    !byte 5, 4, 0
+NAME_PATTERN_3_3_3
+    !byte 3, 3, 3, 0
+NAME_PATTERN_2_2_2_2
+    !byte 2, 2, 2, 2, 0
+NAME_PATTERN_LUT
+    !word NAME_PATTERN_10
+    !word NAME_PATTERN_4_5
+    !word NAME_PATTERN_5_4
+    !word NAME_PATTERN_3_3_3
+    !word NAME_PATTERN_2_2_2_2
+    !word NAME_PATTERN_4_5
+    !word NAME_PATTERN_5_4
+    !word NAME_PATTERN_3_3_3
 
