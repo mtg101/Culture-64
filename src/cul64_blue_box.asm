@@ -3,7 +3,7 @@ BB_SHOW_TEXT_BOX
 
     ; center white text
     jsr TEXT_CENTER_STRING
-    lda #11
+    lda #7
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -15,7 +15,7 @@ BB_SHOW_TEXT_BOX
     lda #>BB_TEXT_RETURN
     sta TEXT_STRING_PTR+1
     jsr TEXT_CENTER_STRING
-    lda #13
+    lda #10
     sta TEXT_Y
     jsr TEXT_DRAW_STRING
 
@@ -29,7 +29,7 @@ BB_SHOW_TEXT_ENTRY_BOX
 
     ; center white text
     jsr TEXT_CENTER_STRING
-    lda #11
+    lda #7
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -132,13 +132,13 @@ BB_DRAW_BOX
 
 
 
-BB_TEXT_BOX_TOP_BORDER_ROW      = SCREEN_RAM + (10 * 40)
+BB_TEXT_BOX_TOP_BORDER_ROW      = SCREEN_RAM + (6 * 40)
 BB_TEXT_BOX_TEXT_ROW_1          = BB_TEXT_BOX_TOP_BORDER_ROW + 40
 BB_TEXT_BOX_TEXT_ROW_GAP        = BB_TEXT_BOX_TEXT_ROW_1 + 40
 BB_TEXT_BOX_TEXT_ROW_2          = BB_TEXT_BOX_TEXT_ROW_GAP + 40
 BB_TEXT_BOX_BOT_BORDER_ROW      = BB_TEXT_BOX_TEXT_ROW_2 + 40
 
-BB_TEXT_BOX_TOP_BORDER_ROW_COL  = COLOR_RAM + (10 * 40)
+BB_TEXT_BOX_TOP_BORDER_ROW_COL  = COLOR_RAM + (6 * 40)
 BB_TEXT_BOX_TEXT_ROW_COL_1      = BB_TEXT_BOX_TOP_BORDER_ROW_COL + 40
 BB_TEXT_BOX_TEXT_ROW_COL_GAP    = BB_TEXT_BOX_TEXT_ROW_COL_1 + 40
 BB_TEXT_BOX_TEXT_ROW_COL_2      = BB_TEXT_BOX_TEXT_ROW_COL_GAP + 40
@@ -160,7 +160,7 @@ BB_TEXT_ENTRY
     lda #>BB_TEXT_BLANK
     sta TEXT_STRING_PTR+1
     jsr TEXT_CENTER_STRING
-    lda #13
+    lda #9
     sta TEXT_Y
     jsr TEXT_DRAW_STRING
 
@@ -213,7 +213,7 @@ BB_TEXT_ENTRY
     lda #>BB_TEXT_BLANK
     sta TEXT_STRING_PTR+1
     jsr TEXT_CENTER_STRING
-    lda #13
+    lda #9
     sta TEXT_Y
     jsr TEXT_DRAW_STRING
 
@@ -223,7 +223,7 @@ BB_TEXT_ENTRY
     lda #>BB_TEXT_ENTRY_BUFFER
     sta TEXT_STRING_PTR+1
     jsr TEXT_CENTER_STRING
-    lda #13
+    lda #9
     sta TEXT_Y
     jsr TEXT_DRAW_STRING
     jmp .finish

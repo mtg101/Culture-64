@@ -36,6 +36,10 @@ LOGO_GENERATE
     and #%00000111  ; 0-7
     sta LOGO_BR_COL
 
+    lda LFSR_W2
+    and #%00000111  ; 0-7
+    sta LOGO_BORDER_COLOR
+
     rts
 
 

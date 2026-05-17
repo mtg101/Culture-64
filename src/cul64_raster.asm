@@ -57,22 +57,35 @@ RASTER_INTERRUPT_SETUP
 
     ; Set the line number where the interrupt triggers
     ; default to row 0
-    +RASTER_INTERRUPT_SET_ROW 250
+    +RASTER_INTERRUPT_SET_ROW 0
 
     ; Point the Vector to our custom routine
-    +SET_IRQ RASTER_IRQ_END_MAIN_SCREEN
+    +SET_IRQ RASTER_IRQ_TOP
     rts             
 
 
 ; --- INTERRUPT ROUTINES ---
 
+RASTER_IRQ_TOP
+    +PUSH_ALL
+
+    lda SCREEN_SYSTEM_COLOR_1
+    sta BORDER_COL
+    lda #BLACK
+    sta BG_COL
+
+    +RASTER_INTERRUPT_SET_ROW 50
+    +ACK_IRQ
+    +SET_IRQ RASTER_IRQ_START_MAIN_SCREEN
+    +PULL_ALL
+    rti
 RASTER_IRQ_START_MAIN_SCREEN
     +PUSH_ALL
 
     lda #01
     sta RASTER_CHASE_BEAM 
 
-    +RASTER_INTERRUPT_SET_ROW 129
+    +RASTER_INTERRUPT_SET_ROW 100
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_START_BLUE_BOX
     +PULL_ALL
@@ -81,7 +94,7 @@ RASTER_IRQ_START_MAIN_SCREEN
 RASTER_IRQ_START_BLUE_BOX
     +PUSH_ALL
 
-    ; stall for hblank of line 145 into 146
+    ; stall for hblank
     +NOPS 12
 
     lda RASTER_BLUE_BOX_STATUS
@@ -90,7 +103,7 @@ RASTER_IRQ_START_BLUE_BOX
     lda #BLUE
     sta BG_COL
 +    
-   +RASTER_INTERRUPT_SET_ROW 170
+   +RASTER_INTERRUPT_SET_ROW 140
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_END_BLUE_BOX
     +PULL_ALL
@@ -99,14 +112,62 @@ RASTER_IRQ_START_BLUE_BOX
 RASTER_IRQ_END_BLUE_BOX
     +PUSH_ALL
 
-    ; stall for hblank of line 186 into 187
-    +NOPS 12
+    ; stall for hblank
+    +NOPS 15
 
     lda BG_COL
     beq +
     ; flip bg back to black
     lda #BLACK
     sta BG_COL
++    
+    +RASTER_INTERRUPT_SET_ROW 170
+    +ACK_IRQ
+    +SET_IRQ RASTER_IRQ_START_TEXT_AREA
+    +PULL_ALL
+    rti
+
+RASTER_IRQ_START_TEXT_AREA
+    +PUSH_ALL
+
+    ; stall for hblank
+    +NOPS 15
+
+    lda SCREEN_SYSTEM_COLOR_2
+    sta BG_COL
+    sta BORDER_COL
+
+    +RASTER_INTERRUPT_SET_ROW 173
+    +ACK_IRQ
+    +SET_IRQ RASTER_IRQ_TEXT_AREA_TOP_BORDER_ON
+    +PULL_ALL
+    rti
+
+RASTER_IRQ_TEXT_AREA_TOP_BORDER_ON
+    +PUSH_ALL
+
+    ; stall for hblank
+    +NOPS 15
+
+    lda SCREEN_SYSTEM_COLOR_1
+    sta BG_COL
+    sta BORDER_COL
+
+    +RASTER_INTERRUPT_SET_ROW 175
+    +ACK_IRQ
+    +SET_IRQ RASTER_IRQ_TEXT_AREA_TOP_BORDER_OFF
+    +PULL_ALL
+    rti
+
+RASTER_IRQ_TEXT_AREA_TOP_BORDER_OFF
+    +PUSH_ALL
+
+    ; stall for hblank
+    +NOPS 15
+
+    lda SCREEN_SYSTEM_COLOR_2
+    sta BG_COL
+    sta BORDER_COL
 +    
     +RASTER_INTERRUPT_SET_ROW 250
     +ACK_IRQ
@@ -120,9 +181,41 @@ RASTER_IRQ_END_MAIN_SCREEN
     lda #01
     sta RASTER_BOTTOM_BORDER
 
-    +RASTER_INTERRUPT_SET_ROW 50
+    +RASTER_INTERRUPT_SET_ROW 253
     +ACK_IRQ
-    +SET_IRQ RASTER_IRQ_START_MAIN_SCREEN
+    +SET_IRQ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_ON
+    +PULL_ALL
+    rti
+
+RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_ON
+    +PUSH_ALL
+
+    ; stall for hblank
+    +NOPS 15
+
+    lda SCREEN_SYSTEM_COLOR_1
+    sta BG_COL
+    sta BORDER_COL
+
+    +RASTER_INTERRUPT_SET_ROW 255
+    +ACK_IRQ
+    +SET_IRQ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_OFF
+    +PULL_ALL
+    rti
+
+RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_OFF
+    +PUSH_ALL
+
+    ; stall for hblank
+    +NOPS 15
+
+    lda SCREEN_SYSTEM_COLOR_2
+    sta BG_COL
+    sta BORDER_COL
++    
+    +RASTER_INTERRUPT_SET_ROW 0
+    +ACK_IRQ
+    +SET_IRQ RASTER_IRQ_TOP
     +PULL_ALL
     rti
 

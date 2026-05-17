@@ -1,12 +1,4 @@
 SCREEN_SYSTEM_SHOW
-    ; black bg
-    lda #BLACK
-    sta BG_COL
-
-    ; black border
-    lda #BLACK
-    sta BORDER_COL
-
     ; seed from name
     lda #<SCREEN_SYSTEM_NAME_BUFFER
     sta LFSR_NAME_PTR
@@ -16,6 +8,7 @@ SCREEN_SYSTEM_SHOW
 
     ; stars
     jsr STARS_FILL_SCREEN
+    jsr STARS_CLEAR_LOWER
 
     jsr SYSTEM_GEN_SYS          ; huh 'gen sys' / 'genesis' 
     jsr SYSTEM_SHOW_LABELS
@@ -25,8 +18,6 @@ SCREEN_SYSTEM_SHOW
     sta LOGO_X
     lda #21
     sta LOGO_Y
-    lda SCREEN_SYSTEM_COLOR_1
-    sta LOGO_BORDER_COLOR
     jsr LOGO_RENDER
 
     jmp SCREEN_SYSTEM_GAME_LOOP
@@ -34,10 +25,10 @@ SCREEN_SYSTEM_SHOW
 SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis' 
     jsr LFSR_NEXT_SEED
 
-    ; 1-7 color 1
+    ; 2-15 color 1 (not black white)
 -
     lda LFSR_W0
-    and #%00000111
+    and #%00001111
     cmp #2
     bcs +                       ; not black or white
     jsr LFSR_NEXT_SEED          ; try next seed
@@ -45,10 +36,10 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
 +
     sta SCREEN_SYSTEM_COLOR_1
 
-   ; 1-7 color 2
+    ; 2-15 color 2 (not black white, not same as 1)
 -
     lda LFSR_W0+1
-    and #%00000111
+    and #%00001111
     cmp #2
     bcs +                       ; not black or white
     jsr LFSR_NEXT_SEED          ; try next seed
@@ -352,7 +343,7 @@ SCREEN_SYSTEM_SUN_TYPE_4_STRING
 SCREEN_SYSTEM_SUN_TYPE_5_STRING
     !scr "brown dwarf", 0
 SCREEN_SYSTEM_SUN_TYPE_6_STRING
-    !scr "neutron", 0
+    !scr "pulsar neutron", 0
 SCREEN_SYSTEM_SUN_TYPE_7_STRING
     !scr "binary", 0
 

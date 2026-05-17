@@ -1,10 +1,23 @@
+STARS_CLEAR_LOWER
+    ldx #0
+
+-
+    lda #$20
+    sta SCREEN_RAM_250_3, x
+    inx
+    cpx #250
+    bne -
+
+-
+    sta SCREEN_RAM_250_2+100, x
+    inx
+    cpx #250
+    bne -
 
 
-
-
+    rts
 
 STARS_FILL_SCREEN
-
     ldx #0
 -
     jsr STARS_GEN_CHAR
@@ -113,3 +126,4 @@ STARS_GEN_CHAR
 .star_char_space
     lda #' '
     rts
+
