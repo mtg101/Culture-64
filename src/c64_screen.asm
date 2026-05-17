@@ -65,7 +65,6 @@ SCREEN_CHAR_SET_3000
     sta MEM_SETUP      ; Apply changes
     rts
 
-
     ; Screen RAM Row Start Addresses (Low Bytes)
 SCREEN_ROW_LOW
     !byte $00, $28, $50, $78, $a0, $c8, $f0, $18

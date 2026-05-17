@@ -349,6 +349,177 @@ SCREEN_SYSTEM_SUN_TYPE_6_STRING
 SCREEN_SYSTEM_SUN_TYPE_7_STRING
     !scr "binary", 0
 
+SCREEN_SYSTEM_SUN_TYPE_0_COLOR = RED
+SCREEN_SYSTEM_SUN_TYPE_1_COLOR = YELLOW
+SCREEN_SYSTEM_SUN_TYPE_2_COLOR = CYAN
+SCREEN_SYSTEM_SUN_TYPE_3_COLOR = RED
+SCREEN_SYSTEM_SUN_TYPE_4_COLOR = WHITE
+SCREEN_SYSTEM_SUN_TYPE_5_COLOR = GREEN
+SCREEN_SYSTEM_SUN_TYPE_6_COLOR = PURPLE
+SCREEN_SYSTEM_SUN_TYPE_7_COLOR = WHITE
+
+SCREEN_SYSTEM_SUN_TYPE_LUT
+    !word SCREEN_SYSTEM_SUN_TYPE_0_CHARS
+    !word SCREEN_SYSTEM_SUN_TYPE_1_CHARS
+    !word SCREEN_SYSTEM_SUN_TYPE_2_CHARS
+    !word SCREEN_SYSTEM_SUN_TYPE_3_CHARS
+    !word SCREEN_SYSTEM_SUN_TYPE_4_CHARS
+    !word SCREEN_SYSTEM_SUN_TYPE_5_CHARS
+    !word SCREEN_SYSTEM_SUN_TYPE_6_CHARS
+    !word SCREEN_SYSTEM_SUN_TYPE_7_CHARS
+SCREEN_SYSTEM_SUN_TYPE_0_CHARS
+    !byte 0, 0
+    !byte 0, 0
+    !byte 233, 0
+    !byte 160, 0
+    !byte 160, 0
+
+    !byte 160, 116
+    !byte 160, 116
+    !byte 160, 117
+    !byte 160, 116
+    !byte 160, 116
+
+    !byte 160, 0
+    !byte 160, 0
+    !byte 105, 0
+    !byte 0, 0
+    !byte 0, 0
+
+SCREEN_SYSTEM_SUN_TYPE_1_CHARS
+    !byte 0, 0
+    !byte 0, 0
+    !byte 233, 0
+    !byte 160, 0
+    !byte 160, 0
+
+    !byte 160, 116
+    !byte 160, 116
+    !byte 160, 117
+    !byte 160, 116
+    !byte 160, 116
+
+    !byte 160, 0
+    !byte 160, 0
+    !byte 105, 0
+    !byte 0, 0
+    !byte 0, 0
+
+SCREEN_SYSTEM_SUN_TYPE_2_CHARS
+    !byte 0, 0
+    !byte 233, 0
+    !byte 160, 0
+    !byte 160, 0
+    !byte 160, 0
+
+    !byte 160, 116
+    !byte 160, 116
+    !byte 160, 117
+    !byte 160, 116
+    !byte 160, 116
+
+    !byte 160, 0
+    !byte 160, 0
+    !byte 160, 0
+    !byte 105, 0
+    !byte 0, 0
+
+SCREEN_SYSTEM_SUN_TYPE_3_CHARS
+    !byte 233, 0
+    !byte 160, 0
+    !byte 160, 0
+    !byte 160, 116
+    !byte 160, 116
+
+    !byte 160, 116
+    !byte 160, 117
+    !byte 160, 117
+    !byte 160, 117
+    !byte 160, 116
+
+    !byte 160, 116
+    !byte 160, 116
+    !byte 160, 0
+    !byte 160, 0
+    !byte 105, 0
+
+SCREEN_SYSTEM_SUN_TYPE_4_CHARS
+    !byte 0, 0
+    !byte 0, 0
+    !byte 233, 0
+    !byte 160, 0
+    !byte 160, 0
+
+    !byte 160, 116
+    !byte 160, 116
+    !byte 160, 117
+    !byte 160, 116
+    !byte 160, 116
+
+    !byte 160, 0
+    !byte 160, 0
+    !byte 105, 0
+    !byte 0, 0
+    !byte 0, 0
+
+SCREEN_SYSTEM_SUN_TYPE_5_CHARS
+    !byte 0, 0
+    !byte 0, 0
+    !byte 233, 0
+    !byte 160, 0
+    !byte 160, 0
+
+    !byte 160, 116
+    !byte 160, 116
+    !byte 160, 117
+    !byte 160, 116
+    !byte 160, 116
+
+    !byte 160, 0
+    !byte 160, 0
+    !byte 105, 0
+    !byte 0, 0
+    !byte 0, 0
+
+SCREEN_SYSTEM_SUN_TYPE_6_CHARS
+    !byte 0, 58
+    !byte 0, 58
+    !byte 0, 58
+    !byte 0, 58
+    !byte 0, 58
+
+    !byte 0, 66
+    !byte 0, 66
+    !byte 0, 81
+    !byte 0, 66
+    !byte 0, 66
+
+    !byte 0, 58
+    !byte 0, 58
+    !byte 0, 58
+    !byte 0, 58
+    !byte 0, 58
+    !byte 0, 58
+
+SCREEN_SYSTEM_SUN_TYPE_7_CHARS
+    !byte 233, 0
+    !byte 160, 0
+    !byte 160, 0
+    !byte 160, 116
+    !byte 160, 116
+
+    !byte 160, 0
+    !byte 160, 0
+    !byte 105, 0
+    !byte 0, 0
+    !byte 0, 0
+
+    !byte 233, 0
+    !byte 160, 0
+    !byte 160, 0
+    !byte 160, 0
+    !byte 160, 0
+    !byte 105, 0
 
 SCREEN_SYSTEM_CUL_STATUS
     !byte 0
@@ -408,3 +579,4 @@ SCREEN_SYSTEM_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
 SCREEN_SYSTEM_DIPLOMAT_BUFFER
     !fill BB_MAX_CHARS+1, 0
+
