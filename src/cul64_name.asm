@@ -4,7 +4,7 @@ NAME_GENERATE
     ; TODO style? one long, two med, three small, med-single-med, etc
 
     ; test with max length 
-    lda #BB_MAX_CHARS 
+    lda #BB_MAX_CHARS-1 
     sta NAME_LEN
     jsr NAME_GEN_MAX_LEN
 
@@ -13,18 +13,22 @@ NAME_GENERATE
 NAME_GEN_LEN
     ldx #0
 .name_gen_len_loop
+    cpx NAME_LEN
+    beq +
     lda 'q'
     sta NAME_BUFFER, x
     inx
-    cpx #BB_MAX_CHARS
-    beq +
     jmp .name_gen_len_loop
-+   rts 
++   lda #0              ; null terminator
+    sta NAME_BUFFER, x
+    rts 
 
-NAME_GEN_MAX_LEN
-    ; TODO choose 1-NAME_LEN based on seed
+NAME_GEN_MAX_LEN        
     lda NAME_LEN
-    sta NAME_LEN
+    and LFSR_W0         ; simple and randomly maxes it - cute trick!
+    bne +               
+    lda #BB_MAX_CHARS   ; but not 0 - max instead
++   sta NAME_LEN
     jsr NAME_GEN_LEN
     rts
 

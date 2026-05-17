@@ -13,12 +13,6 @@ SCREEN_SYSTEM_SHOW
     jsr SYSTEM_GEN_SYS          ; huh 'gen sys' / 'genesis' 
     jsr SYSTEM_SHOW_LABELS
     jsr SYSTEM_SHOW_VALUES
-    jsr LOGO_GENERATE
-    lda #14
-    sta LOGO_X
-    lda #17
-    sta LOGO_Y
-    jsr LOGO_RENDER
 
     jmp SCREEN_SYSTEM_GAME_LOOP
 
@@ -80,6 +74,14 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     lda #>SCREEN_SYSTEM_DIPLOMAT_BUFFER
     sta ZP_PTR_2_PAIR
     jsr SYS_MEM_COPY
+
+    ; diplomat logo
+    jsr LOGO_GENERATE
+    lda #14
+    sta LOGO_X
+    lda #17
+    sta LOGO_Y
+    jsr LOGO_RENDER
 
     ; 0-7 tech level
     lda LFSR_W2
