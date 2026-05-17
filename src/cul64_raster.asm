@@ -149,7 +149,7 @@ RASTER_IRQ_TEXT_AREA_TOP_BORDER_ON
     ; stall for hblank
     +NOPS 15
 
-    lda SCREEN_SYSTEM_COLOR_1
+    lda SCREEN_SYSTEM_COLOR_3
     sta BG_COL
     sta BORDER_COL
 
@@ -193,7 +193,7 @@ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_ON
     ; stall for hblank
     +NOPS 15
 
-    lda SCREEN_SYSTEM_COLOR_1
+    lda SCREEN_SYSTEM_COLOR_3
     sta BG_COL
     sta BORDER_COL
 
