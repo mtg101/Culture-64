@@ -9,12 +9,21 @@
     sta SELF_INT_PTR_HI     
 }
 
-; only up to 255... !TODO
+; only up to 255... 
 !macro RASTER_INTERRUPT_SET_ROW .row {
     lda #.row
     sta RASTER_LINE      
     lda VIC_CR1 
     and #$7f        ; Ensure the 8th bit of the raster line is 0 (for lines < 256)
+    sta VIC_CR1
+}
+
+; 256 upwards
+!macro RASTER_INTERRUPT_SET_ROW_256 .row {
+    lda #.row
+    sta RASTER_LINE      
+    lda VIC_CR1 
+    ora #$80        ; Ensure the 8th bit of the raster line is 1 (for lines >= 256)
     sta VIC_CR1
 }
 
@@ -169,7 +178,7 @@ RASTER_IRQ_TEXT_AREA_TOP_BORDER_OFF
     sta BG_COL
     sta BORDER_COL
 +    
-    +RASTER_INTERRUPT_SET_ROW 248
+    +RASTER_INTERRUPT_SET_ROW 250
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_END_MAIN_SCREEN
     +PULL_ALL
@@ -181,7 +190,7 @@ RASTER_IRQ_END_MAIN_SCREEN
     lda #01
     sta RASTER_BOTTOM_BORDER
 
-    +RASTER_INTERRUPT_SET_ROW 251
+    +RASTER_INTERRUPT_SET_ROW 253
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_ON
     +PULL_ALL
@@ -197,7 +206,7 @@ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_ON
     sta BG_COL
     sta BORDER_COL
 
-    +RASTER_INTERRUPT_SET_ROW 253
+    +RASTER_INTERRUPT_SET_ROW 255
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_OFF
     +PULL_ALL
@@ -209,11 +218,13 @@ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_OFF
     ; stall for hblank
     +NOPS 15
 
-    lda SCREEN_SYSTEM_COLOR_4
+    lda SCREEN_SYSTEM_COLOR_2
     sta BG_COL
     sta BORDER_COL
+
 +    
-    +RASTER_INTERRUPT_SET_ROW 255
+    +RASTER_INTERRUPT_SET_ROW_256 2
+
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_LAST
 
