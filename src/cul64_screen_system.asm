@@ -220,6 +220,86 @@ SYSTEM_SHOW_LABELS
     rts
 
 SYSTEM_SHOW_SUN
+    lda #<SCREEN_SYSTEM_SUN_TYPE_0_COLOR
+    sta ZP_PTR_1
+    lda #>SCREEN_SYSTEM_SUN_TYPE_0_COLOR
+    sta ZP_PTR_1_PAIR
+
+    ldy SCREEN_SYSTEM_SUN_TYPE
+    lda (ZP_PTR_1), y               ; a has color
+
+    ; write colors
+    sta COLOR_RAM+(40*0)
+    sta COLOR_RAM+(40*0)+1
+    sta COLOR_RAM+(40*1)
+    sta COLOR_RAM+(40*1)+1
+    sta COLOR_RAM+(40*2)
+    sta COLOR_RAM+(40*2)+1
+    sta COLOR_RAM+(40*3)
+    sta COLOR_RAM+(40*3)+1
+    sta COLOR_RAM+(40*4)
+    sta COLOR_RAM+(40*4)+1
+
+    sta COLOR_RAM+(40*5)
+    sta COLOR_RAM+(40*5)+1
+    sta COLOR_RAM+(40*6)
+    sta COLOR_RAM+(40*6)+1
+    sta COLOR_RAM+(40*7)
+    sta COLOR_RAM+(40*7)+1
+    sta COLOR_RAM+(40*8)
+    sta COLOR_RAM+(40*8)+1
+    sta COLOR_RAM+(40*9)
+    sta COLOR_RAM+(40*9)+1
+
+    sta COLOR_RAM+(40*10)
+    sta COLOR_RAM+(40*10)+1
+    sta COLOR_RAM+(40*11)
+    sta COLOR_RAM+(40*11)+1
+    sta COLOR_RAM+(40*12)
+    sta COLOR_RAM+(40*12)+1
+    sta COLOR_RAM+(40*13)
+    sta COLOR_RAM+(40*13)+1
+    sta COLOR_RAM+(40*14)
+    sta COLOR_RAM+(40*14)+1
+
+
+    ; hack a to have a random char
+    lda #'k'
+
+    ; hack to all screen chars
+    sta SCREEN_RAM+(40*0)
+    sta SCREEN_RAM+(40*0)+1
+    sta SCREEN_RAM+(40*1)
+    sta SCREEN_RAM+(40*1)+1
+    sta SCREEN_RAM+(40*2)
+    sta SCREEN_RAM+(40*2)+1
+    sta SCREEN_RAM+(40*3)
+    sta SCREEN_RAM+(40*3)+1
+    sta SCREEN_RAM+(40*4)
+    sta SCREEN_RAM+(40*4)+1
+
+    sta SCREEN_RAM+(40*5)
+    sta SCREEN_RAM+(40*5)+1
+    sta SCREEN_RAM+(40*6)
+    sta SCREEN_RAM+(40*6)+1
+    sta SCREEN_RAM+(40*7)
+    sta SCREEN_RAM+(40*7)+1
+    sta SCREEN_RAM+(40*8)
+    sta SCREEN_RAM+(40*8)+1
+    sta SCREEN_RAM+(40*9)
+    sta SCREEN_RAM+(40*9)+1
+
+    sta SCREEN_RAM+(40*10)
+    sta SCREEN_RAM+(40*10)+1
+    sta SCREEN_RAM+(40*11)
+    sta SCREEN_RAM+(40*11)+1
+    sta SCREEN_RAM+(40*12)
+    sta SCREEN_RAM+(40*12)+1
+    sta SCREEN_RAM+(40*13)
+    sta SCREEN_RAM+(40*13)+1
+    sta SCREEN_RAM+(40*14)
+    sta SCREEN_RAM+(40*14)+1
+
     rts
 
 SCREEN_SYSTEM_GAME_LOOP
@@ -363,14 +443,22 @@ SCREEN_SYSTEM_SUN_TYPE_6_STRING
 SCREEN_SYSTEM_SUN_TYPE_7_STRING
     !scr "binary", 0
 
-SCREEN_SYSTEM_SUN_TYPE_0_COLOR = RED
-SCREEN_SYSTEM_SUN_TYPE_1_COLOR = YELLOW
-SCREEN_SYSTEM_SUN_TYPE_2_COLOR = CYAN
-SCREEN_SYSTEM_SUN_TYPE_3_COLOR = RED
-SCREEN_SYSTEM_SUN_TYPE_4_COLOR = WHITE
-SCREEN_SYSTEM_SUN_TYPE_5_COLOR = GREEN
-SCREEN_SYSTEM_SUN_TYPE_6_COLOR = PURPLE
-SCREEN_SYSTEM_SUN_TYPE_7_COLOR = WHITE
+SCREEN_SYSTEM_SUN_TYPE_0_COLOR
+    !byte RED
+SCREEN_SYSTEM_SUN_TYPE_1_COLOR
+    !byte YELLOW
+SCREEN_SYSTEM_SUN_TYPE_2_COLOR
+    !byte CYAN
+SCREEN_SYSTEM_SUN_TYPE_3_COLOR
+    !byte RED
+SCREEN_SYSTEM_SUN_TYPE_4_COLOR
+    !byte WHITE
+SCREEN_SYSTEM_SUN_TYPE_5_COLOR
+    !byte GREEN
+SCREEN_SYSTEM_SUN_TYPE_6_COLOR
+    !byte PURPLE
+SCREEN_SYSTEM_SUN_TYPE_7_COLOR
+    !byte WHITE
 
 SCREEN_SYSTEM_SUN_TYPE_LUT
     !word SCREEN_SYSTEM_SUN_TYPE_0_CHARS
