@@ -262,42 +262,104 @@ SYSTEM_SHOW_SUN
     sta COLOR_RAM+(40*14)
     sta COLOR_RAM+(40*14)+1
 
+    ; lut
+    ldx SCREEN_SYSTEM_SUN_TYPE
+    lda SCREEN_SYSTEM_SUN_TYPE_CHARS_LUT_LOW, x
+    sta ZP_PTR_1
+    lda SCREEN_SYSTEM_SUN_TYPE_CHARS_LUT_HIGH, x
+    sta ZP_PTR_1_PAIR
 
-    ; hack a to have a random char
-    lda #'k'
-
-    ; hack to all screen chars
+    ldy #0
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*0)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*0)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*1)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*1)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*2)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*2)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*3)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*3)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*4)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*4)+1
 
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*5)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*5)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*6)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*6)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*7)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*7)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*8)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*8)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*9)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*9)+1
 
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*10)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*10)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*11)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*11)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*12)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*12)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*13)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*13)+1
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*14)
+    iny
+    lda (ZP_PTR_1), y
     sta SCREEN_RAM+(40*14)+1
 
     rts
@@ -460,21 +522,30 @@ SCREEN_SYSTEM_SUN_TYPE_6_COLOR
 SCREEN_SYSTEM_SUN_TYPE_7_COLOR
     !byte WHITE
 
-SCREEN_SYSTEM_SUN_TYPE_LUT
-    !word SCREEN_SYSTEM_SUN_TYPE_0_CHARS
-    !word SCREEN_SYSTEM_SUN_TYPE_1_CHARS
-    !word SCREEN_SYSTEM_SUN_TYPE_2_CHARS
-    !word SCREEN_SYSTEM_SUN_TYPE_3_CHARS
-    !word SCREEN_SYSTEM_SUN_TYPE_4_CHARS
-    !word SCREEN_SYSTEM_SUN_TYPE_5_CHARS
-    !word SCREEN_SYSTEM_SUN_TYPE_6_CHARS
-    !word SCREEN_SYSTEM_SUN_TYPE_7_CHARS
+SCREEN_SYSTEM_SUN_TYPE_CHARS_LUT_LOW
+    !byte <SCREEN_SYSTEM_SUN_TYPE_0_CHARS
+    !byte <SCREEN_SYSTEM_SUN_TYPE_1_CHARS
+    !byte <SCREEN_SYSTEM_SUN_TYPE_2_CHARS
+    !byte <SCREEN_SYSTEM_SUN_TYPE_3_CHARS
+    !byte <SCREEN_SYSTEM_SUN_TYPE_4_CHARS
+    !byte <SCREEN_SYSTEM_SUN_TYPE_5_CHARS
+    !byte <SCREEN_SYSTEM_SUN_TYPE_6_CHARS
+    !byte <SCREEN_SYSTEM_SUN_TYPE_7_CHARS
+SCREEN_SYSTEM_SUN_TYPE_CHARS_LUT_HIGH
+    !byte >SCREEN_SYSTEM_SUN_TYPE_0_CHARS
+    !byte >SCREEN_SYSTEM_SUN_TYPE_1_CHARS
+    !byte >SCREEN_SYSTEM_SUN_TYPE_2_CHARS
+    !byte >SCREEN_SYSTEM_SUN_TYPE_3_CHARS
+    !byte >SCREEN_SYSTEM_SUN_TYPE_4_CHARS
+    !byte >SCREEN_SYSTEM_SUN_TYPE_5_CHARS
+    !byte >SCREEN_SYSTEM_SUN_TYPE_6_CHARS
+    !byte >SCREEN_SYSTEM_SUN_TYPE_7_CHARS
 SCREEN_SYSTEM_SUN_TYPE_0_CHARS
-    !byte 0, 0
-    !byte 0, 0
-    !byte 233, 0
-    !byte 160, 0
-    !byte 160, 0
+    !byte $20, $20
+    !byte $20, $20
+    !byte 223, $20
+    !byte 160, $20
+    !byte 160, $20
 
     !byte 160, 116
     !byte 160, 116
@@ -482,18 +553,18 @@ SCREEN_SYSTEM_SUN_TYPE_0_CHARS
     !byte 160, 116
     !byte 160, 116
 
-    !byte 160, 0
-    !byte 160, 0
-    !byte 105, 0
-    !byte 0, 0
-    !byte 0, 0
+    !byte 160, $20
+    !byte 160, $20
+    !byte 105, $20
+    !byte $20, $20
+    !byte $20, $20
 
 SCREEN_SYSTEM_SUN_TYPE_1_CHARS
-    !byte 0, 0
-    !byte 0, 0
-    !byte 233, 0
-    !byte 160, 0
-    !byte 160, 0
+    !byte $20, $20
+    !byte $20, $20
+    !byte 223, $20
+    !byte 160, $20
+    !byte 160, $20
 
     !byte 160, 116
     !byte 160, 116
@@ -501,18 +572,18 @@ SCREEN_SYSTEM_SUN_TYPE_1_CHARS
     !byte 160, 116
     !byte 160, 116
 
-    !byte 160, 0
-    !byte 160, 0
-    !byte 105, 0
-    !byte 0, 0
-    !byte 0, 0
+    !byte 160, $20
+    !byte 160, $20
+    !byte 105, $20
+    !byte $20, $20
+    !byte $20, $20
 
 SCREEN_SYSTEM_SUN_TYPE_2_CHARS
-    !byte 0, 0
-    !byte 233, 0
-    !byte 160, 0
-    !byte 160, 0
-    !byte 160, 0
+    !byte $20, $20
+    !byte 223, $20
+    !byte 160, $20
+    !byte 160, $20
+    !byte 160, $20
 
     !byte 160, 116
     !byte 160, 116
@@ -520,16 +591,16 @@ SCREEN_SYSTEM_SUN_TYPE_2_CHARS
     !byte 160, 116
     !byte 160, 116
 
-    !byte 160, 0
-    !byte 160, 0
-    !byte 160, 0
-    !byte 105, 0
-    !byte 0, 0
+    !byte 160, $20
+    !byte 160, $20
+    !byte 160, $20
+    !byte 105, $20
+    !byte $20, $20
 
 SCREEN_SYSTEM_SUN_TYPE_3_CHARS
-    !byte 233, 0
-    !byte 160, 0
-    !byte 160, 0
+    !byte 223, $20
+    !byte 160, $20
+    !byte 160, $20
     !byte 160, 116
     !byte 160, 116
 
@@ -541,16 +612,16 @@ SCREEN_SYSTEM_SUN_TYPE_3_CHARS
 
     !byte 160, 116
     !byte 160, 116
-    !byte 160, 0
-    !byte 160, 0
-    !byte 105, 0
+    !byte 160, $20
+    !byte 160, $20
+    !byte 105, $20
 
 SCREEN_SYSTEM_SUN_TYPE_4_CHARS
-    !byte 0, 0
-    !byte 0, 0
-    !byte 233, 0
-    !byte 160, 0
-    !byte 160, 0
+    !byte $20, $20
+    !byte $20, $20
+    !byte 223, $20
+    !byte 160, $20
+    !byte 160, $20
 
     !byte 160, 116
     !byte 160, 116
@@ -558,18 +629,18 @@ SCREEN_SYSTEM_SUN_TYPE_4_CHARS
     !byte 160, 116
     !byte 160, 116
 
-    !byte 160, 0
-    !byte 160, 0
-    !byte 105, 0
-    !byte 0, 0
-    !byte 0, 0
+    !byte 160, $20
+    !byte 160, $20
+    !byte 105, $20
+    !byte $20, $20
+    !byte $20, $20
 
 SCREEN_SYSTEM_SUN_TYPE_5_CHARS
-    !byte 0, 0
-    !byte 0, 0
-    !byte 233, 0
-    !byte 160, 0
-    !byte 160, 0
+    !byte $20, $20
+    !byte $20, $20
+    !byte 223, $20
+    !byte 160, $20
+    !byte 160, $20
 
     !byte 160, 116
     !byte 160, 116
@@ -577,51 +648,50 @@ SCREEN_SYSTEM_SUN_TYPE_5_CHARS
     !byte 160, 116
     !byte 160, 116
 
-    !byte 160, 0
-    !byte 160, 0
-    !byte 105, 0
-    !byte 0, 0
-    !byte 0, 0
+    !byte 160, $20
+    !byte 160, $20
+    !byte 105, $20
+    !byte $20, $20
+    !byte $20, $20
 
 SCREEN_SYSTEM_SUN_TYPE_6_CHARS
-    !byte 0, 58
-    !byte 0, 58
-    !byte 0, 58
-    !byte 0, 58
-    !byte 0, 58
+    !byte $20, 58
+    !byte $20, 58
+    !byte $20, 58
+    !byte $20, 58
+    !byte $20, 58
 
-    !byte 0, 66
-    !byte 0, 66
-    !byte 0, 81
-    !byte 0, 66
-    !byte 0, 66
+    !byte $20, 66
+    !byte $20, 66
+    !byte $20, 81
+    !byte $20, 66
+    !byte $20, 66
 
-    !byte 0, 58
-    !byte 0, 58
-    !byte 0, 58
-    !byte 0, 58
-    !byte 0, 58
-    !byte 0, 58
+    !byte $20, 58
+    !byte $20, 58
+    !byte $20, 58
+    !byte $20, 58
+    !byte $20, 58
+    !byte $20, 58
 
 SCREEN_SYSTEM_SUN_TYPE_7_CHARS
-    !byte 233, 0
-    !byte 160, 0
-    !byte 160, 0
+    !byte 223, $20
+    !byte 160, $20
+    !byte 160, $20
     !byte 160, 116
     !byte 160, 116
 
-    !byte 160, 0
-    !byte 160, 0
-    !byte 105, 0
-    !byte 0, 0
-    !byte 0, 0
+    !byte 160, $20
+    !byte 160, $20
+    !byte 105, $20
+    !byte $20, $20
+    !byte $20, $20
 
-    !byte 233, 0
-    !byte 160, 0
-    !byte 160, 0
-    !byte 160, 0
-    !byte 160, 0
-    !byte 105, 0
+    !byte 223, $20
+    !byte 160, $20
+    !byte 160, $20
+    !byte 160, $20
+    !byte 105, $20
 
 SCREEN_SYSTEM_CUL_STATUS
     !byte 0
