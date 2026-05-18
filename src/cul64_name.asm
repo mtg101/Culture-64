@@ -102,7 +102,7 @@ NAME_NUM_PAIRS
 NAME_THE_ONE_STRING     ; 128 pairs of chars
     !scr "a i u e o n kakikukekokysasisusesosytasitutetotynaninunenonyhahihuhehohymamimumemomyyayiyuyeyoy "     ; 96
     !scr "rarirurerorywawiwuwewowygagigugegogyzazizuzezozydadidudedodybabibubebobypapipupepopyjajijujejojykakikukekokya "   ; 110
-    !scr "qucldrbrtrchstthfaffeifofulaleliloly/#  ' - . : + "   ; 50
+    !scr "qucldrbrtrchstthfaffeifofulaleliloly/ # ' - . : + "   ; 50
 
 NAME_PATTERN_10
     !byte 10, 0

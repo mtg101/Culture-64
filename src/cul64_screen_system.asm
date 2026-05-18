@@ -13,6 +13,7 @@ SCREEN_SYSTEM_SHOW
     jsr SYSTEM_GEN_SYS          ; huh 'gen sys' / 'genesis' 
     jsr SYSTEM_SHOW_LABELS
     jsr SYSTEM_SHOW_VALUES
+    jsr SYSTEM_SHOW_SUN
 
     jmp SCREEN_SYSTEM_GAME_LOOP
 
@@ -218,6 +219,8 @@ SYSTEM_SHOW_LABELS
 
     rts
 
+SYSTEM_SHOW_SUN
+    rts
 
 SCREEN_SYSTEM_GAME_LOOP
     lda #KEY_J_ROW
