@@ -28,14 +28,28 @@ NAME_GENERATE
     sta NAME_NUM_PAIRS
     jsr NAME_GEN_MAX_LEN        ; this incs x within NAME_BUFFER, and we leave it alone (next will overwrite the null terminator)
                                 ; it preserves y on stack for us
-    lda #$20                    ; space
-    sta NAME_BUFFER, x          ; add space (null terminator added at end)
+
+    txa
+    pha                         ; save x
+
+    lda LFSR_W0+1
+    and #%00011111              ; 0-31
+    tax
+    lda NAME_THE_ONE_PUNCTUATION, x
+    sta ZP_PTR_TEMP_0
+
+    pla 
+    tax                         ; restore x
+
+    lda ZP_PTR_TEMP_0
+    sta NAME_BUFFER, x          ; add punctuation (null terminator added at end)
     inx                         ; move index over space
     iny                         ; next in pattern
     jmp .name_generate_loop
 +
     lda #0                      ; null terminator
-    sta NAME_BUFFER, x
+    dex                         ; move back to punctuation
+    sta NAME_BUFFER, x          ; replace punctuation
 
     rts 
 
@@ -102,7 +116,9 @@ NAME_NUM_PAIRS
 NAME_THE_ONE_STRING     ; 128 pairs of chars
     !scr "a i u e o n kakikukekokysasisusesosytasitutetotynaninunenonyhahihuhehohymamimumemomyyayiyuyeyoy "     ; 96
     !scr "rarirurerorywawiwuwewowygagigugegogyzazizuzezozydadidudedodybabibubebobypapipupepopyjajijujejojykakikukekokya "   ; 110
-    !scr "qucldrbrtrchstthfaffeifofulaleliloly/ # ' - . : + "   ; 50
+    !scr "qucldrbrtrchstthfafefifofufylalelilolulya i u e o "   ; 50
+NAME_THE_ONE_PUNCTUATION
+    !scr "                         /#'-.:+"   ; 32
 
 NAME_PATTERN_10
     !byte 10, 0
