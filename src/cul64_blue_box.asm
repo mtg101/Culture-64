@@ -190,20 +190,17 @@ BB_TEXT_ENTRY
     ldx BB_CHAR_COUNT
     cpx #BB_MAX_CHARS
     bcs .finish         ; Name full, ignore text input
+
+    ; is it a space?
+    cmp #$20
+    beq .handle_space
+
+.handle_add_character
     sta BB_TEXT_ENTRY_BUFFER,x   ; Save raw screen code to buffer
     inx 
     lda #0
     sta BB_TEXT_ENTRY_BUFFER,x   ; save null terminator
     inc BB_CHAR_COUNT
-    jmp .update_text
-
-.handle_delete:
-    ldx BB_CHAR_COUNT
-    beq .finish         ; Nothing to delete
-    dec BB_CHAR_COUNT
-    ldx BB_CHAR_COUNT
-    lda #0              ; null terminator
-    sta BB_TEXT_ENTRY_BUFFER,x   ; Clear from buffer
     jmp .update_text
 
 .update_text:
@@ -240,7 +237,43 @@ BB_TEXT_ENTRY
     lda BB_CHAR_COUNT
     beq .bb_text_entry_loop
 
+    ; check final char isn't a space
+    ldx BB_CHAR_COUNT
+    dex
+    lda BB_TEXT_ENTRY_BUFFER,x
+    cmp #$20
+    bne +
+    
+    ; remove final space
+    lda #0
+    sta BB_TEXT_ENTRY_BUFFER,x
+    dec BB_CHAR_COUNT
++
     rts
+
+.handle_space:
+    cpx #0
+    beq .finish                 ; first character can't be space 
+
+    ; check not double space 
+    dex
+    ldy BB_TEXT_ENTRY_BUFFER,x  ; previous character
+    inx
+    cpy #$20
+    beq .finish                 ; no double spaces
+
+
+    jmp .handle_add_character
+
+.handle_delete:
+    ldx BB_CHAR_COUNT
+    beq .finish         ; Nothing to delete
+    dec BB_CHAR_COUNT
+    ldx BB_CHAR_COUNT
+    lda #0              ; null terminator
+    sta BB_TEXT_ENTRY_BUFFER,x   ; Clear from buffer
+    jmp .update_text
+
 
 BB_SCAN_MATRIX
     lda #0              ; Clear result
