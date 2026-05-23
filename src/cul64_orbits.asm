@@ -75,6 +75,8 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1
     lda #>ORBITS_SLOT_1_PROPS
     sta ZP_PTR_1_PAIR
+    lda #0
+    sta ORBITS_CURRENT_SLOT
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_2
@@ -83,6 +85,8 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1
     lda #>ORBITS_SLOT_2_PROPS
     sta ZP_PTR_1_PAIR
+    lda #1
+    sta ORBITS_CURRENT_SLOT
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_3
@@ -91,6 +95,8 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1
     lda #>ORBITS_SLOT_3_PROPS
     sta ZP_PTR_1_PAIR
+    lda #2
+    sta ORBITS_CURRENT_SLOT
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_4
@@ -99,6 +105,8 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1
     lda #>ORBITS_SLOT_4_PROPS
     sta ZP_PTR_1_PAIR
+    lda #3
+    sta ORBITS_CURRENT_SLOT
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_5
@@ -107,6 +115,8 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1
     lda #>ORBITS_SLOT_5_PROPS
     sta ZP_PTR_1_PAIR
+    lda #4
+    sta ORBITS_CURRENT_SLOT
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_6
@@ -115,6 +125,8 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1
     lda #>ORBITS_SLOT_6_PROPS
     sta ZP_PTR_1_PAIR
+    lda #5
+    sta ORBITS_CURRENT_SLOT
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_7
@@ -123,6 +135,8 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1
     lda #>ORBITS_SLOT_7_PROPS
     sta ZP_PTR_1_PAIR
+    lda #6
+    sta ORBITS_CURRENT_SLOT
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_8
@@ -131,6 +145,8 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1
     lda #>ORBITS_SLOT_8_PROPS
     sta ZP_PTR_1_PAIR
+    lda #7
+    sta ORBITS_CURRENT_SLOT
     jsr PLANET_GENERATE_IN_SLOT
 +
     rts 

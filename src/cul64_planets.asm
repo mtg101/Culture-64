@@ -5,14 +5,32 @@
 PLANET_GENERATE_IN_SLOT:
     jsr LFSR_NEXT_SEED              ; own seed
 
-    ; size
-    lda LFSR_W0
-    and #%00011111              ; 0-31
-    tax                         ; offset in x
-    lda PLANETS_SIZE_DIST, x
-
+    ; zptry offset
     ldy #0
+
+    ; position
+    lda ORBITS_CURRENT_SLOT
+
+    cmp #2                      ; 0-1
+    bcs +
+    ; 0-1 - size=1x1
+    lda #1
     sta (ZP_PTR_1), y           ; save to slot props
+    jmp .planet_size_done
++
+    cmp #4                      ; 0-3 but 0-1 already done: 2-3
+    bcs +
+    ; 2-4 - size=2x2
+    lda #2
+    sta (ZP_PTR_1), y           ; save to slot props
+    jmp .planet_size_done
++
+    ; 5-8 - size=3x3
+    lda #3
+    sta (ZP_PTR_1), y           ; save to slot props
+    ; jmp .planet_size_done
++
+.planet_size_done
 
     ; color
 -
@@ -24,8 +42,7 @@ PLANET_GENERATE_IN_SLOT:
 +
 
     asl 
-    asl 
-    asl                         ; now in bits 3-5
+    asl                         ; now in bits 2-4
     sta PLANETS_TEMP
 
     lda (ZP_PTR_1), y 
@@ -36,17 +53,9 @@ PLANET_GENERATE_IN_SLOT:
     rts 
 
 PLANET_SHOW_IN_SLOT:
-    ; HACK just show #81 in x/y
+    ldy #0                      ; zptr index
 
-    lda #ORBITS_Y
-    sta TEXT_Y
-
-    ldx ORBITS_CURRENT_SLOT
-    lda ORBITS_SLOT_1_X, x
-    sta TEXT_X
-
-    ; get color from props
-    ldy #0
+    ; color
     lda (ZP_PTR_1), y
     and #%00111000
     lsr 
@@ -54,21 +63,39 @@ PLANET_SHOW_IN_SLOT:
     lsr                             ; 1-7 in a now for color
     sta TEXT_COLOR
 
-    lda #81                         ; hack circle
+    ; y
+    lda #ORBITS_Y
+    sta TEXT_Y
+    ; x
+    ldx ORBITS_CURRENT_SLOT
+    lda ORBITS_SLOT_1_X, x
+    sta TEXT_X
+
+    ; size
+    lda (ZP_PTR_1), y
+    and #%00000011              ; sz 0-3, but never 0
+    cmp #1
+    bne + 
+    ; size 1x1
+    lda #81
     sta TEXT_CHAR
-
+    jmp .planet_show_size_done
++
+    cmp #2
+    bne + 
+    ; size 2x2
+    lda #87
+    sta TEXT_CHAR
+    jmp .planet_show_size_done
++
+    ; size 3x3
+    lda #160
+    sta TEXT_CHAR
+    ; .planet_size_done
+.planet_show_size_done:
     jsr TEXT_DRAW_CHAR
-
-    
     rts 
 
-PLANETS_SIZE_DIST                        ; 1x1, 2x2, 3x3 types, over 32 for curve
-                                    ; hack needs to come from distance to star and stuff...
-    !byte 1, 1, 1, 1                ; 4/32
-    !byte 3, 3, 3, 3                ; 4/32
-    !byte 2, 2, 2, 2, 2, 2, 2, 2    ; 8/32
-    !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
-    !byte 2, 2, 2, 2, 3, 3, 3, 3    ; 8/32
 
 PLANETS_TEMP
     !byte 0
