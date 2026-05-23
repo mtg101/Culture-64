@@ -14,6 +14,7 @@ SCREEN_SYSTEM_SHOW
     jsr SYSTEM_SHOW_LABELS
     jsr SYSTEM_SHOW_VALUES
     jsr SUN_SHOW
+    jsr ORBITS_SHOW_SLOTS
 
     jmp SCREEN_SYSTEM_GAME_LOOP
 
@@ -120,6 +121,9 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     tax                         ; offset in x
     lda SCREEN_SYSTEM_CUL_STATUS_DIST, x
     sta SCREEN_SYSTEM_CUL_STATUS
+
+    ; orbits (planets mostly)
+    jsr ORBITS_GENERATE
 
     rts
 
