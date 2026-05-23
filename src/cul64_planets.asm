@@ -77,26 +77,88 @@ PLANET_SHOW_IN_SLOT:
     cmp #1
     bne + 
     ; size 1x1
-    lda #81
+    lda PLANETS_1x1
     sta TEXT_CHAR
     jmp .planet_show_size_done
 +
     cmp #2
     bne + 
     ; size 2x2
-    lda #87
-    sta TEXT_CHAR
+    dec TEXT_X
+    dec TEXT_Y
+
+    lda #<PLANETS_2x2_T
+    sta TEXT_STRING_PTR
+    lda #>PLANETS_2x2_T
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+
+    inc TEXT_Y
+    lda #<PLANETS_2x2_M
+    sta TEXT_STRING_PTR
+    lda #>PLANETS_2x2_M
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+
+    inc TEXT_Y
+    lda #<PLANETS_2x2_B
+    sta TEXT_STRING_PTR
+    lda #>PLANETS_2x2_B
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+
     jmp .planet_show_size_done
 +
     ; size 3x3
-    lda #160
-    sta TEXT_CHAR
+    dec TEXT_X
+    dec TEXT_Y
+
+    lda #<PLANETS_3x3_T
+    sta TEXT_STRING_PTR
+    lda #>PLANETS_3x3_T
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+
+    inc TEXT_Y
+    lda #<PLANETS_3x3_M
+    sta TEXT_STRING_PTR
+    lda #>PLANETS_3x3_M
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+
+    inc TEXT_Y
+    lda #<PLANETS_3x3_B
+    sta TEXT_STRING_PTR
+    lda #>PLANETS_3x3_B
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+
+
+
     ; .planet_size_done
 .planet_show_size_done:
-    jsr TEXT_DRAW_CHAR
     rts 
 
 
 PLANETS_TEMP
     !byte 0
+
+PLANETS_1x1
+    !byte 81
+
+PLANETS_2x2_T
+    !byte 85, 67, 73, 0
+PLANETS_2x2_M
+    !byte 66, 81, 66, 0
+PLANETS_2x2_B
+    !byte 74, 67, 75, 0
+
+PLANETS_3x3_T
+    !byte 233, 224, 223, 0
+PLANETS_3x3_M
+    !byte 224, 224, 224, 0
+PLANETS_3x3_B
+    !byte 95, 224, 105, 0
+
+
 
