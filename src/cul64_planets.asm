@@ -57,8 +57,7 @@ PLANET_SHOW_IN_SLOT:
 
     ; color
     lda (ZP_PTR_1), y
-    and #%00111000
-    lsr 
+    and #%00011100
     lsr 
     lsr                             ; 1-7 in a now for color
     sta TEXT_COLOR
