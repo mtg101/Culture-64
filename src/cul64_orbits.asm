@@ -138,9 +138,9 @@ ORBITS_GENERATE_SLOTS:
 ORBITS_SHOW_SLOTS:
     lda ORBITS_SLOT_1
     beq +                       ; empty
-    lda #<ORBITS_SLOT_1
+    lda #<ORBITS_SLOT_1_PROPS
     sta ZP_PTR_1
-    lda #>ORBITS_SLOT_1
+    lda #>ORBITS_SLOT_1_PROPS
     sta ZP_PTR_1_PAIR
     lda #0
     sta ORBITS_CURRENT_SLOT
@@ -148,9 +148,9 @@ ORBITS_SHOW_SLOTS:
 +
     lda ORBITS_SLOT_2
     beq +                       ; empty
-    lda #<ORBITS_SLOT_2
+    lda #<ORBITS_SLOT_2_PROPS
     sta ZP_PTR_1
-    lda #>ORBITS_SLOT_2
+    lda #>ORBITS_SLOT_2_PROPS
     sta ZP_PTR_1_PAIR
     lda #1
     sta ORBITS_CURRENT_SLOT
@@ -158,9 +158,9 @@ ORBITS_SHOW_SLOTS:
 +
     lda ORBITS_SLOT_3
     beq +                       ; empty
-    lda #<ORBITS_SLOT_3
+    lda #<ORBITS_SLOT_3_PROPS
     sta ZP_PTR_1
-    lda #>ORBITS_SLOT_3
+    lda #>ORBITS_SLOT_3_PROPS
     sta ZP_PTR_1_PAIR
     lda #2
     sta ORBITS_CURRENT_SLOT
@@ -168,9 +168,9 @@ ORBITS_SHOW_SLOTS:
 +
     lda ORBITS_SLOT_4
     beq +                       ; empty
-    lda #<ORBITS_SLOT_4
+    lda #<ORBITS_SLOT_4_PROPS
     sta ZP_PTR_1
-    lda #>ORBITS_SLOT_4
+    lda #>ORBITS_SLOT_4_PROPS
     sta ZP_PTR_1_PAIR
     lda #3
     sta ORBITS_CURRENT_SLOT
@@ -178,9 +178,9 @@ ORBITS_SHOW_SLOTS:
 +
     lda ORBITS_SLOT_5
     beq +                       ; empty
-    lda #<ORBITS_SLOT_5
+    lda #<ORBITS_SLOT_5_PROPS
     sta ZP_PTR_1
-    lda #>ORBITS_SLOT_5
+    lda #>ORBITS_SLOT_5_PROPS
     sta ZP_PTR_1_PAIR
     lda #4
     sta ORBITS_CURRENT_SLOT
@@ -188,9 +188,9 @@ ORBITS_SHOW_SLOTS:
 +
     lda ORBITS_SLOT_6
     beq +                       ; empty
-    lda #<ORBITS_SLOT_6
+    lda #<ORBITS_SLOT_6_PROPS
     sta ZP_PTR_1
-    lda #>ORBITS_SLOT_6
+    lda #>ORBITS_SLOT_6_PROPS
     sta ZP_PTR_1_PAIR
     lda #5
     sta ORBITS_CURRENT_SLOT
@@ -198,9 +198,9 @@ ORBITS_SHOW_SLOTS:
 +
     lda ORBITS_SLOT_7
     beq +                       ; empty
-    lda #<ORBITS_SLOT_7
+    lda #<ORBITS_SLOT_7_PROPS
     sta ZP_PTR_1
-    lda #>ORBITS_SLOT_7
+    lda #>ORBITS_SLOT_7_PROPS
     sta ZP_PTR_1_PAIR
     lda #6
     sta ORBITS_CURRENT_SLOT
@@ -208,9 +208,9 @@ ORBITS_SHOW_SLOTS:
 +
     lda ORBITS_SLOT_8
     beq +                       ; empty
-    lda #<ORBITS_SLOT_8
+    lda #<ORBITS_SLOT_8_PROPS
     sta ZP_PTR_1
-    lda #>ORBITS_SLOT_8
+    lda #>ORBITS_SLOT_8_PROPS
     sta ZP_PTR_1_PAIR
     lda #7
     sta ORBITS_CURRENT_SLOT
@@ -223,8 +223,7 @@ ORBITS_SHOW_SLOTS:
 ; 2-255 specials (planet if not assigned)
 
 ORBITS_DIST                         ; 0-7 types, over 32 for curve
-    !byte 0, 0, 0, 0                ; 4/32
-    !byte 1, 1, 1, 1                ; 4/32
+    !byte 0, 0, 0, 0, 0, 0, 0, 0    ; 8/32
     !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
     !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
     !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
