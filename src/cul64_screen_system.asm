@@ -15,6 +15,7 @@ SCREEN_SYSTEM_SHOW
     jsr SYSTEM_SHOW_VALUES
     jsr SUN_SHOW
     jsr ORBITS_SHOW_SLOTS
+    jsr SYSTEM_SHOW_KEYS
 
     jmp SCREEN_SYSTEM_GAME_LOOP
 
@@ -224,6 +225,20 @@ SYSTEM_SHOW_LABELS
     rts
 
 
+SYSTEM_SHOW_KEYS:
+    lda #0 
+    sta TEXT_Y
+    lda #31
+    sta TEXT_X
+    lda #CYAN
+    sta TEXT_COLOR
+    lda #<SCREEN_SYSTEM_KEYS
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_KEYS
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+    rts     
+
 SCREEN_SYSTEM_GAME_LOOP
     lda #KEY_J_ROW
     sta CIA1_PRA
@@ -379,3 +394,6 @@ SCREEN_SYSTEM_NAME_BUFFER
 SCREEN_SYSTEM_DIPLOMAT_BUFFER
     !fill BB_MAX_CHARS+1, 0
 
+SCREEN_SYSTEM_KEYS
+    ; jMUMP iNFO - 10 chars
+    !byte 138, 21, 13, 16, 32, 137, 14, 6, 15, 0
