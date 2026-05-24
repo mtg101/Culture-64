@@ -13,17 +13,16 @@ NAME_GENERATE_DIPLOMAT
     asl                         ; double for word
     tay                         ; into y for zero page indirect
 
-    ; ZP_PTR_2 points to pattern
+    ; ZP_PTR_TEMP_0 points to pattern
     lda (ZP_PTR_1), y
-    sta ZP_PTR_2
+    sta ZP_PTR_TEMP_1
     iny
     lda (ZP_PTR_1), y
-    sta ZP_PTR_2_PAIR
-
+    sta ZP_PTR_TEMP_1_PAIR
     ldy #0                      ; 0 for actual pattern address
     ldx #0                      ; start of name buffer
 .name_generate_loop
-    lda (ZP_PTR_2), y           ; how many pairs?
+    lda (ZP_PTR_TEMP_1), y      ; how many pairs?
     beq +                       ; null terminated pattern
     sta NAME_NUM_PAIRS
     jsr NAME_GEN_MAX_LEN        ; this incs x within NAME_BUFFER, and we leave it alone (next will overwrite the null terminator)
@@ -68,17 +67,17 @@ NAME_GENERATE_PLANET
     asl                         ; double for word
     tay                         ; into y for zero page indirect
 
-    ; ZP_PTR_2 points to pattern
+    ; ZP_PTR_TEMP_0 points to pattern
     lda (ZP_PTR_1), y
-    sta ZP_PTR_2
+    sta ZP_PTR_TEMP_1
     iny
     lda (ZP_PTR_1), y
-    sta ZP_PTR_2_PAIR
+    sta ZP_PTR_TEMP_1_PAIR
 
     ldy #0                      ; 0 for actual pattern address
     ldx #0                      ; start of name buffer
 .name_generate_planet_loop
-    lda (ZP_PTR_2), y           ; how many pairs?
+    lda (ZP_PTR_TEMP_1), y      ; how many pairs?
     beq +                       ; null terminated pattern
     sta NAME_NUM_PAIRS
     jsr NAME_GEN_MAX_LEN        ; this incs x within NAME_BUFFER, and we leave it alone (next will overwrite the null terminator)

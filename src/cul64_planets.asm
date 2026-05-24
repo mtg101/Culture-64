@@ -50,6 +50,15 @@ PLANET_GENERATE_IN_SLOT:
 
     sta (ZP_PTR_1), y           ; save to slot props
 
+    ; planet name
+    jsr NAME_GENERATE_PLANET
+    lda #<NAME_BUFFER
+    sta ZP_PTR_1
+    lda #>NAME_BUFFER
+    sta ZP_PTR_1_PAIR
+    ; ZP_PTR_2 and pair already has dest address
+    jsr SYS_MEM_COPY    
+
     rts 
 
 PLANET_SHOW_IN_SLOT:

@@ -69,6 +69,17 @@ ORBITS_GENERATE:
     rts
 
 ORBITS_GENERATE_SLOTS:
+    ; blank all buffers
+    lda #0
+    sta ORBITS_SLOT_1_BUFFER
+    sta ORBITS_SLOT_2_BUFFER
+    sta ORBITS_SLOT_3_BUFFER
+    sta ORBITS_SLOT_4_BUFFER
+    sta ORBITS_SLOT_5_BUFFER
+    sta ORBITS_SLOT_6_BUFFER
+    sta ORBITS_SLOT_7_BUFFER
+    sta ORBITS_SLOT_8_BUFFER
+
     lda ORBITS_SLOT_1
     beq +                       ; empty
     lda #<ORBITS_SLOT_1_PROPS
@@ -77,6 +88,10 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1_PAIR
     lda #0
     sta ORBITS_CURRENT_SLOT
+    lda #<ORBITS_SLOT_1_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_1_BUFFER
+    sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_2
@@ -87,6 +102,10 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1_PAIR
     lda #1
     sta ORBITS_CURRENT_SLOT
+    lda #<ORBITS_SLOT_2_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_2_BUFFER
+    sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_3
@@ -97,6 +116,10 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1_PAIR
     lda #2
     sta ORBITS_CURRENT_SLOT
+    lda #<ORBITS_SLOT_3_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_3_BUFFER
+    sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_4
@@ -107,6 +130,10 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1_PAIR
     lda #3
     sta ORBITS_CURRENT_SLOT
+    lda #<ORBITS_SLOT_4_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_4_BUFFER
+    sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_5
@@ -117,6 +144,10 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1_PAIR
     lda #4
     sta ORBITS_CURRENT_SLOT
+    lda #<ORBITS_SLOT_5_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_5_BUFFER
+    sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_6
@@ -127,6 +158,10 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1_PAIR
     lda #5
     sta ORBITS_CURRENT_SLOT
+    lda #<ORBITS_SLOT_6_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_6_BUFFER
+    sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_7
@@ -137,6 +172,10 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1_PAIR
     lda #6
     sta ORBITS_CURRENT_SLOT
+    lda #<ORBITS_SLOT_7_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_7_BUFFER
+    sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
 +
     lda ORBITS_SLOT_8
@@ -147,6 +186,10 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_1_PAIR
     lda #7
     sta ORBITS_CURRENT_SLOT
+    lda #<ORBITS_SLOT_8_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_8_BUFFER
+    sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
 +
     rts 
