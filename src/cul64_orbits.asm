@@ -152,6 +152,10 @@ ORBITS_GENERATE_SLOTS:
     rts 
 
 ORBITS_SHOW_SLOTS:
+    ; not showing status to start
+    lda #0
+    sta ORBITS_INFO_STATUS
+
     lda ORBITS_SLOT_1
     beq +                       ; empty
     lda #<ORBITS_SLOT_1_PROPS
@@ -234,6 +238,132 @@ ORBITS_SHOW_SLOTS:
 +
     rts 
 
+ORBITS_TOGGLE_SLOTS_INFO:
+    lda ORBITS_INFO_STATUS
+    beq +
+    jsr SCREEN_SYSTEM_SHOW          ; just show screen
+    lda #0
+    sta ORBITS_INFO_STATUS
+    rts
++
+    jsr ORBITS_SHOW_SLOTS_INFO      ; overlay info
+    lda #1
+    sta ORBITS_INFO_STATUS
+    rts 
+
+ORBITS_SHOW_SLOTS_INFO:
+    ; color
+    lda #WHITE
+    sta TEXT_COLOR
+    ; y
+    lda #1
+    sta TEXT_Y
+
+    ; x 0
+    lda #2
+    sta TEXT_X
+    ; str ptr
+    ldx SUN_TYPE
+    lda SUN_TYPE_STRING_LUT_LOW, x
+    sta TEXT_STRING_PTR
+    lda SUN_TYPE_STRING_LUT_HIGH, x
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT
+
+    ; x 1
+    lda ORBITS_SLOT_1_X
+    sta TEXT_X
+    ; string ptr
+    lda #<ORBITS_SLOT_1_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>ORBITS_SLOT_1_BUFFER
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT
+
+    ; x 2
+    lda ORBITS_SLOT_2_X
+    sta TEXT_X
+    ; string ptr
+    lda #<ORBITS_SLOT_2_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>ORBITS_SLOT_2_BUFFER
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT
+
+    ; x 3
+    lda ORBITS_SLOT_3_X
+    sta TEXT_X
+    ; string ptr
+    lda #<ORBITS_SLOT_3_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>ORBITS_SLOT_3_BUFFER
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT
+
+    ; x 4
+    lda ORBITS_SLOT_4_X
+    sta TEXT_X
+    ; string ptr
+    lda #<ORBITS_SLOT_4_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>ORBITS_SLOT_4_BUFFER
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT
+
+    ; x 5
+    lda ORBITS_SLOT_5_X
+    sta TEXT_X
+    ; string ptr
+    lda #<ORBITS_SLOT_5_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>ORBITS_SLOT_5_BUFFER
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT
+
+    ; x 6
+    lda ORBITS_SLOT_6_X
+    sta TEXT_X
+    ; string ptr
+    lda #<ORBITS_SLOT_6_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>ORBITS_SLOT_6_BUFFER
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT
+
+    ; x 7
+    lda ORBITS_SLOT_7_X
+    sta TEXT_X
+    ; string ptr
+    lda #<ORBITS_SLOT_7_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>ORBITS_SLOT_7_BUFFER
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT
+
+    ; x 8
+    lda ORBITS_SLOT_8_X
+    sta TEXT_X
+    ; string ptr
+    lda #<ORBITS_SLOT_8_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>ORBITS_SLOT_8_BUFFER
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT
+
+    rts 
+
+ORBITS_INFO_STATUS
+    !byte 0
+
 ; 0 - empty slot
 ; 1 - planet
 ; 2-255 specials (planet if not assigned)
@@ -243,7 +373,6 @@ ORBITS_DIST                         ; 0-7 types, over 32 for curve
     !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
     !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
     !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
-
 
 ORBITS_SLOT_1
     !byte 0
@@ -303,3 +432,20 @@ ORBITS_SLOT_8_X
 ORBITS_CURRENT_SLOT
     !byte 0
 
+ORBITS_MAX_CHARS = 15
+ORBITS_SLOT_1_BUFFER
+    !fill ORBITS_MAX_CHARS+1, 0
+ORBITS_SLOT_2_BUFFER
+    !fill ORBITS_MAX_CHARS+1, 0
+ORBITS_SLOT_3_BUFFER
+    !fill ORBITS_MAX_CHARS+1, 0
+ORBITS_SLOT_4_BUFFER
+    !fill ORBITS_MAX_CHARS+1, 0
+ORBITS_SLOT_5_BUFFER
+    !fill ORBITS_MAX_CHARS+1, 0
+ORBITS_SLOT_6_BUFFER
+    !fill ORBITS_MAX_CHARS+1, 0
+ORBITS_SLOT_7_BUFFER
+    !fill ORBITS_MAX_CHARS+1, 0
+ORBITS_SLOT_8_BUFFER
+    !fill ORBITS_MAX_CHARS+1, 0

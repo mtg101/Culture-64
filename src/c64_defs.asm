@@ -281,6 +281,7 @@ KEY_S_ROW       = %11111101
 KEY_D_ROW       = %11111011
 KEY_ENTER_ROW   = %11111110
 KEY_J_ROW       = %11101111
+KEY_I_ROW       = %11101111
 
 
 ; CIA1_PRB cols
@@ -294,6 +295,7 @@ KEY_S_COL       = %00100000
 KEY_D_COL       = %00000100
 KEY_ENTER_COL   = %00000010
 KEY_J_COL       = %00000100
+KEY_I_COL       = %00000010
 
 ; --- CIA 1 Registers ---
 CIA1_PRA = $DC00    ; Port A (Rows)

@@ -180,13 +180,13 @@ SUN_TYPE_0_STRING
 SUN_TYPE_1_STRING
     !scr "yellow dwarf", 0
 SUN_TYPE_2_STRING
-    !scr "blue star", 0
+    !scr "blue giant", 0
 SUN_TYPE_3_STRING
     !scr "red giant", 0
 SUN_TYPE_4_STRING
     !scr "white dwarf", 0
 SUN_TYPE_5_STRING
-    !scr "brown dwarf", 0
+    !scr "wolf-rayet", 0
 SUN_TYPE_6_STRING
     !scr "pulsar neutron", 0
 SUN_TYPE_7_STRING
@@ -323,10 +323,10 @@ SUN_TYPE_4_CHARS
     !byte $20, $20
 
 SUN_TYPE_5_CHARS
+    !byte 58, $20
     !byte $20, $20
+    !byte 58, $20
     !byte $20, $20
-    !byte 223, $20
-    !byte 160, $20
     !byte 160, $20
 
     !byte 160, 116
@@ -336,10 +336,10 @@ SUN_TYPE_5_CHARS
     !byte 160, 116
 
     !byte 160, $20
-    !byte 160, $20
-    !byte 105, $20
     !byte $20, $20
+    !byte 58, $20
     !byte $20, $20
+    !byte 58, $20
 
 SUN_TYPE_6_CHARS
     !byte $20, 58

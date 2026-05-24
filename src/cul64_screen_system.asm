@@ -90,7 +90,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     sta SCREEN_SYSTEM_NUM_PLANETS_CHAR
 
     ; diplomat name
-    jsr NAME_GENERATE
+    jsr NAME_GENERATE_DIPLOMAT
     lda #<NAME_BUFFER
     sta ZP_PTR_1
     lda #>NAME_BUFFER
@@ -240,6 +240,7 @@ SYSTEM_SHOW_KEYS:
     rts     
 
 SCREEN_SYSTEM_GAME_LOOP
+    ; j jump
     lda #KEY_J_ROW
     sta CIA1_PRA
 
@@ -251,6 +252,19 @@ SCREEN_SYSTEM_GAME_LOOP
     and #KEY_J_COL  ; check released
     beq -
     jmp SCREEN_JUMP_SHOW
++
+    ; i info
+    lda #KEY_I_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_I_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_I_COL  ; check released
+    beq -
+    jsr ORBITS_TOGGLE_SLOTS_INFO
 +
     jmp SCREEN_SYSTEM_GAME_LOOP
 

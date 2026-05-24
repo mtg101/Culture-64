@@ -1,10 +1,10 @@
-NAME_GENERATE
+NAME_GENERATE_DIPLOMAT
     jsr LFSR_NEXT_SEED          ; start fresh
 
     ; setup zptr
-    lda #<NAME_PATTERN_LUT
+    lda #<NAME_PATTERN_DIPLOMAT_LUT
     sta ZP_PTR_1
-    lda #>NAME_PATTERN_LUT
+    lda #>NAME_PATTERN_DIPLOMAT_LUT
     sta ZP_PTR_1_PAIR
 
     ; which pattern?
@@ -53,6 +53,60 @@ NAME_GENERATE
 
     rts 
 
+NAME_GENERATE_PLANET
+    jsr LFSR_NEXT_SEED          ; start fresh
+
+    ; setup zptr
+    lda #<NAME_PATTERN_PLANET_LUT
+    sta ZP_PTR_1
+    lda #>NAME_PATTERN_PLANET_LUT
+    sta ZP_PTR_1_PAIR
+
+    ; which pattern?
+    lda LFSR_W0
+    and #%00000111              ; 0-7
+    asl                         ; double for word
+    tay                         ; into y for zero page indirect
+
+    ; ZP_PTR_2 points to pattern
+    lda (ZP_PTR_1), y
+    sta ZP_PTR_2
+    iny
+    lda (ZP_PTR_1), y
+    sta ZP_PTR_2_PAIR
+
+    ldy #0                      ; 0 for actual pattern address
+    ldx #0                      ; start of name buffer
+.name_generate_planet_loop
+    lda (ZP_PTR_2), y           ; how many pairs?
+    beq +                       ; null terminated pattern
+    sta NAME_NUM_PAIRS
+    jsr NAME_GEN_MAX_LEN        ; this incs x within NAME_BUFFER, and we leave it alone (next will overwrite the null terminator)
+                                ; it preserves y on stack for us
+
+    txa
+    pha                         ; save x
+
+    lda LFSR_W0+1
+    and #%00011111              ; 0-31
+    tax
+    lda NAME_THE_ONE_PUNCTUATION, x
+    sta ZP_PTR_TEMP_0
+
+    pla 
+    tax                         ; restore x
+
+    lda ZP_PTR_TEMP_0
+    sta NAME_BUFFER, x          ; add punctuation (null terminator added at end)
+    inx                         ; move index over space
+    iny                         ; next in pattern
+    jmp .name_generate_planet_loop
++
+    lda #0                      ; null terminator
+    dex                         ; move back to punctuation
+    sta NAME_BUFFER, x          ; replace punctuation
+
+    rts 
 ; generates NAME_NUM_PAIRS pairs
 ; x is offset into NAME_BUFFER
 ; 0 for single long nem, but can split into other types
@@ -120,23 +174,42 @@ NAME_THE_ONE_STRING     ; 128 pairs of chars
 NAME_THE_ONE_PUNCTUATION
     !scr "                         /#'-.:+"   ; 32
 
-NAME_PATTERN_10
+NAME_PATTERN_DIPLOMAT_10
     !byte 10, 0
-NAME_PATTERN_4_5
+NAME_PATTERN_DIPLOMAT_4_5
     !byte 4, 5, 0
-NAME_PATTERN_5_4
+NAME_PATTERN_DIPLOMAT_5_4
     !byte 5, 4, 0
-NAME_PATTERN_3_3_3
+NAME_PATTERN_DIPLOMAT_3_3_3
     !byte 3, 3, 3, 0
-NAME_PATTERN_2_2_2_2
+NAME_PATTERN_DIPLOMAT_2_2_2_2
     !byte 2, 2, 2, 2, 0
-NAME_PATTERN_LUT
-    !word NAME_PATTERN_10
-    !word NAME_PATTERN_4_5
-    !word NAME_PATTERN_5_4
-    !word NAME_PATTERN_3_3_3
-    !word NAME_PATTERN_2_2_2_2
-    !word NAME_PATTERN_4_5
-    !word NAME_PATTERN_5_4
-    !word NAME_PATTERN_3_3_3
+NAME_PATTERN_DIPLOMAT_LUT
+    !word NAME_PATTERN_DIPLOMAT_10
+    !word NAME_PATTERN_DIPLOMAT_4_5
+    !word NAME_PATTERN_DIPLOMAT_5_4
+    !word NAME_PATTERN_DIPLOMAT_3_3_3
+    !word NAME_PATTERN_DIPLOMAT_2_2_2_2
+    !word NAME_PATTERN_DIPLOMAT_4_5
+    !word NAME_PATTERN_DIPLOMAT_5_4
+    !word NAME_PATTERN_DIPLOMAT_3_3_3
 
+NAME_PATTERN_PLANET_7
+    !byte 7, 0
+NAME_PATTERN_PLANET_3_3
+    !byte 3, 3, 0
+NAME_PATTERN_PLANET_2_4
+    !byte 2, 4, 0
+NAME_PATTERN_PLANET_4_2
+    !byte 4, 2, 0
+NAME_PATTERN_PLANET_2_2_2
+    !byte 2, 2, 2, 0
+NAME_PATTERN_PLANET_LUT
+    !word NAME_PATTERN_PLANET_7
+    !word NAME_PATTERN_PLANET_3_3
+    !word NAME_PATTERN_PLANET_2_4
+    !word NAME_PATTERN_PLANET_4_2
+    !word NAME_PATTERN_PLANET_2_2_2
+    !word NAME_PATTERN_PLANET_7
+    !word NAME_PATTERN_PLANET_3_3
+    !word NAME_PATTERN_PLANET_7
