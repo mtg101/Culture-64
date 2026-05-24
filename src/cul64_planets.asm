@@ -68,7 +68,7 @@ PLANET_SHOW_IN_SLOT:
     lda (ZP_PTR_1), y
     and #%00011100
     lsr 
-    lsr                             ; 1-7 in a now for color
+    lsr                         ; 1-7 in a now for color
     sta TEXT_COLOR
 
     ; y
@@ -87,6 +87,7 @@ PLANET_SHOW_IN_SLOT:
     ; size 1x1
     lda PLANETS_1x1
     sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
     jmp .planet_show_size_done
 +
     cmp #2

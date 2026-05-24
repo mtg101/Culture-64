@@ -5,7 +5,6 @@
 ORBITS_GENERATE:
     jsr LFSR_NEXT_SEED              ; own value
 
-
     ; slot 1
     lda LFSR_W0
     and #%00011111              ; 0-31
@@ -456,9 +455,9 @@ ORBITS_SLOT_8_PROPS
 ORBITS_Y = 7
 
 ORBITS_SLOT_1_X
-    !byte 3             ; close planets not 3x3 so won't 'touch' sun
+    !byte 6             ; close planets not 3x3 so won't 'touch' sun
 ORBITS_SLOT_2_X
-    !byte 8
+    !byte 10
 ORBITS_SLOT_3_X
     !byte 13             
 ORBITS_SLOT_4_X
