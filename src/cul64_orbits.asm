@@ -455,9 +455,9 @@ ORBITS_SLOT_8_PROPS
 ORBITS_Y = 7
 
 ORBITS_SLOT_1_X
-    !byte 6             ; close planets not 3x3 so won't 'touch' sun
+    !byte 5             ; close planets not 3x3 so won't 'touch' sun
 ORBITS_SLOT_2_X
-    !byte 10
+    !byte 9
 ORBITS_SLOT_3_X
     !byte 13             
 ORBITS_SLOT_4_X
