@@ -412,7 +412,7 @@ ORBITS_INFO_STATUS
 
 ORBITS_DIST                         ; 0-7 types, over 32 for curve
     !byte 0, 0, 0, 0, 0, 0, 0, 0    ; 8/32
-    !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
+    !byte 0, 0, 0, 0, 1, 1, 1, 1    ; 8/32
     !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
     !byte 1, 1, 1, 1, 1, 1, 1, 1    ; 8/32
 

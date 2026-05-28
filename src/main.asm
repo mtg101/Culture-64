@@ -20,6 +20,7 @@
 !source "src/cul64_text.asm"
 !source "src/cul64_stars.asm"
 !source "src/cul64_sun.asm"
+!source "src/cul64_ship.asm"
 !source "src/cul64_orbits.asm"
 !source "src/cul64_planets.asm"
 !source "src/cul64_logo.asm"

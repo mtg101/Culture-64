@@ -228,13 +228,13 @@ SYSTEM_SHOW_LABELS
 SYSTEM_SHOW_KEYS:
     lda #0 
     sta TEXT_Y
-    lda #31
+    lda #26
     sta TEXT_X
     lda #CYAN
     sta TEXT_COLOR
-    lda #<SCREEN_SYSTEM_KEYS
+    lda #<SCREEN_SYSTEM_KEYS_LABEL
     sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_KEYS
+    lda #>SCREEN_SYSTEM_KEYS_LABEL
     sta TEXT_STRING_PTR+1
     jsr TEXT_DRAW_STRING
     rts     
@@ -265,6 +265,19 @@ SCREEN_SYSTEM_GAME_LOOP
     and #KEY_I_COL  ; check released
     beq -
     jsr ORBITS_TOGGLE_SLOTS_INFO
++
+    ; s ship
+    lda #KEY_S_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_S_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_S_COL  ; check released
+    beq -
+    jsr SHIP_TOGGLE
 +
     jmp SCREEN_SYSTEM_GAME_LOOP
 
@@ -408,6 +421,6 @@ SCREEN_SYSTEM_NAME_BUFFER
 SCREEN_SYSTEM_DIPLOMAT_BUFFER
     !fill BB_MAX_CHARS+1, 0
 
-SCREEN_SYSTEM_KEYS
-    ; jMUMP iNFO - 10 chars
-    !byte 138, 21, 13, 16, 32, 137, 14, 6, 15, 0
+SCREEN_SYSTEM_KEYS_LABEL
+    ; sHIP jMUMP iNFO
+    !byte 147, 8, 9, 16, 32, 138, 21, 13, 16, 32, 137, 14, 6, 15, 0
