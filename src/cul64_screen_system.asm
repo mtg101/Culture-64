@@ -20,7 +20,7 @@ SCREEN_SYSTEM_SHOW
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis' 
-    jsr LFSR_NEXT_SEED
+    jsr LFSR_NEXT_SEED          ; fresh own seed
 
     ; 2-15 color 1 (not black white)
 -
@@ -51,7 +51,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
 
     ; 0-15 color 3 (not same as 2)
 -
-    lda LFSR_W0+1
+    lda LFSR_W1
     and #%00001111
     cmp SCREEN_SYSTEM_COLOR_2   ; check not same color
     bne +                       ; are different
@@ -62,7 +62,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
 
     ; 0-15 color 3 (not same as 3)
 -
-    lda LFSR_W0+1
+    lda LFSR_W1+1
     and #%00001111
     cmp SCREEN_SYSTEM_COLOR_3   ; check not same color
     bne +                       ; are different
@@ -71,9 +71,18 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
 +
     sta SCREEN_SYSTEM_COLOR_4
 
+    ; 0-15 shared MCM for planet color 1 (VIC-2 only looks at 4 bits so don't have to make 0-15)
+    lda LFSR_W2
+    sta BG_COL_1
+
+    ; 0-15 planet color 1
+    lda LFSR_W2+1
+    sta BG_COL_2
+
+    jsr LFSR_NEXT_SEED          ; new seed needed
  
     ; 0-7 sun type
-    lda LFSR_W1
+    lda LFSR_W2
     and #%00011111              ; 0-31
     tax                         ; offset in x
     lda SUN_TYPE_DIST, x

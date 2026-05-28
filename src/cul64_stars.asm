@@ -102,26 +102,8 @@ STARS_GEN_CHAR
     and #%00111111              ; 0-63
     bne .star_char_space        ; mostly empty space
 
-    lda LFSR_W2
-    and #%00001111              ; 0-15
-    cmp #%00001011
-    beq .star_char_asterisk     ; 1 in 16
-
-    cmp #%00001110
-    beq .star_char_plus         ; 1 in 16
-    cmp #%00001100
-    beq .star_char_plus         ; 2 in 16
-
-
-                                ; rest dots (13 in 16)
 .star_char_period
     lda #'.'
-    rts
-.star_char_plus
-    lda #'+'
-    rts
-.star_char_asterisk
-    lda #'*'
     rts
 .star_char_space
     lda #' '
