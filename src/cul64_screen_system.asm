@@ -273,7 +273,7 @@ SCREEN_SYSTEM_GAME_LOOP
     lda CIA1_PRB
     and #KEY_I_COL  ; check released
     beq -
-    jsr ORBITS_TOGGLE_SLOTS_INFO
+    jmp ORBITS_SHOW_SLOTS_INFO
 +
     ; s ship
     lda #KEY_S_ROW
@@ -286,10 +286,9 @@ SCREEN_SYSTEM_GAME_LOOP
     lda CIA1_PRB
     and #KEY_S_COL  ; check released
     beq -
-    jsr SHIP_TOGGLE
+    jmp SHIP_SHOW
 +
     jmp SCREEN_SYSTEM_GAME_LOOP
-
 
 SCREEN_SYSTEM_NAME_LABEL
     !scr "system", 0
@@ -432,4 +431,8 @@ SCREEN_SYSTEM_DIPLOMAT_BUFFER
 
 SCREEN_SYSTEM_KEYS_LABEL
     ; sHIP jMUMP iNFO
-    !byte 147, 8, 9, 16, 32, 138, 21, 13, 16, 32, 137, 14, 6, 15, 0
+    !byte 147, 8, 9, 16, 32, 138, 21, 13, 16, 32, 137, 14, 6, 15, 0     ; 14+null
+
+SCREEN_SYSTEM_KEYS_LABEL_BLANK      ; I'll worry about these waster bytes when I run out of bytes... TODO
+    !byte 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 0     ; 14+null
+

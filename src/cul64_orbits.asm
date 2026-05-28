@@ -280,20 +280,29 @@ ORBITS_SHOW_SLOTS:
 +
     rts 
 
-ORBITS_TOGGLE_SLOTS_INFO:
-    lda ORBITS_INFO_STATUS
-    beq +
-    jsr SCREEN_SYSTEM_SHOW          ; just show screen
-    lda #0
-    sta ORBITS_INFO_STATUS
-    rts
-+
-    jsr ORBITS_SHOW_SLOTS_INFO      ; overlay info
-    lda #1
-    sta ORBITS_INFO_STATUS
-    rts 
-
 ORBITS_SHOW_SLOTS_INFO:
+    ; clear sHIP jUMP iNFO
+    lda #0 
+    sta TEXT_Y
+    lda #26
+    sta TEXT_X
+    lda #<SCREEN_SYSTEM_KEYS_LABEL_BLANK
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_KEYS_LABEL_BLANK
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+
+    ; invert I in top right
+    lda #0 
+    sta TEXT_Y
+    lda #39
+    sta TEXT_X
+    lda #CYAN
+    sta TEXT_COLOR
+    lda #137            ; invert I
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+
     ; color
     lda #WHITE
     sta TEXT_COLOR
@@ -401,7 +410,23 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_CENTER_STRING_VERT
     jsr TEXT_DRAW_STRING_VERT
 
-    rts 
+; into...
+ORBITS_GAME_LOOP:
+    ; i info
+    lda #KEY_I_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_I_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_I_COL  ; check released
+    beq -
+    jmp SCREEN_SYSTEM_SHOW
++
+    jmp ORBITS_GAME_LOOP
+
 
 ORBITS_INFO_STATUS
     !byte 0
