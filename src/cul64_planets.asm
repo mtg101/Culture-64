@@ -141,10 +141,6 @@ PLANET_SHOW_IN_SLOT:
     lda #>PLANETS_3x3_B
     sta TEXT_STRING_PTR+1
     jsr TEXT_DRAW_STRING
-
-
-
-    ; .planet_size_done
 .planet_show_size_done:
     rts 
 
@@ -169,5 +165,7 @@ PLANETS_3x3_M
 PLANETS_3x3_B
     !byte 95, 224, 105, 0
 
-
+PLANETS_MOON_TYPE_LUT
+    !byte 81, 81, 81, 81, 81, 81, 81, 81
+    !byte 87, 42, 90, 86, 46, 43, 81, 81
 
