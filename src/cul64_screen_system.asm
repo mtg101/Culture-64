@@ -214,11 +214,9 @@ SYSTEM_SHOW_KEPLER:
     lsr 
     lsr 
     lsr 
-    lsr 
-
-    clc
-    adc #48                     ; hack 0-3 instead of LUT card suits
-
+    lsr                         ; 0-3
+    tax
+    lda SCREEN_SYSTEM_CARD_SUIT_LUT, x
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR
     inc TEXT_X
@@ -231,21 +229,33 @@ SYSTEM_SHOW_KEPLER:
 
     ; show vector 1
     lda SCREEN_SYSTEM_KEPLER
-    and #%00111000
+    and #%00110000
     lsr 
     lsr 
     lsr 
-    clc
-    adc #77                     ; hack 77 for some symbols instead of LUT for proper vector angles
+    lsr 
+    tax 
+    lda SCREEN_SYSTEM_VECTOR_LUT, x
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR
     inc TEXT_X
 
     ; show vector 2
     lda SCREEN_SYSTEM_KEPLER
-    and #%00000111
-    clc
-    adc #77                     ; hack 77 for some symbols instead of LUT for proper vector angles
+    and #%00001100
+    lsr 
+    lsr 
+    tax 
+    lda SCREEN_SYSTEM_VECTOR_LUT, x
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+
+    ; show vector 3
+    lda SCREEN_SYSTEM_KEPLER
+    and #%00000011
+    tax 
+    lda SCREEN_SYSTEM_VECTOR_LUT, x
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR
     inc TEXT_X
@@ -524,3 +534,8 @@ SCREEN_SYSTEM_KEYS_LABEL_BLANK      ; I'll worry about these waster bytes when I
 
 SCREEN_SYSTEM_SPACE_BG
     !byte 0
+
+SCREEN_SYSTEM_CARD_SUIT_LUT
+    !byte 65, 83, 90, 88
+SCREEN_SYSTEM_VECTOR_LUT
+    !byte 77, 78, 67, 93
