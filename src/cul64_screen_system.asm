@@ -134,6 +134,22 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     ; orbits (planets mostly)
     jsr ORBITS_GENERATE
 
+    jsr LFSR_NEXT_SEED          ; new seed needed
+    ; incline
+-
+    lda LFSR_W0
+    and #%01111111              ; 0-127
+    cmp #91
+    bcc +                       ; it's 0-90
+    jsr LFSR_NEXT_SEED          ; new seed needed
+    jmp -
++
+    sta SCREEN_SYSTEM_INCLINE
+
+    ; kepler
+    lda LFSR_W0+1
+    sta SCREEN_SYSTEM_KEPLER
+
     rts
 
 SYSTEM_SHOW_VALUES
@@ -158,8 +174,6 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR+1
     lda #18
     sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
     ldx SCREEN_SYSTEM_CUL_STATUS
@@ -169,11 +183,74 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR+1
     lda #20
     sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
+    lda #22
+    sta TEXT_Y
+    lda SCREEN_SYSTEM_INCLINE
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_NUMBER
+
+    lda #<SCREEN_SYSTEM_DEGREES
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_DEGREES
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+
+    lda #24
+    sta TEXT_Y
+    lda #20
+    sta TEXT_X
+    jsr SYSTEM_SHOW_KEPLER
+
     rts
+
+SYSTEM_SHOW_KEPLER:
+    ; show card suit
+    lda SCREEN_SYSTEM_KEPLER
+    and #%11000000
+    lsr 
+    lsr 
+    lsr 
+    lsr 
+    lsr 
+    lsr 
+
+    clc
+    adc #48                     ; hack 0-3 instead of LUT card suits
+
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+
+    ; space
+    lda #$20    
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+
+    ; show vector 1
+    lda SCREEN_SYSTEM_KEPLER
+    and #%00111000
+    lsr 
+    lsr 
+    lsr 
+    clc
+    adc #77                     ; hack 77 for some symbols instead of LUT for proper vector angles
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+
+    ; show vector 2
+    lda SCREEN_SYSTEM_KEPLER
+    and #%00000111
+    clc
+    adc #77                     ; hack 77 for some symbols instead of LUT for proper vector angles
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+
+    rts 
 
 SYSTEM_SHOW_LABELS
     ; all labels same x
@@ -196,8 +273,6 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR+1
     lda #18
     sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
     lda #<SCREEN_SYSTEM_CUL_STATUS_LABEL
@@ -206,12 +281,25 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR+1
     lda #20
     sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    lda #<SCREEN_SYSTEM_INCLINE_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_INCLINE_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #22
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+
+    lda #<SCREEN_SYSTEM_KEPLER_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SCREEN_SYSTEM_KEPLER_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #24
+    sta TEXT_Y
     jsr TEXT_DRAW_STRING
 
     rts
-
 
 SYSTEM_SHOW_KEYS:
     lda #0 
@@ -288,12 +376,23 @@ SCREEN_SYSTEM_NAME_LABEL
 ;    !scr 'n'+$80, 'a'+$80, 'm'+$80, 'e'+$80, ':'+$80, 0
 SCREEN_SYSTEM_SUN_TYPE_LABEL
     !scr "sun type", 0
-SCREEN_SYSTEM_NUM_PLANETS_LABEL
-    !scr "planets", 0
+SCREEN_SYSTEM_INCLINE_LABEL
+    !scr "plane incline", 0         ; 0-90 degrees
+SCREEN_SYSTEM_KEPLER_LABEL
+    !scr "kepler vector", 0         ; it's a cool scifi name kinda related to star systems... ignore the details!
 SCREEN_SYSTEM_TECH_LEVEL_LABEL
     !scr "tech level", 0
 SCREEN_SYSTEM_CUL_STATUS_LABEL
     !scr "culture status", 0
+
+SCREEN_SYSTEM_DEGREES
+    !scr " degrees", 0
+
+SCREEN_SYSTEM_INCLINE
+    !byte 0
+SCREEN_SYSTEM_KEPLER
+    !byte 0
+
 
 SCREEN_SYSTEM_NUM_PLANETS
     !byte 0

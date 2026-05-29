@@ -323,8 +323,9 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_DRAW_STRING_VERT
 
     ; x 1
-    lda ORBITS_SLOT_1_X
-    sta TEXT_X
+    ldx ORBITS_SLOT_1_X
+    inx
+    stx TEXT_X
     ; string ptr
     lda #<ORBITS_SLOT_1_BUFFER
     sta TEXT_STRING_PTR
@@ -334,8 +335,9 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_DRAW_STRING_VERT
 
     ; x 2
-    lda ORBITS_SLOT_2_X
-    sta TEXT_X
+    ldx ORBITS_SLOT_2_X
+    inx
+    stx TEXT_X
     ; string ptr
     lda #<ORBITS_SLOT_2_BUFFER
     sta TEXT_STRING_PTR
@@ -345,8 +347,9 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_DRAW_STRING_VERT
 
     ; x 3
-    lda ORBITS_SLOT_3_X
-    sta TEXT_X
+    ldx ORBITS_SLOT_3_X
+    inx
+    stx TEXT_X
     ; string ptr
     lda #<ORBITS_SLOT_3_BUFFER
     sta TEXT_STRING_PTR
@@ -356,8 +359,9 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_DRAW_STRING_VERT
 
     ; x 4
-    lda ORBITS_SLOT_4_X
-    sta TEXT_X
+    ldx ORBITS_SLOT_4_X
+    inx
+    stx TEXT_X
     ; string ptr
     lda #<ORBITS_SLOT_4_BUFFER
     sta TEXT_STRING_PTR
@@ -367,8 +371,9 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_DRAW_STRING_VERT
 
     ; x 5
-    lda ORBITS_SLOT_5_X
-    sta TEXT_X
+    ldx ORBITS_SLOT_5_X
+    inx
+    stx TEXT_X
     ; string ptr
     lda #<ORBITS_SLOT_5_BUFFER
     sta TEXT_STRING_PTR
@@ -378,8 +383,9 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_DRAW_STRING_VERT
 
     ; x 6
-    lda ORBITS_SLOT_6_X
-    sta TEXT_X
+    ldx ORBITS_SLOT_6_X
+    inx
+    stx TEXT_X
     ; string ptr
     lda #<ORBITS_SLOT_6_BUFFER
     sta TEXT_STRING_PTR
@@ -389,8 +395,9 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_DRAW_STRING_VERT
 
     ; x 7
-    lda ORBITS_SLOT_7_X
-    sta TEXT_X
+    ldx ORBITS_SLOT_7_X
+    inx
+    stx TEXT_X
     ; string ptr
     lda #<ORBITS_SLOT_7_BUFFER
     sta TEXT_STRING_PTR
@@ -400,8 +407,9 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_DRAW_STRING_VERT
 
     ; x 8
-    lda ORBITS_SLOT_8_X
-    sta TEXT_X
+    ldx ORBITS_SLOT_8_X
+    inx
+    stx TEXT_X
     ; string ptr
     lda #<ORBITS_SLOT_8_BUFFER
     sta TEXT_STRING_PTR
@@ -516,3 +524,45 @@ ORBITS_SLOT_7_BUFFER
     !fill ORBITS_MAX_CHARS+1, 0
 ORBITS_SLOT_8_BUFFER
     !fill ORBITS_MAX_CHARS+1, 0
+
+
+ORBITS_SLOT_3_MOON_1
+    !byte 0
+ORBITS_SLOT_3_MOON_2
+    !byte 0
+ORBITS_SLOT_4_MOON_1
+    !byte 0
+ORBITS_SLOT_4_MOON_2
+    !byte 0
+ORBITS_SLOT_5_MOON_1
+    !byte 0
+ORBITS_SLOT_5_MOON_2
+    !byte 0
+ORBITS_SLOT_5_MOON_3
+    !byte 0
+ORBITS_SLOT_5_MOON_4
+    !byte 0
+ORBITS_SLOT_6_MOON_1
+    !byte 0
+ORBITS_SLOT_6_MOON_2
+    !byte 0
+ORBITS_SLOT_6_MOON_3
+    !byte 0
+ORBITS_SLOT_6_MOON_4
+    !byte 0
+ORBITS_SLOT_7_MOON_1
+    !byte 0
+ORBITS_SLOT_7_MOON_2
+    !byte 0
+ORBITS_SLOT_7_MOON_3
+    !byte 0
+ORBITS_SLOT_7_MOON_4
+    !byte 0
+ORBITS_SLOT_8_MOON_1
+    !byte 0
+ORBITS_SLOT_8_MOON_2
+    !byte 0
+ORBITS_SLOT_8_MOON_3
+    !byte 0
+ORBITS_SLOT_8_MOON_4
+    !byte 0

@@ -319,6 +319,55 @@ TEXT_CENTER_STRING_VERT
     rts 
 
 
+; this is Gemini AI toaster stuff...
+    ; but this is just drudgery Assembler 101 end of term test stuff
+    ; I could work it out but I'm learning procgen not that now!
+
+; incs TEXT_X as it draws to allow things like ' degrees' printed after
+TEXT_DRAW_NUMBER:
+    lda TEXT_CHAR    ; reuse as number
+
+    ; --- 1. Find the Hundreds Digit ---
+    ldx #$2F         ; $2F is ASCII '0' minus 1
+GetHundreds:
+    inx              ; Increment character code ('0', '1', '2'...)
+    sec
+    sbc #100         ; Subtract 100
+    bcs GetHundreds  ; If it didn't roll under 0, keep going
+    adc #100         ; Fix the over-subtraction
+
+    ; only show if not 0
+    cpx #48
+    beq +
+    stx TEXT_CHAR
+    jsr TEXT_DRAW_CHAR  
+    inc TEXT_X
++
+
+    ; --- 2. Find the Tens Digit ---
+    ldx #$2F
+GetTens:
+    inx
+    sec
+    sbc #10          ; Subtract 10
+    bcs GetTens      ; If it didn't roll under 0, keep going
+    adc #10          ; Fix the over-subtraction
+
+    cpx #48
+    beq +
+    stx TEXT_CHAR
+    jsr TEXT_DRAW_CHAR  
+    inc TEXT_X
++
+
+    ; --- 3. What's left is the Ones Digit ---
+    clc
+    adc #$30         ; Convert the remaining raw number to ASCII '0'-'9'
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    rts 
+
 ; waits for release, so doesn't fire multiple times
 TEXT_WAIT_FOR_ENTER
     lda #KEY_ENTER_ROW
@@ -353,5 +402,5 @@ TEXT_COL_PTR
 TEXT_STRING_LEN
     !byte 0
 
-TEXT_CHAR 
+TEXT_CHAR           ; also used as number...
     !byte 0
