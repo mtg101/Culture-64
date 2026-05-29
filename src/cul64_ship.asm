@@ -1,26 +1,4 @@
 SHIP_SHOW:
-    ; clear sHIP jUMP iNFO
-    lda #0 
-    sta TEXT_Y
-    lda #26
-    sta TEXT_X
-    lda #<SCREEN_SYSTEM_KEYS_LABEL_BLANK
-    sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_KEYS_LABEL_BLANK
-    sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
-
-    ; invert I in top right
-    lda #0 
-    sta TEXT_Y
-    lda #39
-    sta TEXT_X
-    lda #CYAN
-    sta TEXT_COLOR
-    lda #147                ; invert I
-    sta TEXT_CHAR
-    jsr TEXT_DRAW_CHAR
-
     ; clear bg
     ldx #0
 -
@@ -52,6 +30,17 @@ SHIP_SHOW:
     cpx #100
     bne -
 
+    ; invert I in top right
+    lda #0 
+    sta TEXT_Y
+    lda #39
+    sta TEXT_X
+    lda #CYAN
+    sta TEXT_COLOR
+    lda #147                ; invert I
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+
     ; show labels
     lda #2
     sta TEXT_X
@@ -61,6 +50,16 @@ SHIP_SHOW:
     lda #>SHIP_SHIP_LABEL
     sta TEXT_STRING_PTR+1
     lda #1
+    sta TEXT_Y
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    lda #<SHIP_HOME_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SHIP_HOME_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #5
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -135,6 +134,8 @@ SHIP_COLOR_BG
 
 SHIP_SHIP_LABEL
     !scr "ship", 0
+SHIP_HOME_LABEL
+    !scr "home system", 0
 SHIP_CARGO_LABEL
     !scr "cargo bays", 0
 SHIP_CABIN_LABEL
