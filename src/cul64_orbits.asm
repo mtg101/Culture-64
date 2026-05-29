@@ -284,7 +284,7 @@ ORBITS_SHOW_SLOTS_INFO:
     ; clear sHIP jUMP iNFO
     lda #0 
     sta TEXT_Y
-    lda #26
+    lda #17
     sta TEXT_X
     lda #<SCREEN_SYSTEM_KEYS_LABEL_BLANK
     sta TEXT_STRING_PTR
@@ -311,7 +311,7 @@ ORBITS_SHOW_SLOTS_INFO:
     sta TEXT_Y
 
     ; x 0
-    lda #2
+    lda #0
     sta TEXT_X
     ; str ptr
     ldx SUN_TYPE

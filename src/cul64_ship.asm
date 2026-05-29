@@ -1,3 +1,91 @@
+SHIP_GEN_FROM_NAME:
+    ; gen seed from name
+    lda #<SHIP_NAME_BUFFER
+    sta LFSR_NAME_PTR
+    lda #>SHIP_NAME_BUFFER
+    sta LFSR_NAME_PTR+1
+    jsr LFSR_SEED_FROM_NAME
+
+
+    ; gen home system name from seed
+    jsr NAME_GENERATE_SYSTEM
+    lda #<NAME_BUFFER
+    sta ZP_PTR_1
+    lda #>NAME_BUFFER
+    sta ZP_PTR_1_PAIR
+    lda #<SHIP_HOME_BUFFER
+    sta ZP_PTR_2
+    lda #>SHIP_HOME_BUFFER
+    sta ZP_PTR_2_PAIR
+    jsr SYS_MEM_COPY
+
+    ; generate logo from seed
+    jsr LOGO_GENERATE
+    jsr SHIP_COPY_FROM_LOGO
+
+    rts
+
+SHIP_COPY_FROM_LOGO:
+    lda LOGO_TL_CHAR
+    sta SHIP_LOGO_TL_CHAR
+
+    lda LOGO_TR_CHAR
+    sta SHIP_LOGO_TR_CHAR
+
+    lda LOGO_BL_CHAR
+    sta SHIP_LOGO_BL_CHAR
+
+    lda LOGO_BR_CHAR
+    sta SHIP_LOGO_BR_CHAR
+
+    lda LOGO_TL_COL
+    sta SHIP_LOGO_TL_COL
+
+    lda LOGO_TR_COL
+    sta SHIP_LOGO_TR_COL
+
+    lda LOGO_BL_COL
+    sta SHIP_LOGO_BL_COL
+
+    lda LOGO_BR_COL
+    sta SHIP_LOGO_BR_COL
+
+    lda LOGO_BORDER_COLOR
+    sta SHIP_LOGO_BORDER_COLOR
+
+    rts 
+
+SHIP_COPY_TO_LOGO: 
+    lda SHIP_LOGO_TL_CHAR
+    sta LOGO_TL_CHAR
+
+    lda SHIP_LOGO_TR_CHAR
+    sta LOGO_TR_CHAR
+
+    lda SHIP_LOGO_BL_CHAR
+    sta LOGO_BL_CHAR
+
+    lda SHIP_LOGO_BR_CHAR
+    sta LOGO_BR_CHAR
+
+    lda SHIP_LOGO_TL_COL
+    sta LOGO_TL_COL
+
+    lda SHIP_LOGO_TR_COL
+    sta LOGO_TR_COL
+
+    lda SHIP_LOGO_BL_COL
+    sta LOGO_BL_COL
+
+    lda SHIP_LOGO_BR_COL
+    sta LOGO_BR_COL
+
+    lda SHIP_LOGO_BORDER_COLOR
+    sta LOGO_BORDER_COLOR
+
+    rts 
+
+
 SHIP_SHOW:
     ; clear bg
     ldx #0
@@ -30,16 +118,20 @@ SHIP_SHOW:
     cpx #100
     bne -
 
-    ; invert I in top right
+    ; invert S in top right
     lda #0 
     sta TEXT_Y
     lda #39
     sta TEXT_X
-    lda #CYAN
+    lda #WHITE
     sta TEXT_COLOR
-    lda #147                ; invert I
+    lda #147                ; invert S
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR
+
+    ; blue bg
+    lda #BLUE
+    sta SCREEN_SYSTEM_SPACE_BG
 
     ; show labels
     lda #2
@@ -75,13 +167,17 @@ SHIP_SHOW:
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SHIP_BULLETS_LABEL
+    lda #<SHIP_EMPTY_LABEL
     sta TEXT_STRING_PTR
-    lda #>SHIP_BULLETS_LABEL
+    lda #>SHIP_EMPTY_LABEL
     sta TEXT_STRING_PTR+1
-    lda #9
+    lda #11
     sta TEXT_Y
-    jsr TEXT_DRAW_STRING_VERT
+    lda #4
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
 
     lda #<SHIP_CABIN_LABEL
     sta TEXT_STRING_PTR
@@ -95,19 +191,52 @@ SHIP_SHOW:
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SHIP_BULLETS_LABEL
+    lda #<SHIP_EMPTY_LABEL
     sta TEXT_STRING_PTR
-    lda #>SHIP_BULLETS_LABEL
+    lda #>SHIP_EMPTY_LABEL
     sta TEXT_STRING_PTR+1
-    lda #9
+    lda #11
     sta TEXT_Y
-    jsr TEXT_DRAW_STRING_VERT
+    lda #22
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    ; show values
+    lda #<SHIP_NAME_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>SHIP_NAME_BUFFER
+    sta TEXT_STRING_PTR+1
+    lda #1
+    sta TEXT_Y
+    lda #20
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    lda #<SHIP_HOME_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>SHIP_HOME_BUFFER
+    sta TEXT_STRING_PTR+1
+    lda #5
+    sta TEXT_Y
+    lda #20
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    lda #15
+    sta LOGO_X
+    lda #0
+    sta LOGO_Y
+    jsr SHIP_COPY_TO_LOGO
+    jsr LOGO_RENDER
 
 ; into...
 SHIP_GAME_LOOP
-    lda #1
-    sta SHIP_ON
-
     ; s ship
     lda #KEY_S_ROW
     sta CIA1_PRA
@@ -119,17 +248,10 @@ SHIP_GAME_LOOP
     lda CIA1_PRB
     and #KEY_S_COL  ; check released
     beq -
-    lda #0
-    sta SHIP_ON
     jmp SCREEN_SYSTEM_SHOW
 +
     jmp SHIP_GAME_LOOP
 
-
-SHIP_ON
-    !byte 0
-SHIP_COLOR_BG
-    !byte BLUE
 
 
 SHIP_SHIP_LABEL
@@ -137,8 +259,32 @@ SHIP_SHIP_LABEL
 SHIP_HOME_LABEL
     !scr "home system", 0
 SHIP_CARGO_LABEL
-    !scr "cargo bays", 0
+    !scr "cargo bay", 0
 SHIP_CABIN_LABEL
-    !scr "passenger cabins", 0
-SHIP_BULLETS_LABEL
-    !scr "-----", 0
+    !scr "passenger cabin", 0
+SHIP_EMPTY_LABEL
+    !scr "< empty >", 0
+
+SHIP_NAME_BUFFER
+    !fill BB_MAX_CHARS+1, 0
+SHIP_HOME_BUFFER
+    !fill BB_MAX_CHARS+1, 0
+
+SHIP_LOGO_TL_CHAR
+    !byte 0
+SHIP_LOGO_TR_CHAR
+    !byte 0
+SHIP_LOGO_BL_CHAR
+    !byte 0
+SHIP_LOGO_BR_CHAR
+    !byte 0
+SHIP_LOGO_TL_COL
+    !byte 0
+SHIP_LOGO_TR_COL
+    !byte 0
+SHIP_LOGO_BL_COL
+    !byte 0
+SHIP_LOGO_BR_COL
+    !byte 0
+SHIP_LOGO_BORDER_COLOR
+    !byte 0

@@ -162,7 +162,7 @@ SCREEN_TITLE_SHOW
     jsr TEXT_DRAW_STRING
 
     jsr TEXT_WAIT_FOR_ENTER
-    jmp SCREEN_JUMP_SHOW
+    jmp BB_SHIP_NAME_SHOW
 
 
 SCREEN_TITLE_TITLE
@@ -183,5 +183,5 @@ SCREEN_TITLE_DREAMS
 SCREEN_TITLE_MATHS
     !scr "where math stores the universe", 0
 SCREEN_TITLE_PROMPT
-    !scr "> enter system <", 0
+    !scr "> return to space <", 0
 

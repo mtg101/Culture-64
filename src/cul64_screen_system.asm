@@ -16,6 +16,10 @@ SCREEN_SYSTEM_SHOW
     jsr SUN_SHOW
     jsr ORBITS_SHOW_SLOTS
     jsr SYSTEM_SHOW_KEYS
+    
+    ; black bg
+    lda #BLACK
+    sta SCREEN_SYSTEM_SPACE_BG
 
     jmp SCREEN_SYSTEM_GAME_LOOP
 
@@ -104,19 +108,14 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     sta ZP_PTR_1
     lda #>NAME_BUFFER
     sta ZP_PTR_1_PAIR
-    lda #<SCREEN_SYSTEM_DIPLOMAT_BUFFER
+    lda #<DIPLOMAT_BUFFER
     sta ZP_PTR_2
-    lda #>SCREEN_SYSTEM_DIPLOMAT_BUFFER
+    lda #>DIPLOMAT_BUFFER
     sta ZP_PTR_2_PAIR
     jsr SYS_MEM_COPY
 
     ; diplomat logo
     jsr LOGO_GENERATE
-    lda #14
-    sta LOGO_X
-    lda #17
-    sta LOGO_Y
-    jsr LOGO_RENDER
 
     ; 0-7 tech level
     lda LFSR_W2
@@ -152,22 +151,12 @@ SYSTEM_SHOW_VALUES
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SCREEN_SYSTEM_DIPLOMAT_BUFFER
-    sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_DIPLOMAT_BUFFER
-    sta TEXT_STRING_PTR+1
-    lda #18
-    sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
-    jsr TEXT_DRAW_STRING
-
     ldx SCREEN_SYSTEM_TECH_LEVEL
     lda SCREEN_SYSTEM_TECH_LEVEL_STRING_LUT_LOW, x
     sta TEXT_STRING_PTR
     lda SCREEN_SYSTEM_TECH_LEVEL_STRING_LUT_HIGH, x
     sta TEXT_STRING_PTR+1
-    lda #22
+    lda #18
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -178,7 +167,7 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR
     lda SCREEN_SYSTEM_CUL_STATUS_STRING_LUT_HIGH, x
     sta TEXT_STRING_PTR+1
-    lda #24
+    lda #20
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -201,21 +190,11 @@ SYSTEM_SHOW_LABELS
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SCREEN_SYSTEM_ADMINISTRATOR_LABEL
-    sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_ADMINISTRATOR_LABEL
-    sta TEXT_STRING_PTR+1
-    lda #18
-    sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
-    jsr TEXT_DRAW_STRING
-
     lda #<SCREEN_SYSTEM_TECH_LEVEL_LABEL
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_TECH_LEVEL_LABEL
     sta TEXT_STRING_PTR+1
-    lda #22
+    lda #18
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -225,7 +204,7 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR
     lda #>SCREEN_SYSTEM_CUL_STATUS_LABEL
     sta TEXT_STRING_PTR+1
-    lda #24
+    lda #20
     sta TEXT_Y
     lda #WHITE
     sta TEXT_COLOR
@@ -237,7 +216,7 @@ SYSTEM_SHOW_LABELS
 SYSTEM_SHOW_KEYS:
     lda #0 
     sta TEXT_Y
-    lda #26
+    lda #17
     sta TEXT_X
     lda #CYAN
     sta TEXT_COLOR
@@ -260,7 +239,7 @@ SCREEN_SYSTEM_GAME_LOOP
     lda CIA1_PRB
     and #KEY_J_COL  ; check released
     beq -
-    jmp SCREEN_JUMP_SHOW
+    jmp BB_JUMP_SHOW
 +
     ; i info
     lda #KEY_I_ROW
@@ -288,6 +267,19 @@ SCREEN_SYSTEM_GAME_LOOP
     beq -
     jmp SHIP_SHOW
 +
+    ; d diplomat
+    lda #KEY_D_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_D_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_D_COL  ; check released
+    beq -
+    jmp DIPLOMAT_SHOW
++
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SCREEN_SYSTEM_NAME_LABEL
@@ -302,8 +294,6 @@ SCREEN_SYSTEM_TECH_LEVEL_LABEL
     !scr "tech level", 0
 SCREEN_SYSTEM_CUL_STATUS_LABEL
     !scr "culture status", 0
-SCREEN_SYSTEM_ADMINISTRATOR_LABEL
-    !scr "diplomat", 0
 
 SCREEN_SYSTEM_NUM_PLANETS
     !byte 0
@@ -426,13 +416,12 @@ SCREEN_SYSTEM_COLOR_4
     !byte 0
 SCREEN_SYSTEM_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
-SCREEN_SYSTEM_DIPLOMAT_BUFFER
-    !fill BB_MAX_CHARS+1, 0
-
 SCREEN_SYSTEM_KEYS_LABEL
     ; sHIP jMUMP iNFO
-    !byte 147, 8, 9, 16, 32, 138, 21, 13, 16, 32, 137, 14, 6, 15, 0     ; 14+null
+    !byte 132, 9, 16, 12, 15, 13, 1, 20, 32, 147, 8, 9, 16, 32, 138, 21, 13, 16, 32, 137, 14, 6, 15, 0     ; 22+null
 
 SCREEN_SYSTEM_KEYS_LABEL_BLANK      ; I'll worry about these waster bytes when I run out of bytes... TODO
-    !byte 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 0     ; 14+null
+    !byte 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 0     ; 23+null
 
+SCREEN_SYSTEM_SPACE_BG
+    !byte 0

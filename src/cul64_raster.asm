@@ -78,18 +78,11 @@ RASTER_INTERRUPT_SETUP
 RASTER_IRQ_TOP
     +PUSH_ALL
 
-    lda SHIP_ON
-    bne +                       ; ship on
-    lda SCREEN_SYSTEM_COLOR_1   ; ship off
+    lda SCREEN_SYSTEM_COLOR_1
     sta BORDER_COL
-    lda #BLACK
+    lda SCREEN_SYSTEM_SPACE_BG
     sta BG_COL
-    jmp ++
-+                               ; ship on
-    lda SHIP_COLOR_BG
-    sta BORDER_COL
-    sta BG_COL
-++
+
     +RASTER_INTERRUPT_SET_ROW 50
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_START_MAIN_SCREEN
@@ -131,16 +124,9 @@ RASTER_IRQ_END_BLUE_BOX
     ; stall for hblank
     +NOPS 15
 
-    lda SHIP_ON
-    bne +                       ; ship on
-    lda #BLACK                  ; skip off black
+    lda SCREEN_SYSTEM_SPACE_BG
     sta BG_COL
-    jmp ++
-+                               ; ship on
-    lda SHIP_COLOR_BG
-    sta BORDER_COL
-    sta BG_COL
-++
+
     +RASTER_INTERRUPT_SET_ROW 170
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_START_TEXT_AREA

@@ -129,7 +129,100 @@ BB_DRAW_BOX
 
     rts
 
+BB_JUMP_SHOW
+    ; turn on blue box mode
+    lda #1
+    sta RASTER_BLUE_BOX_STATUS
 
+    ; where string
+    lda #<BB_JUMP_WHERE
+    sta TEXT_STRING_PTR
+    lda #>BB_JUMP_WHERE
+    sta TEXT_STRING_PTR+1
+
+    jsr BB_SHOW_TEXT_ENTRY_BOX
+
+    ; turn off blue box mode
+    lda #0
+    sta RASTER_BLUE_BOX_STATUS
+
+    ; jump effect
+    lda #BLACK
+    sta SCREEN_SYSTEM_COLOR_1
+    sta SCREEN_SYSTEM_COLOR_2
+    sta SCREEN_SYSTEM_COLOR_3
+    sta SCREEN_SYSTEM_COLOR_4
+    jsr STARS_FILL_SCREEN
+    jsr STARS_FILL_SCREEN
+    jsr STARS_FILL_SCREEN
+    jsr STARS_FILL_SCREEN
+
+    ; save system name
+    ldx #0
+-
+    lda BB_TEXT_ENTRY_BUFFER, x
+    sta SCREEN_SYSTEM_NAME_BUFFER, x
+    inx
+    cpx #BB_MAX_CHARS
+    bne -
+    
+    jmp SCREEN_SYSTEM_SHOW
+
+BB_JUMP_WHERE
+    !scr "jump to which system?", 0
+
+BB_SHIP_NAME_SHOW
+    ; turn on blue box mode
+    lda #1
+    sta RASTER_BLUE_BOX_STATUS
+
+    ; where string
+    lda #<BB_SHIP_NAME
+    sta TEXT_STRING_PTR
+    lda #>BB_SHIP_NAME
+    sta TEXT_STRING_PTR+1
+
+    jsr BB_SHOW_TEXT_ENTRY_BOX
+
+    ; turn off blue box mode
+    lda #0
+    sta RASTER_BLUE_BOX_STATUS
+
+    ; jump effect
+    lda #BLACK
+    sta SCREEN_SYSTEM_COLOR_1
+    sta SCREEN_SYSTEM_COLOR_2
+    sta SCREEN_SYSTEM_COLOR_3
+    sta SCREEN_SYSTEM_COLOR_4
+    jsr STARS_FILL_SCREEN
+    jsr STARS_FILL_SCREEN
+    jsr STARS_FILL_SCREEN
+    jsr STARS_FILL_SCREEN
+
+    ; save ship name
+    ldx #0
+-
+    lda BB_TEXT_ENTRY_BUFFER, x
+    sta SHIP_NAME_BUFFER, x
+    inx
+    cpx #BB_MAX_CHARS
+    bne -
+
+    jsr SHIP_GEN_FROM_NAME
+
+    ; save system name
+    ldx #0
+-
+    lda SHIP_HOME_BUFFER, x
+    sta SCREEN_SYSTEM_NAME_BUFFER, x
+    inx
+    cpx #BB_MAX_CHARS
+    bne -
+
+    jmp SCREEN_SYSTEM_SHOW
+
+BB_SHIP_NAME
+    !scr "ship, what is your name?", 0
 
 
 BB_TEXT_BOX_TOP_BORDER_ROW      = SCREEN_RAM + (6 * 40)
