@@ -150,48 +150,61 @@ PLANET_SHOW_IN_SLOT:
 PLANETS_LOAD_UDGS:
     ldx #0
 -
-    lda PLANETS_19_UDG, x
-    sta ZP_PTR_TEMP_0      ; save for later
+    jsr LFSR_NEXT_SEED      ; fresh each loop
 
+    lda PLANETS_19_UDG, x
+    sta ZP_PTR_TEMP_0       ; save for later
     ; for each bit pair, check if it's 00 or 11
     and #%11000000
     beq +                   ; skip if 00
+    lda LFSR_W0
+    and #%00000011          ; 0-3
+    tay
+    lda PLANETS_COLOR_LUT_1, y
+    sta ZP_PTR_TEMP_1
 
-    ; hack to shared from 11
     lda ZP_PTR_TEMP_0       ; restore
-    and #%01111111          ; change 11 or 01 for shared 1
-    sta ZP_PTR_TEMP_0      ; save for later
-
+    and ZP_PTR_TEMP_1
+    sta ZP_PTR_TEMP_0       ; save for later
 +    
     lda ZP_PTR_TEMP_0       ; restore
     and #%00110000
     beq +                   ; skip if 00
+    lda LFSR_W0+1
+    and #%00000011          ; 0-3
+    tay
+    lda PLANETS_COLOR_LUT_2, y
+    sta ZP_PTR_TEMP_1
 
-    ; hack to shared from 11
     lda ZP_PTR_TEMP_0       ; restore
-    and #%11011111          ; change 11 or 01 for shared 1
-    sta ZP_PTR_TEMP_0      ; save for later
-
+    and ZP_PTR_TEMP_1
+    sta ZP_PTR_TEMP_0       ; save for later
 +
     lda ZP_PTR_TEMP_0       ; restore
     and #%00001100
     beq +                   ; skip if 00
+    lda LFSR_W1
+    and #%00000011          ; 0-3
+    tay
+    lda PLANETS_COLOR_LUT_3, y
+    sta ZP_PTR_TEMP_1
 
-    ; hack to shared from 11
     lda ZP_PTR_TEMP_0       ; restore
-    and #%11111011          ; change 11 or 10 for shared 2
-    sta ZP_PTR_TEMP_0      ; save for later
-
+    and ZP_PTR_TEMP_1
+    sta ZP_PTR_TEMP_0       ; save for later
 +
     lda ZP_PTR_TEMP_0       ; restore
     and #%00000011
     beq +                   ; skip if 00
+    lda LFSR_W1+1
+    and #%00000011          ; 0-3
+    tay
+    lda PLANETS_COLOR_LUT_4, y
+    sta ZP_PTR_TEMP_1
 
-    ; hack to shared from 11
     lda ZP_PTR_TEMP_0       ; restore
-    and #%11111110          ; change 11 or 10 for shared 2
-    sta ZP_PTR_TEMP_0      ; save for later
-
+    and ZP_PTR_TEMP_1
+    sta ZP_PTR_TEMP_0       ; save for later
 +
     lda ZP_PTR_TEMP_0       ; restore
     sta PLANETS_19_FONT_RAM, x
@@ -268,3 +281,12 @@ PLANETS_3x3_CHAR_BR
     !byte $F0,$F0,$C0,$C0,$00,$00,$00,$00
 
 PLANETS_19_FONT_RAM     = $3000 + (237*8)
+
+PLANETS_COLOR_LUT_1
+    !byte %11111111, %11111111, %01111111, %10111111
+PLANETS_COLOR_LUT_2
+    !byte %11111111, %11111111, %11011111, %11101111
+PLANETS_COLOR_LUT_3
+    !byte %11111111, %11111111, %11110111, %11111011
+PLANETS_COLOR_LUT_4
+    !byte %11111111, %11111111, %11111101, %11111110
