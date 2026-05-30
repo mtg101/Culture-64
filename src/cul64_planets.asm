@@ -62,6 +62,8 @@ PLANET_GENERATE_IN_SLOT:
     rts 
 
 PLANET_SHOW_IN_SLOT:
+    jsr PLANETS_LOAD_UDGS       ; load every time as we're procgen hacking the planet colors
+
     ldy #0                      ; zptr index
 
     ; color
@@ -69,6 +71,7 @@ PLANET_SHOW_IN_SLOT:
     and #%00011100
     lsr 
     lsr                         ; 1-7 in a now for color
+    ora #%00001000              ; set bit 3 for MCM
     sta TEXT_COLOR
 
     ; y
@@ -144,26 +147,81 @@ PLANET_SHOW_IN_SLOT:
 .planet_show_size_done:
     rts 
 
+PLANETS_LOAD_UDGS:
+    ldx #0
+-
+    lda PLANETS_19_UDG, x
+    sta PLANETS_19_FONT_RAM, x
+    inx 
+    cpx #19*8               ; 19 udgs, 8 bytes each
+    bne -
+    rts
 
 PLANETS_TEMP
     !byte 0
 
 PLANETS_1x1
-    !byte 81
+    !byte 237
 
 PLANETS_2x2_T
-    !byte 85, 67, 73, 0
+    !byte 238, 239, 240, 0
 PLANETS_2x2_M
-    !byte 66, 81, 66, 0
+    !byte 241, 242, 243, 0
 PLANETS_2x2_B
-    !byte 74, 67, 75, 0
+    !byte 244, 245, 246, 0
 
 PLANETS_3x3_T
-    !byte 233, 224, 223, 0
+    !byte 247, 248, 249, 0
 PLANETS_3x3_M
-    !byte 224, 224, 224, 0
+    !byte 250, 251, 252, 0
 PLANETS_3x3_B
-    !byte 95, 224, 105, 0
+    !byte 253, 254, 255, 0
 
 
+; mcm characters for planets
+; each byte is in bit-pairs for wide pixel
+; %00 means bg, %01 shared 1, %02 shared 2, %11 fg
+; fg for char needs to be set 9-15 (set bit 3) to force MCM
+PLANETS_19_UDG
+PLANETS_1x1_CHAR
+    !byte $3C, $3C, $FF, $FF, $FF, $FF, $3C, $3C
 
+PLANETS_2x2_CHAR_TL
+    !byte $00,$00,$00,$00,$00,$00,$03,$03
+PLANETS_2x2_CHAR_TM
+    !byte $00,$00,$00,$00,$00,$3C,$FF,$FF
+PLANETS_2x2_CHAR_TR
+    !byte $00,$00,$00,$00,$00,$00,$C0,$C0
+PLANETS_2x2_CHAR_ML
+    !byte $03,$0F,$0F,$0F,$0F,$0F,$0F,$03
+PLANETS_2x2_CHAR_MM
+    !byte $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+PLANETS_2x2_CHAR_MR
+    !byte $C0,$F0,$F0,$F0,$F0,$F0,$F0,$C0
+PLANETS_2x2_CHAR_BL
+    !byte $03,$03,$00,$00,$00,$00,$00,$00
+PLANETS_2x2_CHAR_BM
+    !byte $FF,$FF,$3C,$00,$00,$00,$00,$00
+PLANETS_2x2_CHAR_BR
+    !byte $C0,$C0,$00,$00,$00,$00,$00,$00
+
+PLANETS_3x3_CHAR_TL
+    !byte $00,$00,$00,$00,$03,$03,$0F,$0F
+PLANETS_3x3_CHAR_TM
+    !byte $00,$00,$00,$3C,$FF,$FF,$FF,$FF
+PLANETS_3x3_CHAR_TR
+    !byte $00,$00,$00,$00,$C0,$C0,$F0,$F0
+PLANETS_3x3_CHAR_ML
+    !byte $0F,$3F,$3F,$3F,$3F,$3F,$3F,$0F
+PLANETS_3x3_CHAR_MM
+    !byte $FF,$FF,$FF,$FF,$FF,$FF,$FF,$FF
+PLANETS_3x3_CHAR_MR
+    !byte $F0,$FC,$FC,$FC,$FC,$FC,$FC,$F0
+PLANETS_3x3_CHAR_BL
+    !byte $0F,$0F,$03,$03,$00,$00,$00,$00
+PLANETS_3x3_CHAR_BM
+    !byte $FF,$FF,$FF,$FF,$3C,$00,$00,$00
+PLANETS_3x3_CHAR_BR
+    !byte $F0,$F0,$C0,$C0,$00,$00,$00,$00
+
+PLANETS_19_FONT_RAM     = $3000 + (237*8)
