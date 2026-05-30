@@ -151,49 +151,49 @@ PLANETS_LOAD_UDGS:
     ldx #0
 -
     lda PLANETS_19_UDG, x
-    tay                     ; temp for later
+    sta ZP_PTR_TEMP_0      ; save for later
 
     ; for each bit pair, check if it's 00 or 11
     and #%11000000
     beq +                   ; skip if 00
 
     ; hack to shared from 11
-    tya                     ; restore
+    lda ZP_PTR_TEMP_0       ; restore
     and #%01111111          ; change 11 or 01 for shared 1
-    tay                     ; save it
+    sta ZP_PTR_TEMP_0      ; save for later
 
 +    
-    tya                     ; back from temp
+    lda ZP_PTR_TEMP_0       ; restore
     and #%00110000
     beq +                   ; skip if 00
 
     ; hack to shared from 11
-    tya                     ; restore
+    lda ZP_PTR_TEMP_0       ; restore
     and #%11011111          ; change 11 or 01 for shared 1
-    tay                     ; save it
+    sta ZP_PTR_TEMP_0      ; save for later
 
 +
-    tya                     ; back from temp
+    lda ZP_PTR_TEMP_0       ; restore
     and #%00001100
     beq +                   ; skip if 00
 
     ; hack to shared from 11
-    tya                     ; restore
+    lda ZP_PTR_TEMP_0       ; restore
     and #%11111011          ; change 11 or 10 for shared 2
-    tay                     ; save it
+    sta ZP_PTR_TEMP_0      ; save for later
 
 +
-    tya                     ; back from temp
+    lda ZP_PTR_TEMP_0       ; restore
     and #%00000011
     beq +                   ; skip if 00
 
     ; hack to shared from 11
-    tya                     ; restore
+    lda ZP_PTR_TEMP_0       ; restore
     and #%11111110          ; change 11 or 10 for shared 2
-    tay                     ; save it
+    sta ZP_PTR_TEMP_0      ; save for later
 
 +
-    tya                     ; restore for final save
+    lda ZP_PTR_TEMP_0       ; restore
     sta PLANETS_19_FONT_RAM, x
     inx 
     cpx #19*8               ; 19 udgs, 8 bytes each
