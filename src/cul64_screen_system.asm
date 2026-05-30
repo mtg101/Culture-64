@@ -1,4 +1,6 @@
 SCREEN_SYSTEM_SHOW
+    jsr SCREEN_OFF
+
     ; seed from name
     lda #<SCREEN_SYSTEM_NAME_BUFFER
     sta LFSR_NAME_PTR
@@ -20,6 +22,8 @@ SCREEN_SYSTEM_SHOW
     ; black bg
     lda #BLACK
     sta SCREEN_SYSTEM_SPACE_BG
+
+    jsr SCREEN_ON
 
     jmp SCREEN_SYSTEM_GAME_LOOP
 
