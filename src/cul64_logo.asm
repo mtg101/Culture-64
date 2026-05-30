@@ -3,19 +3,23 @@ LOGO_GENERATE
     jsr    LFSR_NEXT_SEED      ; get a clean seed
 
     lda LFSR_W0
-    ora #%11000000  ; 192-255 - inverted symbols
+    and #%01111111      ; 0-127
+    ora #%01000000      ; 64-127 symbols
     sta LOGO_TL_CHAR
 
     lda LFSR_W0+1
-    ora #%11000000  ; 192-255 - inverted symbols
+    and #%01111111      ; 0-127
+    ora #%01000000      ; 64-127 symbols
     sta LOGO_TR_CHAR
 
     lda LFSR_W1
-    ora #%11000000  ; 192-255 - inverted symbols
+    and #%01111111      ; 0-127
+    ora #%01000000      ; 64-127 symbols
     sta LOGO_BL_CHAR
 
     lda LFSR_W1+1
-    ora #%11000000  ; 192-255 - inverted symbols
+    and #%01111111      ; 0-127
+    ora #%01000000      ; 64-127 symbols
     sta LOGO_BR_CHAR
 
     jsr    LFSR_NEXT_SEED      ; need another seed
@@ -41,7 +45,6 @@ LOGO_GENERATE
     sta LOGO_BORDER_COLOR
 
     rts
-
 
 ; renders at LOGO_X / LOGO_Y
 LOGO_RENDER
