@@ -34,5 +34,20 @@ SYS_MEM_COPY
     beq +               ; copied null terminator, we are done
     iny 
     jmp .sys_mem_cpy_loop
++
+    rts
 
-+    rts
+; source: ZP_PTR_1 
+; target: ZP_PTR_2
+; byte count: ZP_PTR_TEMP_0
+SYS_MEM_COPY_NUM
+    ldy #0
+.sys_mem_cpy_loop_num
+    lda (ZP_PTR_1), y
+    sta (ZP_PTR_2), y
+    iny
+    cpy ZP_PTR_TEMP_0
+    beq + 
+    jmp .sys_mem_cpy_loop_num
++
+    rts

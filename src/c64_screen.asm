@@ -18,6 +18,23 @@ SCREEN_MCM_ON
     sta VIC_CR2
     rts    
 
+SCREEN_PATCH_3000_FONT:
+    lda #<PLANETS_FONT_PATCH_223
+    sta ZP_PTR_1
+    lda #>PLANETS_FONT_PATCH_223
+    sta ZP_PTR_1_PAIR
+
+    lda #<PLANETS_FONT_PATCH_95
+    sta ZP_PTR_2
+    lda #>PLANETS_FONT_PATCH_95
+    sta ZP_PTR_2_PAIR
+
+    lda #8
+    sta ZP_PTR_TEMP_0
+
+    jsr SYS_MEM_COPY_NUM
+
+    rts 
 
 SCREEN_CHAR_COPY_ROM_3000_ALL
      sei          ; Disable interrupts to prevent the Kernal 
@@ -102,3 +119,4 @@ SCREEN_COL_RAM_250_0 = COLOR_RAM
 SCREEN_COL_RAM_250_1 = SCREEN_COL_RAM_250_0 + 250
 SCREEN_COL_RAM_250_2 = SCREEN_COL_RAM_250_1 + 250
 SCREEN_COL_RAM_250_3 = SCREEN_COL_RAM_250_2 + 250
+

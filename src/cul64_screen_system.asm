@@ -220,7 +220,7 @@ SYSTEM_SHOW_KEPLER:
     lsr 
     lsr                         ; 0-3
     tax
-    lda SCREEN_SYSTEM_CARD_SUIT_LUT, x
+    lda SCREEN_SYSTEM_PRE_LUT, x
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR
     inc TEXT_X
@@ -539,8 +539,8 @@ SCREEN_SYSTEM_KEYS_LABEL_BLANK      ; I'll worry about these waster bytes when I
 SCREEN_SYSTEM_SPACE_BG
     !byte 0
 
-SCREEN_SYSTEM_CARD_SUIT_LUT
-    !byte 65, 83, 90, 88
+SCREEN_SYSTEM_PRE_LUT
+    !byte 73, 74, 75, 85
 SCREEN_SYSTEM_VECTOR_LUT
     !byte 77, 78, 67, 93
 

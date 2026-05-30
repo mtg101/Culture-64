@@ -230,7 +230,7 @@ SUN_TYPE_CHARS_LUT_HIGH
 SUN_TYPE_0_CHARS
     !byte $20, $20
     !byte $20, $20
-    !byte 223, $20
+    !byte 95, $20
     !byte 160, $20
     !byte 160, $20
 
@@ -249,7 +249,7 @@ SUN_TYPE_0_CHARS
 SUN_TYPE_1_CHARS
     !byte $20, $20
     !byte $20, $20
-    !byte 223, $20
+    !byte 95, $20
     !byte 160, $20
     !byte 160, $20
 
@@ -267,7 +267,7 @@ SUN_TYPE_1_CHARS
 
 SUN_TYPE_2_CHARS
     !byte $20, $20
-    !byte 223, $20
+    !byte 95, $20
     !byte 160, $20
     !byte 160, $20
     !byte 160, $20
@@ -285,7 +285,7 @@ SUN_TYPE_2_CHARS
     !byte $20, $20
 
 SUN_TYPE_3_CHARS
-    !byte 223, $20
+    !byte 95, $20
     !byte 160, $20
     !byte 160, $20
     !byte 160, 116
@@ -306,7 +306,7 @@ SUN_TYPE_3_CHARS
 SUN_TYPE_4_CHARS
     !byte $20, $20
     !byte $20, $20
-    !byte 223, $20
+    !byte 95, $20
     !byte 160, $20
     !byte 160, $20
 
@@ -362,7 +362,7 @@ SUN_TYPE_6_CHARS
     !byte $20, 58
 
 SUN_TYPE_7_CHARS
-    !byte 223, $20
+    !byte 95, $20
     !byte 160, $20
     !byte 160, $20
     !byte 160, 116
@@ -374,7 +374,7 @@ SUN_TYPE_7_CHARS
     !byte $20, $20
     !byte $20, $20
 
-    !byte 223, $20
+    !byte 95, $20
     !byte 160, $20
     !byte 160, $20
     !byte 160, $20

@@ -38,6 +38,7 @@ MAIN
     jsr ROM_CLR_SCREEN
     jsr SCREEN_MCM_ON
     jsr SCREEN_CHAR_COPY_ROM_3000_ALL
+    jsr SCREEN_PATCH_3000_FONT
 
     jmp SYS_NO_BASIC_NO_KERNEL_ROM  ; also does raster irq setup - jmp as it's reclaiming the stack
 SYS_NO_BASIC_NO_KERNEL_ROM_DONE    

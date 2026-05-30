@@ -435,91 +435,42 @@ ORBITS_SHOW_SLOTS:
     lda #0
     sta ORBITS_INFO_STATUS
 
+    jsr PLANETS_LOAD_UDGS       ; load every time as we're procgen hacking the planet colors
+
     lda ORBITS_SLOT_1
     beq +                       ; empty
-    lda #<ORBITS_SLOT_1_PROPS
-    sta ZP_PTR_1
-    lda #>ORBITS_SLOT_1_PROPS
-    sta ZP_PTR_1_PAIR
-    lda #0
-    sta ORBITS_CURRENT_SLOT
-    jsr PLANET_SHOW_IN_SLOT
+    jsr PLANET_SHOW_SLOT_1
 +
     lda ORBITS_SLOT_2
     beq +                       ; empty
-    lda #<ORBITS_SLOT_2_PROPS
-    sta ZP_PTR_1
-    lda #>ORBITS_SLOT_2_PROPS
-    sta ZP_PTR_1_PAIR
-    lda #1
-    sta ORBITS_CURRENT_SLOT
-    jsr PLANET_SHOW_IN_SLOT
+    jsr PLANET_SHOW_SLOT_2
 +
     lda ORBITS_SLOT_3
     beq +                       ; empty
-    lda #<ORBITS_SLOT_3_PROPS
-    sta ZP_PTR_1
-    lda #>ORBITS_SLOT_3_PROPS
-    sta ZP_PTR_1_PAIR
-    lda #2
-    sta ORBITS_CURRENT_SLOT
-    jsr PLANET_SHOW_IN_SLOT
+    jsr PLANET_SHOW_SLOT_3
 +
     lda ORBITS_SLOT_4
     beq +                       ; empty
-    lda #<ORBITS_SLOT_4_PROPS
-    sta ZP_PTR_1
-    lda #>ORBITS_SLOT_4_PROPS
-    sta ZP_PTR_1_PAIR
-    lda #3
-    sta ORBITS_CURRENT_SLOT
-    jsr PLANET_SHOW_IN_SLOT
+    jsr PLANET_SHOW_SLOT_4
 +
     lda ORBITS_SLOT_5
     beq +                       ; empty
-    lda #<ORBITS_SLOT_5_PROPS
-    sta ZP_PTR_1
-    lda #>ORBITS_SLOT_5_PROPS
-    sta ZP_PTR_1_PAIR
-    lda #4
-    sta ORBITS_CURRENT_SLOT
-    jsr PLANET_SHOW_IN_SLOT
+    jsr PLANET_SHOW_SLOT_5
 +
     lda ORBITS_SLOT_6
     beq +                       ; empty
-    lda #<ORBITS_SLOT_6_PROPS
-    sta ZP_PTR_1
-    lda #>ORBITS_SLOT_6_PROPS
-    sta ZP_PTR_1_PAIR
-    lda #5
-    sta ORBITS_CURRENT_SLOT
-    jsr PLANET_SHOW_IN_SLOT
+    jsr PLANET_SHOW_SLOT_6
 +
     lda ORBITS_SLOT_7
     beq +                       ; empty
-    lda #<ORBITS_SLOT_7_PROPS
-    sta ZP_PTR_1
-    lda #>ORBITS_SLOT_7_PROPS
-    sta ZP_PTR_1_PAIR
-    lda #6
-    sta ORBITS_CURRENT_SLOT
-    jsr PLANET_SHOW_IN_SLOT
+    jsr PLANET_SHOW_SLOT_7
 +
     lda ORBITS_SLOT_8
     beq +                       ; empty
-    lda #<ORBITS_SLOT_8_PROPS
-    sta ZP_PTR_1
-    lda #>ORBITS_SLOT_8_PROPS
-    sta ZP_PTR_1_PAIR
-    lda #7
-    sta ORBITS_CURRENT_SLOT
-    jsr PLANET_SHOW_IN_SLOT
+    jsr PLANET_SHOW_SLOT_8
 +
-
     jsr ORBITS_SHOW_MOONS
-
     rts 
-
 
 ORBITS_SHOW_MOONS:
     lda ORBITS_SLOT_3_MOON_1
@@ -999,9 +950,6 @@ ORBITS_SLOT_7_X
 ORBITS_SLOT_8_X
     !byte 38            ; just enough space for 3x3
 
-ORBITS_CURRENT_SLOT
-    !byte 0
-
 ORBITS_MAX_CHARS = 15
 ORBITS_SLOT_1_BUFFER
     !fill ORBITS_MAX_CHARS+1, 0
@@ -1020,6 +968,8 @@ ORBITS_SLOT_7_BUFFER
 ORBITS_SLOT_8_BUFFER
     !fill ORBITS_MAX_CHARS+1, 0
 
+ORBITS_CURRENT_SLOT
+    !byte 0
 
 ORBITS_SLOT_3_MOON_1
     !byte 0
