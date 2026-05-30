@@ -165,7 +165,5 @@ PLANETS_3x3_M
 PLANETS_3x3_B
     !byte 95, 224, 105, 0
 
-PLANETS_MOON_TYPE_LUT
-    !byte 81, 81, 81, 81, 81, 81, 81, 81
-    !byte 87, 42, 90, 86, 46, 43, 81, 81
+
 

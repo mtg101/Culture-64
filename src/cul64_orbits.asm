@@ -191,7 +191,244 @@ ORBITS_GENERATE_SLOTS:
     sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
 +
+
+    jsr ORBITS_GENERATE_MOONS
+
     rts 
+
+ORBITS_GENERATE_MOONS:
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_3_MOON_1    ; blank it
+    lda ORBITS_SLOT_3
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_3_MOON_1    
++
+    lda #0
+    sta ORBITS_SLOT_3_MOON_2    ; blank it
+    lda ORBITS_SLOT_3
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_3_MOON_2    
++
+    
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_4_MOON_1    ; blank it
+    lda ORBITS_SLOT_4
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_4_MOON_1    
++
+    lda #0
+    sta ORBITS_SLOT_4_MOON_2    ; blank it
+    lda ORBITS_SLOT_4
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_4_MOON_2    
++
+
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_5_MOON_1    ; blank it
+    lda ORBITS_SLOT_5
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_5_MOON_1    
++
+    lda #0
+    sta ORBITS_SLOT_5_MOON_2    ; blank it
+    lda ORBITS_SLOT_5
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_5_MOON_2    
++
+
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_5_MOON_3    ; blank it
+    lda ORBITS_SLOT_5
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_5_MOON_3    
++
+    lda #0
+    sta ORBITS_SLOT_5_MOON_4    ; blank it
+    lda ORBITS_SLOT_5
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_5_MOON_4    
++
+
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_6_MOON_1    ; blank it
+    lda ORBITS_SLOT_6
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_6_MOON_1    
++
+    lda #0
+    sta ORBITS_SLOT_6_MOON_2    ; blank it
+    lda ORBITS_SLOT_6
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_6_MOON_2    
++
+
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_6_MOON_3    ; blank it
+    lda ORBITS_SLOT_6
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_6_MOON_3    
++
+    lda #0
+    sta ORBITS_SLOT_6_MOON_4    ; blank it
+    lda ORBITS_SLOT_6
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_6_MOON_4    
++
+
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_7_MOON_1    ; blank it
+    lda ORBITS_SLOT_7
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_7_MOON_1    
++
+    lda #0
+    sta ORBITS_SLOT_7_MOON_2    ; blank it
+    lda ORBITS_SLOT_7
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_7_MOON_2    
++
+
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_7_MOON_3    ; blank it
+    lda ORBITS_SLOT_7
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_7_MOON_3    
++
+    lda #0
+    sta ORBITS_SLOT_7_MOON_4    ; blank it
+    lda ORBITS_SLOT_7
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_7_MOON_4    
++
+
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_8_MOON_1    ; blank it
+    lda ORBITS_SLOT_8
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_8_MOON_1    
++
+    lda #0
+    sta ORBITS_SLOT_8_MOON_2    ; blank it
+    lda ORBITS_SLOT_8
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_8_MOON_2    
++
+
+    jsr LFSR_NEXT_SEED      ; fresh set
+
+    lda #0
+    sta ORBITS_SLOT_8_MOON_3    ; blank it
+    lda ORBITS_SLOT_8
+    beq +                       ; no planet, so no moons
+    lda LFSR_W0
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W0+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_8_MOON_3    
++
+    lda #0
+    sta ORBITS_SLOT_8_MOON_4    ; blank it
+    lda ORBITS_SLOT_8
+    beq +                       ; no planet, so no moons
+    lda LFSR_W1
+    and #%00000001
+    beq +                       ; 50% no moon
+    lda LFSR_W1+1               ; hmm 1 in 8 moons are there but invisible black...
+    sta ORBITS_SLOT_8_MOON_4    
++
+
+    rts
+
 
 ORBITS_SHOW_SLOTS:
     ; not showing status to start
@@ -278,6 +515,264 @@ ORBITS_SHOW_SLOTS:
     sta ORBITS_CURRENT_SLOT
     jsr PLANET_SHOW_IN_SLOT
 +
+
+    jsr ORBITS_SHOW_MOONS
+
+    rts 
+
+
+ORBITS_SHOW_MOONS:
+    lda ORBITS_SLOT_3_MOON_1
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-3
+    sta TEXT_Y
+    lda ORBITS_SLOT_3_X
+    sta TEXT_X
+    lda ORBITS_SLOT_3_MOON_1
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_3_MOON_2
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+3
+    sta TEXT_Y
+    lda ORBITS_SLOT_3_X
+    sta TEXT_X
+    lda ORBITS_SLOT_3_MOON_2
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_4_MOON_1
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-3
+    sta TEXT_Y
+    lda ORBITS_SLOT_4_X
+    sta TEXT_X
+    lda ORBITS_SLOT_4_MOON_1
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_4_MOON_2
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+3
+    sta TEXT_Y
+    lda ORBITS_SLOT_4_X
+    sta TEXT_X
+    lda ORBITS_SLOT_4_MOON_2
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_5_MOON_1
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-3
+    sta TEXT_Y
+    lda ORBITS_SLOT_5_X
+    sta TEXT_X
+    lda ORBITS_SLOT_5_MOON_1
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_5_MOON_2
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+3
+    sta TEXT_Y
+    lda ORBITS_SLOT_5_X
+    sta TEXT_X
+    lda ORBITS_SLOT_5_MOON_2
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_5_MOON_3
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-5
+    sta TEXT_Y
+    lda ORBITS_SLOT_5_X
+    sta TEXT_X
+    lda ORBITS_SLOT_5_MOON_3
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_5_MOON_4
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+5
+    sta TEXT_Y
+    lda ORBITS_SLOT_5_X
+    sta TEXT_X
+    lda ORBITS_SLOT_5_MOON_4
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_6_MOON_1
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-3
+    sta TEXT_Y
+    lda ORBITS_SLOT_6_X
+    sta TEXT_X
+    lda ORBITS_SLOT_6_MOON_1
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_6_MOON_2
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+3
+    sta TEXT_Y
+    lda ORBITS_SLOT_6_X
+    sta TEXT_X
+    lda ORBITS_SLOT_6_MOON_2
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_6_MOON_3
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-5
+    sta TEXT_Y
+    lda ORBITS_SLOT_6_X
+    sta TEXT_X
+    lda ORBITS_SLOT_6_MOON_3
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_6_MOON_4
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+5
+    sta TEXT_Y
+    lda ORBITS_SLOT_6_X
+    sta TEXT_X
+    lda ORBITS_SLOT_6_MOON_4
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_7_MOON_1
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-3
+    sta TEXT_Y
+    lda ORBITS_SLOT_7_X
+    sta TEXT_X
+    lda ORBITS_SLOT_7_MOON_1
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_7_MOON_2
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+3
+    sta TEXT_Y
+    lda ORBITS_SLOT_7_X
+    sta TEXT_X
+    lda ORBITS_SLOT_7_MOON_2
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_7_MOON_3
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-5
+    sta TEXT_Y
+    lda ORBITS_SLOT_7_X
+    sta TEXT_X
+    lda ORBITS_SLOT_7_MOON_3
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_7_MOON_4
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+5
+    sta TEXT_Y
+    lda ORBITS_SLOT_7_X
+    sta TEXT_X
+    lda ORBITS_SLOT_7_MOON_4
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_8_MOON_1
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-3
+    sta TEXT_Y
+    lda ORBITS_SLOT_8_X
+    sta TEXT_X
+    lda ORBITS_SLOT_8_MOON_1
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_8_MOON_2
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+3
+    sta TEXT_Y
+    lda ORBITS_SLOT_8_X
+    sta TEXT_X
+    lda ORBITS_SLOT_8_MOON_2
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_8_MOON_3
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y-5
+    sta TEXT_Y
+    lda ORBITS_SLOT_8_X
+    sta TEXT_X
+    lda ORBITS_SLOT_8_MOON_3
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    lda ORBITS_SLOT_8_MOON_4
+    and #%00000111           
+    beq +                       ; black means no moon
+    sta TEXT_COLOR
+    lda #ORBITS_Y+5
+    sta TEXT_Y
+    lda ORBITS_SLOT_8_X
+    sta TEXT_X
+    lda ORBITS_SLOT_8_MOON_4
+    jsr ORBITS_SET_MOON_CHAR
+    jsr TEXT_DRAW_CHAR
++
+    rts 
+
+ORBITS_SET_MOON_CHAR:
+    ; a holds moon byte
+    lsr
+    lsr 
+    lsr                         ; first 3 bits are color, shift past them, leaving 0-31
+    and #%00001111              ; 0-15
+    tax
+    lda ORBITS_MOON_CHARS_LUT, x
+    sta TEXT_CHAR
     rts 
 
 ORBITS_SHOW_SLOTS_INFO:
@@ -566,3 +1061,7 @@ ORBITS_SLOT_8_MOON_3
     !byte 0
 ORBITS_SLOT_8_MOON_4
     !byte 0
+
+ORBITS_MOON_CHARS_LUT
+    !byte 81, 81, 81, 81, 81, 81, 81, 81
+    !byte 87, 42, 90, 86, 46, 43, 81, 81    
