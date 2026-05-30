@@ -369,17 +369,38 @@ GetTens:
     rts 
 
 ; waits for release, so doesn't fire multiple times
-TEXT_WAIT_FOR_ENTER
+; space handling added using VSCODE agent which was pretty interesting to try
+TEXT_WAIT_FOR_ENTER_SPACE
     lda #KEY_ENTER_ROW
     sta CIA1_PRA
--
+.wait_poll
     lda CIA1_PRB
-    and #KEY_ENTER_COL  ; check pressed
-    bne -
--
+    and #KEY_ENTER_COL          ; check ENTER pressed
+    beq .wait_release
+
+    lda #KEY_SPACE_ROW
+    sta CIA1_PRA
     lda CIA1_PRB
-    and #KEY_ENTER_COL  ; check not pressed
-    beq -
+    and #KEY_SPACE_COL          ; check SPACE pressed
+    beq .wait_release
+
+    lda #KEY_ENTER_ROW
+    sta CIA1_PRA
+    jmp .wait_poll
+
+.wait_release
+    lda #KEY_ENTER_ROW
+    sta CIA1_PRA
+    lda CIA1_PRB
+    and #KEY_ENTER_COL          ; wait for ENTER release
+    beq .wait_release
+
+    lda #KEY_SPACE_ROW
+    sta CIA1_PRA
+    lda CIA1_PRB
+    and #KEY_SPACE_COL          ; wait for SPACE release
+    beq .wait_release
+
     rts
 
 TEXT_X
