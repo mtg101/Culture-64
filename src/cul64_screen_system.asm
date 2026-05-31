@@ -8,9 +8,10 @@ SCREEN_SYSTEM_SHOW
     sta LFSR_NAME_PTR+1
     jsr LFSR_SEED_FROM_NAME
 
-    ; stars
+    ; background space
     jsr STARS_FILL_SCREEN
     jsr STARS_CLEAR_LOWER
+    jsr CLOUDS_SHOW
 
     jsr SYSTEM_GEN_SYS          ; huh 'gen sys' / 'genesis' 
     jsr SYSTEM_SHOW_LABELS

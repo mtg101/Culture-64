@@ -28,6 +28,7 @@
 !source "src/cul64_name.asm"
 !source "src/cul64_ship.asm"
 !source "src/cul64_diplomat.asm"
+!source "src/cul64_nebula_clouds.asm"
 
 !source "src/cul64_screen_title.asm"
 !source "src/cul64_screen_system.asm"
@@ -39,6 +40,7 @@ MAIN
     jsr SCREEN_MCM_ON
     jsr SCREEN_CHAR_COPY_ROM_3000_FROM_64
     jsr SCREEN_PATCH_3000_FONT
+    jsr CLOUDS_PATCH_FONT
 
     jmp SYS_NO_BASIC_NO_KERNEL_ROM  ; also does raster irq setup - jmp as it's reclaiming the stack
 SYS_NO_BASIC_NO_KERNEL_ROM_DONE    
