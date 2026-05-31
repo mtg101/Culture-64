@@ -88,13 +88,14 @@ SCREEN_CHAR_COPY_ROM_3000_FROM_64
      sta $01
 
     ; --- Setup Pointers in Zero Page ---
-    lda #64
-    sta ZP_PTR_1       ; Source Low ($00 of $D000 + 64)
-    sta ZP_PTR_2       ; Destination Low ($00 of $3000 + 64)
+    ; 64*8=512/$200
+    lda #0
+    sta ZP_PTR_1       ; Source Low ($00 of $D200)
+    sta ZP_PTR_2       ; Destination Low ($00 of $3200)
     
-    lda #$d0      ; Source High ($D0 of $D000)
+    lda #$d2      ; Source High ($D2 of $D200)
     sta ZP_PTR_1_PAIR
-    lda #$30      ; Destination High ($30 of $3000)
+    lda #$32      ; Destination High ($32 of $3200)
     sta ZP_PTR_2_PAIR
 
     ; leave first 64 free

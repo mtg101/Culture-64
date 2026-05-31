@@ -42,7 +42,7 @@ DIPLOMAT_SHOW:
     jsr TEXT_DRAW_CHAR
 
     ; bg from system bg
-    lda SCREEN_SYSTEM_COLOR_2
+    lda SCREEN_SYSTEM_COLOR_TEXT_BG
     sta SCREEN_SYSTEM_SPACE_BG
 
     ; show diplomat label

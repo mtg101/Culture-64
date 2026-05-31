@@ -39,45 +39,40 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     jsr LFSR_NEXT_SEED          ; try next seed
     jmp -
 +
-    sta SCREEN_SYSTEM_COLOR_1
+    sta SCREEN_SYSTEM_COLOR_TOP_SPACE_BORDER
 
-    ; 2-15 color 2 (not black white, not same as 1)
+    ; 2-15 color 2 (not same as 1)
 -
     lda LFSR_W0+1
     and #%00001111
-    cmp #2
-    bcs +                       ; not black or white
-    jsr LFSR_NEXT_SEED          ; try next seed
-    jmp -
-+
-    cmp SCREEN_SYSTEM_COLOR_1   ; check not same color
+    cmp SCREEN_SYSTEM_COLOR_TOP_SPACE_BORDER   ; check not same color
     bne +                       ; are different
     jsr LFSR_NEXT_SEED          ; try next seed
     jmp -
 +
-    sta SCREEN_SYSTEM_COLOR_2
+    sta SCREEN_SYSTEM_COLOR_TEXT_BG
 
     ; 0-15 color 3 (not same as 2)
 -
     lda LFSR_W1
     and #%00001111
-    cmp SCREEN_SYSTEM_COLOR_2   ; check not same color
+    cmp SCREEN_SYSTEM_COLOR_TEXT_BG   ; check not same color
     bne +                       ; are different
     jsr LFSR_NEXT_SEED          ; try next seed
     jmp -
 +
-    sta SCREEN_SYSTEM_COLOR_3
+    sta SCREEN_SYSTEM_COLOR_TEXT_BORDER
 
-    ; 0-15 color 3 (not same as 3)
+    ; 0-15 color 4 (not same as 3)
 -
     lda LFSR_W1+1
     and #%00001111
-    cmp SCREEN_SYSTEM_COLOR_3   ; check not same color
+    cmp SCREEN_SYSTEM_COLOR_TEXT_BORDER   ; check not same color
     bne +                       ; are different
     jsr LFSR_NEXT_SEED          ; try next seed
     jmp -
 +
-    sta SCREEN_SYSTEM_COLOR_4
+    sta SCREEN_SYSTEM_COLOR_BOTTOM_BORDER
 
     ; 0-15 shared MCM for planet color 1 (VIC-2 only looks at 4 bits so don't have to make 0-15)
     lda LFSR_W2
@@ -157,6 +152,11 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     rts
 
 SYSTEM_SHOW_VALUES
+    ; white or black?
+    ldx SCREEN_SYSTEM_COLOR_TEXT_BG
+    lda SCREEN_SYSTEM_FONT_COLOR, x 
+    sta TEXT_COLOR
+
     ; all values same x
     lda #20
     sta TEXT_X
@@ -167,8 +167,6 @@ SYSTEM_SHOW_VALUES
     sta TEXT_STRING_PTR+1
     lda #16
     sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
     ldx SCREEN_SYSTEM_TECH_LEVEL
@@ -267,6 +265,11 @@ SYSTEM_SHOW_KEPLER:
     rts 
 
 SYSTEM_SHOW_LABELS
+    ; white or black?
+    ldx SCREEN_SYSTEM_COLOR_TEXT_BG
+    lda SCREEN_SYSTEM_FONT_COLOR, x 
+    sta TEXT_COLOR
+
     ; all labels same x
     lda #2
     sta TEXT_X
@@ -277,8 +280,6 @@ SYSTEM_SHOW_LABELS
     sta TEXT_STRING_PTR+1
     lda #16
     sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
     lda #<SCREEN_SYSTEM_TECH_LEVEL_LABEL
@@ -519,13 +520,13 @@ SCREEN_SYSTEM_CUL_STATUS_7_STRING
     !scr "culture system", 0
 
 
-SCREEN_SYSTEM_COLOR_1 
+SCREEN_SYSTEM_COLOR_TOP_SPACE_BORDER 
     !byte 0
-SCREEN_SYSTEM_COLOR_2
+SCREEN_SYSTEM_COLOR_TEXT_BG
     !byte 0
-SCREEN_SYSTEM_COLOR_3
+SCREEN_SYSTEM_COLOR_TEXT_BORDER
     !byte 0
-SCREEN_SYSTEM_COLOR_4
+SCREEN_SYSTEM_COLOR_BOTTOM_BORDER
     !byte 0
 SCREEN_SYSTEM_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
@@ -544,4 +545,7 @@ SCREEN_SYSTEM_PRE_LUT
 SCREEN_SYSTEM_VECTOR_LUT
     !byte 77, 78, 67, 93
 
-    
+; if bg is black, text white, it white black
+SCREEN_SYSTEM_FONT_COLOR
+    !byte WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, WHITE, BLACK
+    !byte BLACK, WHITE, BLACK, WHITE, BLACK, BLACK, BLACK, BLACK
