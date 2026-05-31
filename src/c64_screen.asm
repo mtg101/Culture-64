@@ -56,7 +56,7 @@ SCREEN_CHAR_COPY_ROM_3000_ALL
     sta ZP_PTR_2_PAIR
 
     ; copy all, can overwrite later with UDG
-    ldx #$08      ; copy all 256 chars: 8 pages of 256 bytes = 2048 bytes
+    ldx #$08      ; copy all 256 chars: 8 bytes per char = 2048 bytes = 8x256 pages
     ldy #$00      ; Clear Y index
     
 rom_loop:
@@ -74,6 +74,51 @@ rom_loop:
      pla
      sta $01
      cli          ; Re-enable interrupts
+
+     jsr SCREEN_CHAR_SET_3000
+     rts
+
+SCREEN_CHAR_COPY_ROM_3000_FROM_64
+     sei          ; Disable interrupts to prevent the Kernel 
+                  ; from trying to read I/O while we hide it.
+
+     lda $01      ; Save current memory configuration
+     pha
+     lda #$33     ; Map Character ROM at $D000-$DFFF
+     sta $01
+
+    ; --- Setup Pointers in Zero Page ---
+    lda #64
+    sta ZP_PTR_1       ; Source Low ($00 of $D000 + 64)
+    sta ZP_PTR_2       ; Destination Low ($00 of $3000 + 64)
+    
+    lda #$d0      ; Source High ($D0 of $D000)
+    sta ZP_PTR_1_PAIR
+    lda #$30      ; Destination High ($30 of $3000)
+    sta ZP_PTR_2_PAIR
+
+    ; leave first 64 free
+    ldx #$06      ; copy 192 chars: 8 bytes per char = 1536 bytes = 6x256 pages
+    ldy #$00      ; Clear Y index
+    
+rom_loop_64:
+    lda (ZP_PTR_1),y   ; Grab byte from ROM
+    sta (ZP_PTR_2),y   ; Write byte to RAM
+    iny           ; Next byte
+    bne rom_loop_64 ; Loop until Y wraps to 0 (256 bytes)
+    
+    inc ZP_PTR_1_PAIR       ; Move source to next page
+    inc ZP_PTR_2_PAIR       ; Move destination to next page
+    dex           ; Decrease page count
+    bne rom_loop_64 ; Repeat for all 8 pages
+
+     ; --- Restore Memory Map ---
+     pla
+     sta $01
+     cli          ; Re-enable interrupts
+
+     jsr SCREEN_CHAR_SET_3000
+     rts
 
 SCREEN_CHAR_SET_3000
     lda MEM_SETUP      ; Get current Screen/Char settings

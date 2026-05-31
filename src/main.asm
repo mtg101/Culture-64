@@ -37,15 +37,18 @@ MAIN
     jsr SCREEN_OFF
     jsr ROM_CLR_SCREEN
     jsr SCREEN_MCM_ON
-    jsr SCREEN_CHAR_COPY_ROM_3000_ALL
+    jsr SCREEN_CHAR_COPY_ROM_3000_FROM_64
     jsr SCREEN_PATCH_3000_FONT
 
     jmp SYS_NO_BASIC_NO_KERNEL_ROM  ; also does raster irq setup - jmp as it's reclaiming the stack
 SYS_NO_BASIC_NO_KERNEL_ROM_DONE    
     jsr SCREEN_ON
-
     jmp SCREEN_TITLE_SHOW
 ; screens have their own game loops
+
+; sources with fixed memory locations
+!source "src/cul64_font.asm"
+
 
 ; --- End of code section ---
 
