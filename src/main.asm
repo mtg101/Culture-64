@@ -46,10 +46,6 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
     jmp SCREEN_TITLE_SHOW
 ; screens have their own game loops
 
-; sources with fixed memory locations
-!source "src/cul64_font.asm"
-
-
 ; --- End of code section ---
 
 !ifndef PASS1 {
@@ -71,4 +67,5 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
     }
 }
 
-
+; sources with fixed memory locations
+!source "src/cul64_font.asm"
