@@ -118,12 +118,12 @@ CLOUDS_SHOW:
     lsr
     lsr                     ; Accumulator = 0 to 15
 
-    ; only 0-3 show
+    ; only 12-15 show - bt 15 never turns up so...
     sec 
-    cmp #3
-    bcs +                
+    cmp #11
+    bcc +                   ; skip if 0-10
     clc
-    adc #CLOUDS_UDG_BASE
+    adc #CLOUDS_UDG_BASE-11 ; -11 for the offset (assuming 15 not used)
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR 
 +
@@ -135,7 +135,6 @@ CLOUDS_SHOW:
     
     lda CLOUDS_W1_INDEX
     clc
-    add_w1:
     adc CLOUDS_STEP_1_X             ; Directly jump ahead horizontally
     sta CLOUDS_W1_INDEX
 
@@ -143,7 +142,6 @@ CLOUDS_SHOW:
 
     lda CLOUDS_W3_INDEX
     clc
-    add_w3:
     adc CLOUDS_STEP_3_X             ; Jump ahead diagonally
     sta CLOUDS_W3_INDEX
 
@@ -203,26 +201,17 @@ CLOUDS_W2_ROW_BASE
 CLOUDS_W3_ROW_BASE
     !byte 0
 
-CLOUDS_UDGS         ; dense to light
+CLOUDS_UDGS         ; light to dense
 CLOUDS_1
-    !byte %01000100
-    !byte %00010000
-    !byte %01000100
-    !byte %00100010
-    !byte %01001000
-    !byte %01000010
-    !byte %00010000
-    !byte %00100100
-CLOUDS_2
-    !byte %01000000
+    !byte %00000000
+    !byte %00100000
+    !byte %00000000
+    !byte %00000000
     !byte %00000100
-    !byte %10010000
+    !byte %00000000
     !byte %01000000
-    !byte %00001000
-    !byte %01000000
-    !byte %00010010
-    !byte %00001000
-CLOUDS_3
+    !byte %00000000
+CLOUDS_2
     !byte %00000000
     !byte %00100000
     !byte %00000010
@@ -231,15 +220,24 @@ CLOUDS_3
     !byte %01000000
     !byte %00001000
     !byte %00000000
-CLOUDS_4
-    !byte %00000000
-    !byte %00100000
-    !byte %00000000
-    !byte %00000000
-    !byte %00000100
-    !byte %00000000
+CLOUDS_3
     !byte %01000000
-    !byte %00000000
+    !byte %00000100
+    !byte %10010000
+    !byte %01000000
+    !byte %00001000
+    !byte %01000000
+    !byte %00010010
+    !byte %00001000
+CLOUDS_4
+    !byte %01000100
+    !byte %00010010
+    !byte %01000100
+    !byte %00100010
+    !byte %01001000
+    !byte %01001010
+    !byte %00010001
+    !byte %00100100
 
 
 ; =====================================================================
