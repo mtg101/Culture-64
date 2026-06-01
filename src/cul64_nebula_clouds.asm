@@ -43,97 +43,152 @@ CLOUDS_SHOW:
     sta CLOUDS_SEED_W2+1
 
     ; steps from seed
-    lda CLOUDS_SEED_W0+1
-    ora #1                      ; can't be 0, so just ensure odd
-    sta CLOUDS_STEP_1
-    lda CLOUDS_SEED_W1+1
-    ora #1                      ; can't be 0, so just ensure odd
-    sta CLOUDS_STEP_2
-    lda CLOUDS_SEED_W2+1
-    ora #1                      ; can't be 0, so just ensure odd
-    sta CLOUDS_STEP_3
+    lda CLOUDS_SEED_W0
+    ora #$1d                     ; make sure it's big
+    sta CLOUDS_STEP_1_X
 
+    lda CLOUDS_SEED_W0+1
+    ora #$2b                     ; make sure it's big
+    sta CLOUDS_STEP_2_Y
+
+    lda CLOUDS_SEED_W1
+    ora #$23                     ; make sure it's big
+    sta CLOUDS_STEP_3_X
+    lda CLOUDS_SEED_W1+1
+    ora #$37                     ; make sure it's big
+    sta CLOUDS_STEP_3_Y
+
+    ; base row values
+    lda CLOUDS_SEED_W2
+    sta CLOUDS_W2_ROW_BASE
+    lda CLOUDS_SEED_W2+1
+    sta CLOUDS_W2_ROW_BASE+1
+
+    lda CLOUDS_SEED_W0          ; reusing seed OK???
+    sta CLOUDS_W3_ROW_BASE
+    lda CLOUDS_SEED_W0+1
+    sta CLOUDS_W3_ROW_BASE+1
 
     ldy #0                      ; y 0-14 rows
 .clouds_row_loop:
     sty TEXT_Y
 
+    ; --- Prepare Wave Starters for this Line ---
+    ; Wave 1 resets to the exact same horizontal starting point every line
+    lda CLOUDS_SEED_W1
+    sta CLOUDS_W1_COL
+    lda CLOUDS_SEED_W1+1
+    sta CLOUDS_W1_COL+1
+
+    ; Wave 2 is purely vertical! It stays completely static across the columns,
+    ; copy its current row base directly into the active register.
+    lda CLOUDS_W2_ROW_BASE
+    sta CLOUDS_W2_COL
+    lda CLOUDS_W2_ROW_BASE+1
+    sta CLOUDS_W2_COL+1
+
+    ; Wave 3 is diagonal. Copy its current row base into its column register.
+    lda CLOUDS_W3_ROW_BASE
+    sta CLOUDS_W3_COL
+    lda CLOUDS_W3_ROW_BASE+1
+    sta CLOUDS_W3_COL+1
+
     ldx #0                      ; x 0-39 cols
 .clouds_col_loop:
     stx TEXT_X
 
-    ; wave 1
-    lda CLOUDS_SEED_W0+1        ; high byte of 16bit for 255 index
-    tay 
-    lda CLOUDS_SINE_LUT, y
+    ; --- WAVE 1: Horizontal Waves ---
+    lda CLOUDS_W1_COL+1
+    tay
+    lda CLOUDS_SINE_LUT,y
     sta ZP_PTR_TEMP_0
 
-    ; wave 2
-    lda CLOUDS_SEED_W1+1        ; high byte of 16bit for 255 index
-    tay 
-    lda CLOUDS_SINE_LUT, y
+    ; --- WAVE 2: Vertical Bars ---
+    lda CLOUDS_W2_COL+1
+    tay
+    lda CLOUDS_SINE_LUT,y
     clc
     adc ZP_PTR_TEMP_0
     sta ZP_PTR_TEMP_0
 
-    ; wave 3
-    lda CLOUDS_SEED_W2+1        ; high byte of 16bit for 255 index
-    tay 
-    lda CLOUDS_SINE_LUT, y
+    ; --- WAVE 3: Diagonal Noise ---
+    lda CLOUDS_W3_COL+1
+    tay
+    lda CLOUDS_SINE_LUT,y
     clc
-    adc ZP_PTR_TEMP_0           ; (sine 0-80, combining 3 0-240)
+    adc ZP_PTR_TEMP_0             ; Max total ~240
 
-    ; scale down to 0-15
-    lsr 
-    lsr 
-    lsr 
-    lsr 
+    ; --- Scale down to 0-15 ---
+    lsr
+    lsr
+    lsr
+    lsr                     ; Accumulator = 0 to 15
 
     ; only 0-3 show
     sec 
     cmp #3
     bcs +                
-
     clc
     adc #CLOUDS_UDG_BASE
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR 
 +
-    ; update wave 1
-    lda CLOUDS_SEED_W0
+    ; --- ADVANCE PHASES FOR THE NEXT COLUMN ---
+    ; Wave 1 moves forward horizontally
+    lda CLOUDS_W1_COL
     clc
-    adc CLOUDS_STEP_1
-    sta CLOUDS_SEED_W0
+    adc CLOUDS_STEP_1_X
+    sta CLOUDS_W1_COL
     bcc +
-    inc CLOUDS_SEED_W0+1
+    inc CLOUDS_W1_COL+1
 +
-    ; update wave 2
-    lda CLOUDS_SEED_W1
+    ; Wave 2 stays completely STILL across columns (it only moves per row)
+
+    ; Wave 3 moves forward horizontally (creating the diagonal shear)
+    lda CLOUDS_W3_COL
     clc
-    adc CLOUDS_STEP_2
-    sta CLOUDS_SEED_W1
+    adc CLOUDS_STEP_3_X
+    sta CLOUDS_W3_COL
     bcc +
-    inc CLOUDS_SEED_W1+1
+    inc CLOUDS_W3_COL+1
 +
+
     ; next col
     inx 
     cpx #CLOUDS_COLS
     bne .clouds_col_loop
-    ; only update wave 3 once per row
-    lda CLOUDS_SEED_W2
+
+
+    ; --- END OF ROW: ADVANCE VERTICAL BASES ---
+    ; Now that a whole line is done, we advance our row anchors downward.
+    
+    ; Move Wave 2 down vertically
+    lda CLOUDS_W2_ROW_BASE
     clc
-    adc CLOUDS_STEP_3
-    sta CLOUDS_SEED_W2
+    adc CLOUDS_STEP_2_Y
+    sta CLOUDS_W2_ROW_BASE
     bcc +
-    inc CLOUDS_SEED_W2+1    
-+    
+    inc CLOUDS_W2_ROW_BASE+1
++
+    ; Move Wave 3 down vertically
+    lda CLOUDS_W3_ROW_BASE
+    clc
+    adc CLOUDS_STEP_3_Y
+    sta CLOUDS_W3_ROW_BASE
+    bcc +
+    inc CLOUDS_W3_ROW_BASE+1
++
+
     ; next row
     ldy TEXT_Y                  ; we used as an index earlier
     iny 
     cpy #CLOUDS_ROWS
-    bne .clouds_row_loop
+    bne .clouds_row_loop_bounce
 
     rts 
+
+.clouds_row_loop_bounce:
+    jmp .clouds_row_loop
 
 CLOUDS_SEED_W0
     !word 0
@@ -142,12 +197,26 @@ CLOUDS_SEED_W1
 CLOUDS_SEED_W2
     !word 0
 
-CLOUDS_STEP_1
+CLOUDS_STEP_1_X
     !byte 0
-CLOUDS_STEP_2
+CLOUDS_STEP_2_Y
     !byte 0
-CLOUDS_STEP_3
+CLOUDS_STEP_3_X
     !byte 0
+CLOUDS_STEP_3_Y
+    !byte 0
+
+CLOUDS_W1_COL
+    !word 0
+CLOUDS_W2_COL
+    !word 0
+CLOUDS_W3_COL
+    !word 0
+
+CLOUDS_W2_ROW_BASE
+    !word 0
+CLOUDS_W3_ROW_BASE
+    !word 0
 
 CLOUDS_UDGS         ; dense to light
 CLOUDS_1
