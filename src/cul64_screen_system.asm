@@ -24,6 +24,9 @@ SCREEN_SYSTEM_SHOW
     lda #BLACK
     sta SCREEN_SYSTEM_SPACE_BG
 
+    ; music!
+    jsr music_init
+
     jsr SCREEN_ON
 
     jmp SCREEN_SYSTEM_GAME_LOOP

@@ -29,6 +29,7 @@
 !source "src/cul64_ship.asm"
 !source "src/cul64_diplomat.asm"
 !source "src/cul64_nebula_clouds.asm"
+!source "src/cul64_theme_music.asm"
 
 !source "src/cul64_screen_title.asm"
 !source "src/cul64_screen_system.asm"

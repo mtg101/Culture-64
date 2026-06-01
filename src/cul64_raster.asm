@@ -238,6 +238,9 @@ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_LAST
     sta BG_COL
     sta BORDER_COL
 +    
+
+    jsr music_play_frame
+
     +RASTER_INTERRUPT_SET_ROW 0
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_TOP
