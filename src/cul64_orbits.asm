@@ -730,7 +730,7 @@ ORBITS_SHOW_SLOTS_INFO:
     ; clear sHIP jUMP iNFO
     lda #0 
     sta TEXT_Y
-    lda #17
+    lda #11
     sta TEXT_X
     lda #<SCREEN_SYSTEM_KEYS_LABEL_BLANK
     sta TEXT_STRING_PTR

@@ -323,7 +323,7 @@ SYSTEM_SHOW_LABELS
 SYSTEM_SHOW_KEYS:
     lda #0 
     sta TEXT_Y
-    lda #17
+    lda #11
     sta TEXT_X
     lda #CYAN
     sta TEXT_COLOR
@@ -335,6 +335,19 @@ SYSTEM_SHOW_KEYS:
     rts     
 
 SCREEN_SYSTEM_GAME_LOOP
+    ; j jump
+    lda #KEY_M_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_M_COL  ; check pressed
+    bne +           ; not pressed jump
+-
+    lda CIA1_PRB
+    and #KEY_M_COL  ; check released
+    beq -
+    jsr SCREEN_SYSTEM_TOGGLE_THEME_MUSIC
++
     ; j jump
     lda #KEY_J_ROW
     sta CIA1_PRA
@@ -388,6 +401,19 @@ SCREEN_SYSTEM_GAME_LOOP
     jmp DIPLOMAT_SHOW
 +
     jmp SCREEN_SYSTEM_GAME_LOOP
+
+SCREEN_SYSTEM_TOGGLE_THEME_MUSIC
+    lda SCREEN_SYSTEM_THEME_VOL
+    bne +
+    lda #$0f
+    sta SCREEN_SYSTEM_THEME_VOL
+    jmp ++
++
+    lda #0
+    sta SCREEN_SYSTEM_THEME_VOL
+++
+    sta VOLUME_RETI             ; Set $D418 to $0F (Max Volume, standard output)
+    rts
 
 SCREEN_SYSTEM_NAME_LABEL
     !scr "system", 0
@@ -536,10 +562,24 @@ SCREEN_SYSTEM_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
 SCREEN_SYSTEM_KEYS_LABEL
     ; sHIP jMUMP iNFO
-    !byte 132, 9, 16, 12, 15, 13, 1, 20, 32, 147, 8, 9, 16, 32, 138, 21, 13, 16, 32, 137, 14, 6, 15, 0     ; 22+null
+    !byte 138           ; jump 4 = 4
+    !scr "ump"
+    !byte 32            ; space +1 = 5
+    !byte 141           ; music +5 = 10
+    !scr "usic"
+    !byte 32            ; space +1 = 11
+    !byte 132           ; +8 = 19
+    !scr "iplomat"
+    !byte 32            ; +1 = 20
+    !byte 147           ; +4 = 24
+    !scr "hip"
+    !byte 32            ; +1 = 25
+    !byte 137           ; +4 = 29
+    !scr "nfo"
+    !byte  0                            ; +1 = 30
 
 SCREEN_SYSTEM_KEYS_LABEL_BLANK      ; I'll worry about these waster bytes when I run out of bytes... TODO
-    !byte 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 32, 0     ; 23+null
+    !fill 30, 32                        ; fill (phil ;) spaces
 
 SCREEN_SYSTEM_SPACE_BG
     !byte 0
@@ -553,3 +593,7 @@ SCREEN_SYSTEM_VECTOR_LUT
 SCREEN_SYSTEM_FONT_COLOR
     !byte WHITE, BLACK, WHITE, BLACK, WHITE, WHITE, WHITE, BLACK
     !byte BLACK, WHITE, BLACK, WHITE, BLACK, BLACK, BLACK, BLACK
+
+; $00 silent, $0F max vol
+SCREEN_SYSTEM_THEME_VOL
+    !byte 0

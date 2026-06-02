@@ -61,7 +61,7 @@ music_init:
     ; 3. CRITICAL: Force audio paths open and set volume to maximum
     lda #$00
     sta FILTER_RES              ; Clear $D417 (Bypasses filter, forces V3 into output)
-    lda #$0F
+    lda SCREEN_SYSTEM_THEME_VOL
     sta VOLUME_RETI             ; Set $D418 to $0F (Max Volume, standard output)
 
     ; 4. DERIVE MUSIC ENGINE PARAMETERS FROM YOUR SEEDS
