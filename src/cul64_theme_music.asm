@@ -50,7 +50,7 @@ music_init:
     lda #0
     sta SCREEN_SYSTEM_MUSIC_JUMPING
 
-
+    ; next seed
     jsr LFSR_NEXT_SEED
 
     ; 1. Hard reset all SID registers to a clean state
@@ -156,11 +156,8 @@ music_play_frame:
     ; but not while jumping
     lda SCREEN_SYSTEM_MUSIC_JUMPING
     beq +
-    ; off while jumping
-    lda #$00
-    sta VOLUME_RETI             ; volume off
+    jsr sfx_update_frame_warp
     rts                         
-
 +    
 
     ; --------------------------------------------------------------------------
@@ -304,6 +301,99 @@ music_play_frame:
 
     rts
 
+
+; ==============================================================================
+; Call this the exact frame the player initiates the jump
+; ==============================================================================
+sfx_trigger_warp:
+    ; 1. Set effect duration to 30 frames (~0.5 second - 50hz won't be too long)
+    lda #30
+    sta warp_timer
+
+    ; 2. Ensure Master Volume is wide open
+    lda #$0F
+    sta VOLUME_RETI
+
+    ; 3. Setup Voice 1 Envelope (Sawtooth Whine - Quick attack, infinite sustain)
+    lda #$00                    ; Instant Attack
+    sta V1_AD
+    lda #$F0                    ; Full Sustain
+    sta V1_SR
+
+    ; 4. Setup Voice 2 Envelope (Noise Splash - Instant attack, rapid decay)
+    lda #$0A                    ; Snappy Decay
+    sta V2_AD
+    lda #$00                    ; No Sustain
+    sta V2_SR
+
+    ; 5. Set initial starting frequencies
+    lda #$00
+    sta V1_FREQ_LO
+    sta V1_FREQ_HI              ; Start Voice 1 at absolute bass bottom
+    
+    sta V2_FREQ_LO
+    lda #$18                    ; Deeper, lower frequency for heavy noise blast
+    sta V2_FREQ_HI
+
+    ; 6. Gate both voices ON
+    lda #$21                    ; Sawtooth + Gate ON
+    sta V1_CTRL
+    
+    lda #$81                    ; Noise + Gate ON
+    sta V2_CTRL
+
+    rts
+
+
+; ==============================================================================
+; play sfx warp
+; ==============================================================================
+sfx_update_frame_warp:
+    lda warp_timer
+    bne .process_sfx            ; If timer > 0, update the sound
+    rts                         ; Otherwise, exit immediately
+
+.process_sfx:
+    dec warp_timer              ; Count down from 30 to 0
+    bne .calculate_sweep        ; If it hasn't hit 0, calculate the sweep
+    
+    ; --- EFFECT ENDS (Frame 30) ---
+    lda #$20                    ; Gate OFF Voice 1
+    sta V1_CTRL
+    lda #$80                    ; Gate OFF Voice 2
+    sta V1_CTRL
+    rts
+
+.calculate_sweep:
+    ; --- DYNAMIC FREQUENCY ACCELERATION ---
+    ; To make the jump feel like it accelerates, we calculate the sweep using:
+    ; Current Pitch = (30 - warp_timer)
+    ; This creates a linear upward ramp.
+    lda #30
+    sec
+    sbc warp_timer              ; A now goes from 1 (start) to 59 (end)
+    
+    ; Shift left to multiply by 2 or 4 to make the pitch climb rapidly
+;    asl
+    asl                         ; Max value around $EC (perfect for FREQ_HI)
+    sta V1_FREQ_HI              ; Slam it straight into Voice 1's pitch
+    
+    ; Optional: Add a bit of texture to the low byte to create ring vibrato
+    sta V1_FREQ_LO
+
+    ; --- GRADUAL NOISE DECAY OVERRIDE ---
+    ; Slowly drop the Noise gate halfway through to keep it clean
+    lda warp_timer
+    cmp #15                     ; Halfway mark (0.5 seconds in)
+    bne .exit
+    
+    lda #$80                    ; Force Gate OFF on Noise to let it bleed out
+    sta V2_CTRL
+
+.exit:
+    rts
+
+
 ; ------------------------------------------------------------------------------
 ; ENGINE LOOKUP MATRICES
 ; ------------------------------------------------------------------------------
@@ -324,3 +414,7 @@ table_scales:
     
     ; 24: Pentatonic (Classic Arcade/Fast Pace)
     !byte $11, $14, $16, $1A, $1E, $25, $2B, $33
+
+
+warp_timer:     !byte 0         ; 0 = Inactive, 30 to 1 = Playing
+

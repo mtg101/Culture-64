@@ -149,6 +149,8 @@ BB_JUMP_SHOW
     ; pause music during jump
     lda #1
     sta SCREEN_SYSTEM_MUSIC_JUMPING
+    ; and jump sound
+    jsr sfx_trigger_warp
 
     ; jump effect
     lda #BLACK
