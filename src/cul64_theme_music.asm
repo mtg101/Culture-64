@@ -123,18 +123,24 @@ music_init:
 
     jsr LFSR_NEXT_SEED      ; that time again...
 
-    ; instruments
-    ; drums are special
-
-    ; melody
+    ; drum pattern
     lda LFSR_W0
+    and #%00000111          ; 0-7
+    tax
+    lda drum_pattern_lut_low, x 
+    sta drum_pattern_ptr
+    lda drum_pattern_lut_high, x 
+    sta drum_pattern_ptr+1
+
+    ; melody instrument
+    lda LFSR_W0+1
     and #%00000111          ; 0-7
     tax 
     lda melody_instrument_lut, x
     sta melody_instrument
 
-    ; drone
-    lda LFSR_W0+1
+    ; drone instrument
+    lda LFSR_W1
     and #%00000111          ; 0-7
     tax 
     lda drone_instrument_lut, x
@@ -221,13 +227,20 @@ music_play_frame:
     sta step_counter
 
     ; --------------------------------------------------------------------------
-    ; CHANNEL 1: THE BEAT (TRUE NOISE KICK-START EDITION)
+    ; CHANNEL 1: THE BEAT 
     ; --------------------------------------------------------------------------
-    lda step_counter
-    and #$03
-    bne .decay_drum             ; If not on the beat, branch to gate off
+    lda step_counter        ; 0-15
+    tay
 
-    ; STRIKE DRUM (Steps 0, 4, 8, 12)
+    lda drum_pattern_ptr
+    sta ZP_PTR_1
+    lda drum_pattern_ptr+1
+    sta ZP_PTR_1_PAIR
+
+    lda (ZP_PTR_1), y
+    beq .decay_drum         ; not playing this beat   
+
+    ; STRIKE DRUM
     ; Step A: Set pitch low so the noise has a heavy, bassy rumble
     lda #$00
     sta V1_FREQ_LO
@@ -528,6 +541,8 @@ last_note_idx:  !byte 0         ; Tracks our current scale step position (0-7)
 
 drone_instrument !byte 0        
 
+drum_pattern_ptr !word 0
+
 drone_instrument_lut
     !byte %10000001         ; noise
     !byte %01000001         ; pulse
@@ -549,3 +564,172 @@ melody_instrument_lut
     !byte %00010001         ; tri
     !byte %00010001         ; tri
     !byte %00010001         ; tri
+
+; drum pattern lut
+drum_pattern_lut_low
+    !byte <drum_pattern_1
+    !byte <drum_pattern_2
+    !byte <drum_pattern_3
+    !byte <drum_pattern_4
+    !byte <drum_pattern_5
+    !byte <drum_pattern_6
+    !byte <drum_pattern_7
+    !byte <drum_pattern_8
+
+drum_pattern_lut_high
+    !byte >drum_pattern_1
+    !byte >drum_pattern_2
+    !byte >drum_pattern_3
+    !byte >drum_pattern_4
+    !byte >drum_pattern_5
+    !byte >drum_pattern_6
+    !byte >drum_pattern_7
+    !byte >drum_pattern_8
+
+; drum patterns
+; 16 byte tables of on/off
+drum_pattern_1
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+
+drum_pattern_2
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+
+drum_pattern_3
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+
+drum_pattern_4
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0001
+
+drum_pattern_5
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+
+drum_pattern_6
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+
+drum_pattern_7
+    !byte 0001
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0001
+    !byte 0
+    !byte 0
+
+drum_pattern_8
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+    !byte 0001
+    !byte 0
+    !byte 0
+    !byte 0
+
+
