@@ -41,7 +41,7 @@ SCREEN_TITLE_SHOW
 
     lda #14
     sta TEXT_X
-    lda #5
+    lda #21
     sta TEXT_Y
 
     lda #BLUE
@@ -57,7 +57,7 @@ SCREEN_TITLE_SHOW
 
     lda #14
     sta TEXT_X
-    lda #6
+    lda #22
     sta TEXT_Y
 
     lda #CYAN
@@ -73,7 +73,7 @@ SCREEN_TITLE_SHOW
 
     lda #14
     sta TEXT_X
-    lda #7
+    lda #23
     sta TEXT_Y
 
     lda #PURPLE
@@ -89,7 +89,7 @@ SCREEN_TITLE_SHOW
 
     lda #14
     sta TEXT_X
-    lda #8
+    lda #24
     sta TEXT_Y
 
     lda #RED
@@ -103,9 +103,9 @@ SCREEN_TITLE_SHOW
     lda #>SCREEN_TITLE_POST
     sta TEXT_STRING_PTR+1
 
-    lda #16
+    lda #3
     sta TEXT_X
-    lda #19
+    lda #14
     sta TEXT_Y
 
     lda #CYAN
@@ -119,9 +119,9 @@ SCREEN_TITLE_SHOW
     lda #>SCREEN_TITLE_DREAMS
     sta TEXT_STRING_PTR+1
 
-    lda #3
-    sta TEXT_X
     lda #21
+    sta TEXT_X
+    lda #16
     sta TEXT_Y
 
     lda #YELLOW
@@ -137,7 +137,7 @@ SCREEN_TITLE_SHOW
 
     lda #7
     sta TEXT_X
-    lda #24
+    lda #4
     sta TEXT_Y
 
     lda #GREEN
@@ -153,7 +153,7 @@ SCREEN_TITLE_SHOW
 
     jsr TEXT_CENTER_STRING
 
-    lda #13
+    lda #9
     sta TEXT_Y
 
     lda #WHITE
