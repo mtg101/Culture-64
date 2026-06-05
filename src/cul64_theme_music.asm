@@ -105,7 +105,7 @@ music_init:
     ; Voice 1 (Noise Drum): Instant Attack, snappy decay phase
     lda #$0A                    ; Instant Attack ($0-), Snappy Decay (-$A)
     sta V1_AD
-    lda #$08                    ; Zero Sustain ($0-), Short crisp Release (-$8)
+    lda #$00                    ; Zero Sustain and release - crisp
     sta V1_SR
 
     ; Voice 2 (Melody): Instant Attack, Medium Release
