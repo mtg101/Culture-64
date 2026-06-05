@@ -87,6 +87,15 @@ SHIP_COPY_TO_LOGO:
 
 
 SHIP_SHOW:
+    ; play theme music
+    lda #<SHIP_NAME_BUFFER
+    sta LFSR_NAME_PTR
+    lda #>SHIP_NAME_BUFFER
+    sta LFSR_NAME_PTR+1
+    jsr LFSR_SEED_FROM_NAME
+
+    jsr music_init
+
     ; clear bg
     ldx #0
 -
