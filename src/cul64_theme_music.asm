@@ -120,6 +120,26 @@ music_init:
     lda #$F0
     sta V3_SR
 
+
+    jsr LFSR_NEXT_SEED      ; that time again...
+
+    ; instruments
+    ; drums are special
+
+    ; melody
+    lda LFSR_W0
+    and #%00000111          ; 0-7
+    tax 
+    lda melody_instrument_lut, x
+    sta melody_instrument
+
+    ; drone
+    lda LFSR_W0+1
+    and #%00000111          ; 0-7
+    tax 
+    lda drone_instrument_lut, x
+    sta drone_instrument
+
     rts
 
 ; ==============================================================================
@@ -310,12 +330,13 @@ music_play_frame:
     lda #$00
     sta V2_FREQ_LO              ; Clear Low Byte
 
-    lda #$21                    ; Sawtooth Waveform + Gate ON
+    lda melody_instrument
     sta V2_CTRL
     jmp .channel3_drone
 
 .melody_rest:
-    lda #$20                    ; Sawtooth Waveform + Gate OFF (Release phase)
+    lda melody_instrument
+    and #%11111110          ; gate off
     sta V2_CTRL
 
     ; --------------------------------------------------------------------------
@@ -340,7 +361,7 @@ music_play_frame:
 
 +
 
-    lda #$11                    ; Triangle Waveform + Gate ON (Smooth low drone)
+    lda drone_instrument
     sta V3_CTRL
 
     rts
@@ -505,3 +526,26 @@ warp_timer:     !byte 0         ; 0 = Inactive, 30 to 1 = Playing
 
 last_note_idx:  !byte 0         ; Tracks our current scale step position (0-7)
 
+drone_instrument !byte 0        
+
+drone_instrument_lut
+    !byte %10000001         ; noise
+    !byte %01000001         ; pulse
+    !byte %00100001         ; saw
+    !byte %00100001         ; saw
+    !byte %00100001         ; saw
+    !byte %00010001         ; tri
+    !byte %00010001         ; tri
+    !byte %00010001         ; tri
+
+melody_instrument !byte 0
+
+melody_instrument_lut
+    !byte %10000001         ; noise
+    !byte %01000001         ; pulse
+    !byte %00100001         ; saw
+    !byte %00100001         ; saw
+    !byte %00100001         ; saw
+    !byte %00010001         ; tri
+    !byte %00010001         ; tri
+    !byte %00010001         ; tri
