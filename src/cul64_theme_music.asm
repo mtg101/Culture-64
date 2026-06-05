@@ -102,17 +102,12 @@ music_init:
     sta cfg_bass_pitch
 
     ; 5. CONFIGURE ADSR ENVELOPES
-; Voice 1 (Pulse Drum): Fast attack, quick decay, very short release
-    lda #$00                    ; Instant Attack ($0-), Fast Decay (-$0)
-    sta V1_AD
-    lda #$14                    ; Very low Sustain ($1-), Crisp Release (-$4)
-    sta V1_SR
 
-    ; Set Pulse Width Duty Cycle to a sharp 12.5% (~$0100)
-    lda #$00
-    sta V1_PW_LO
-    lda #$01
-    sta V1_PW_HI
+    ; Voice 1 (Noise Drum): Instant Attack, snappy decay phase
+    lda #$0A                    ; Instant Attack ($0-), Snappy Decay (-$A)
+    sta V1_AD
+    lda #$08                    ; Zero Sustain ($0-), Short crisp Release (-$8)
+    sta V1_SR
 
     ; Voice 2 (Melody): Instant Attack, Medium Release
     lda #$00
@@ -151,25 +146,32 @@ music_play_frame:
     sta step_counter
 
     ; --------------------------------------------------------------------------
-    ; CHANNEL 1: THE BEAT (FIXED WORKING TRIANGLE DRUM)
+    ; CHANNEL 1: THE BEAT (TRUE NOISE KICK-START EDITION)
     ; --------------------------------------------------------------------------
     lda step_counter
     and #$03
     bne .decay_drum             ; If not on the beat, branch to gate off
 
-; Strike Drum on steps 0, 4, 8, 12
-    lda #$01
+    ; STRIKE DRUM (Steps 0, 4, 8, 12)
+    ; Step A: Set pitch low so the noise has a heavy, bassy rumble
+    lda #$00
     sta V1_FREQ_LO
-    lda #$09                    ; Dropped slightly lower ($09) for extra bass weight
+    lda #$12                    ; Low frequency register placement
     sta V1_FREQ_HI
     
-    lda #$41                    ; Pulse Waveform ($40) + Gate ON ($01)
+    ; Step B: THE KICK-START TRICK
+    ; Briefly pulse a Triangle wave to wake up the internal oscillators
+    lda #$10                    ; Triangle Wave, Gate OFF
+    sta V1_CTRL
+    
+    ; Step C: Immediately slam it into Noise mode + Gate ON
+    lda #$81                    ; Noise Waveform ($80) + Gate ON ($01)
     sta V1_CTRL
     jmp .channel2_melody
 
 .decay_drum:
-    ; On steps 1, 2, 3 we clear the gate so the ADSR decay takes over
-    lda #$40                    ; Pulse Waveform ($40) + Gate OFF ($00)
+    ; On steps 1, 2, 3 we drop the gate to let the ADSR release phase finish
+    lda #$80                    ; Noise Waveform ($80) + Gate OFF ($00)
     sta V1_CTRL
 
     ; --------------------------------------------------------------------------
@@ -205,7 +207,7 @@ music_play_frame:
     sta V2_FREQ_LO              ; Clear Low Byte
 
     lda #$21                    ; Sawtooth Waveform + Gate ON
-; hack melody off    sta V2_CTRL
+    sta V2_CTRL
     jmp .channel3_drone
 
 .melody_rest:
@@ -223,7 +225,7 @@ music_play_frame:
     sta V3_FREQ_HI
 
     lda #$11                    ; Triangle Waveform + Gate ON (Smooth low drone)
-; hack off drone    sta V3_CTRL
+    sta V3_CTRL
 
     rts
 
