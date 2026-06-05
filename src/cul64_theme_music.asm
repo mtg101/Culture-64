@@ -10,6 +10,8 @@ SID_BASE    = $D400
 
 V1_FREQ_LO  = SID_BASE + 0
 V1_FREQ_HI  = SID_BASE + 1
+V1_PW_LO    = SID_BASE + 2
+V1_PW_HI    = SID_BASE + 3
 V1_CTRL     = SID_BASE + 4
 V1_AD       = SID_BASE + 5
 V1_SR       = SID_BASE + 6
@@ -100,11 +102,17 @@ music_init:
     sta cfg_bass_pitch
 
     ; 5. CONFIGURE ADSR ENVELOPES
-    ; Voice 1 (Bass Drum): Instant Attack, Quick Decay, No Sustain
-    lda #$08
+; Voice 1 (Pulse Drum): Fast attack, quick decay, very short release
+    lda #$00                    ; Instant Attack ($0-), Fast Decay (-$0)
     sta V1_AD
-    lda #$00
+    lda #$14                    ; Very low Sustain ($1-), Crisp Release (-$4)
     sta V1_SR
+
+    ; Set Pulse Width Duty Cycle to a sharp 12.5% (~$0100)
+    lda #$00
+    sta V1_PW_LO
+    lda #$01
+    sta V1_PW_HI
 
     ; Voice 2 (Melody): Instant Attack, Medium Release
     lda #$00
@@ -143,24 +151,25 @@ music_play_frame:
     sta step_counter
 
     ; --------------------------------------------------------------------------
-    ; CHANNEL 1: THE BEAT (BASS DRUM)
+    ; CHANNEL 1: THE BEAT (FIXED WORKING TRIANGLE DRUM)
     ; --------------------------------------------------------------------------
-    ; Fire a heavy kick drum on steps 0, 4, 8, and 12
     lda step_counter
     and #$03
-    bne .decay_drum
+    bne .decay_drum             ; If not on the beat, branch to gate off
 
-    ; Trigger Drum Strike
-    lda #$00
+; Strike Drum on steps 0, 4, 8, 12
+    lda #$01
     sta V1_FREQ_LO
-    lda #$30                    ; Deep low-mid punch frequency
+    lda #$09                    ; Dropped slightly lower ($09) for extra bass weight
     sta V1_FREQ_HI
-    lda #$41                    ; Noise Waveform + Gate ON
+    
+    lda #$41                    ; Pulse Waveform ($40) + Gate ON ($01)
     sta V1_CTRL
     jmp .channel2_melody
 
 .decay_drum:
-    lda #$40                    ; Noise Waveform + Gate OFF (Allows natural decay)
+    ; On steps 1, 2, 3 we clear the gate so the ADSR decay takes over
+    lda #$40                    ; Pulse Waveform ($40) + Gate OFF ($00)
     sta V1_CTRL
 
     ; --------------------------------------------------------------------------
@@ -196,7 +205,7 @@ music_play_frame:
     sta V2_FREQ_LO              ; Clear Low Byte
 
     lda #$21                    ; Sawtooth Waveform + Gate ON
-    sta V2_CTRL
+; hack melody off    sta V2_CTRL
     jmp .channel3_drone
 
 .melody_rest:
@@ -214,7 +223,7 @@ music_play_frame:
     sta V3_FREQ_HI
 
     lda #$11                    ; Triangle Waveform + Gate ON (Smooth low drone)
-    sta V3_CTRL
+; hack off drone    sta V3_CTRL
 
     rts
 
