@@ -351,7 +351,7 @@ SCREEN_SYSTEM_GAME_LOOP
 
     lda CIA1_PRB
     and #KEY_M_COL  ; check pressed
-    bne +           ; not pressed jump
+    bne +           ; not pressed music
 -
     lda CIA1_PRB
     and #KEY_M_COL  ; check released
@@ -600,4 +600,6 @@ SCREEN_SYSTEM_FONT_COLOR
 
 ; $00 silent, $0F max vol
 SCREEN_SYSTEM_MUSIC_ON
+    !byte 0
+SCREEN_SYSTEM_MUSIC_JUMPING
     !byte 0

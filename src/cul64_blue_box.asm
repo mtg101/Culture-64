@@ -146,6 +146,10 @@ BB_JUMP_SHOW
     lda #0
     sta RASTER_BLUE_BOX_STATUS
 
+    ; pause music during jump
+    lda #1
+    sta SCREEN_SYSTEM_MUSIC_JUMPING
+
     ; jump effect
     lda #BLACK
     sta SCREEN_SYSTEM_COLOR_TOP_SPACE_BORDER
@@ -165,7 +169,7 @@ BB_JUMP_SHOW
     inx
     cpx #BB_MAX_CHARS
     bne -
-    
+
     jmp SCREEN_SYSTEM_SHOW
 
 BB_JUMP_WHERE

@@ -46,6 +46,11 @@ cfg_bass_pitch: !byte 0         ; Root pitch for the drone
 ; Call this when entering a location to parse your seeds and reset the chip
 ; ==============================================================================
 music_init:
+    ; un pause music from jump
+    lda #0
+    sta SCREEN_SYSTEM_MUSIC_JUMPING
+
+
     jsr LFSR_NEXT_SEED
 
     ; 1. Hard reset all SID registers to a clean state
@@ -142,14 +147,21 @@ music_play_frame:
     ; only if music is on
     lda SCREEN_SYSTEM_MUSIC_ON
     bne +
-
     ; music is off
+    lda #$00
+    sta VOLUME_RETI             ; volume off
+    rts                         
++    
+    ; music is on
+    ; but not while jumping
+    lda SCREEN_SYSTEM_MUSIC_JUMPING
+    beq +
+    ; off while jumping
     lda #$00
     sta VOLUME_RETI             ; volume off
     rts                         
 
 +    
-    ; music is on
 
     ; --------------------------------------------------------------------------
     ; DYNAMIC DRONE OSCILLATOR (RUNS EVERY FRAME)
