@@ -3,43 +3,6 @@
 ; 100% Self-Contained, Zero-Page Free, Pure Register Math
 ; ==============================================================================
 
-; ------------------------------------------------------------------------------
-; HARDWARE REGISTERS
-; ------------------------------------------------------------------------------
-SID_BASE    = $D400
-
-V1_FREQ_LO  = SID_BASE + 0
-V1_FREQ_HI  = SID_BASE + 1
-V1_PW_LO    = SID_BASE + 2
-V1_PW_HI    = SID_BASE + 3
-V1_CTRL     = SID_BASE + 4
-V1_AD       = SID_BASE + 5
-V1_SR       = SID_BASE + 6
-
-V2_FREQ_LO  = SID_BASE + 7
-V2_FREQ_HI  = SID_BASE + 8
-V2_CTRL     = SID_BASE + 11
-V2_AD       = SID_BASE + 12
-V2_SR       = SID_BASE + 13
-
-V3_FREQ_LO  = SID_BASE + 14
-V3_FREQ_HI  = SID_BASE + 15
-V3_CTRL     = SID_BASE + 18
-V3_AD       = SID_BASE + 19
-V3_SR       = SID_BASE + 20
-
-FILTER_RES  = SID_BASE + 23     ; $D417
-VOLUME_RETI = SID_BASE + 24     ; $D418
-
-; INTERNAL ENGINE CLOCKS
-clock_ticks:    !byte 0         ; Frame counter
-step_counter:   !byte 0         ; 16th-note step (0-15)
-
-; RUNTIME CONFIGURATION GENERATED FROM SEEDS
-runtime_lfsr:   !byte 0         ; Current state of running melody generator
-cfg_scale_idx:  !byte 0         ; Offset into the scale table (0, 8, 16, or 24)
-cfg_rhythm_mask:!byte 0         ; Rests configuration bitmask
-cfg_bass_pitch: !byte 0         ; Root pitch for the drone
 
 ; ==============================================================================
 ; API ROUTINE: music_init
@@ -84,27 +47,28 @@ music_init:
 
     ; 4. DERIVE MUSIC ENGINE PARAMETERS FROM YOUR SEEDS
     
-    ; Melody Init: Load High Byte of LFSR_W2. If 0, fallback to $7F so it shifts
-    lda LFSR_W2 + 1
+    ; Melody Init: If 0, fallback to $7F so it shifts
+    lda LFSR_W0
     bne .store_lfsr
     lda #$7F
 .store_lfsr:
     sta runtime_lfsr
 
-    ; Scale Picker: Use LFSR_W1 Low Byte to select 1 of 4 scales (0, 8, 16, 24)
-    lda LFSR_W1
+    ; Scale Picker
+    lda LFSR_W0+1
     and #%00000011
     asl
     asl
     asl
     sta cfg_scale_idx
 
-    ; Rhythm Picker: Use LFSR_W1 High Byte as a pattern logic gate mask
-    lda LFSR_W1 + 1
+    ; Rhythm Picker
+    lda LFSR_W1
+;    ora #%10001000              ; force melody notes on bars
     sta cfg_rhythm_mask
 
-    ; Bass Drone Picker: Use LFSR_W0 Low Byte to choose a steady root room key
-    lda LFSR_W0
+    ; Bass Drone Picker 1
+    lda LFSR_W1+1
     and #$07                    ; Select notes 0-7 from the active scale
     clc
     adc cfg_scale_idx
@@ -112,10 +76,26 @@ music_init:
     lda table_scales, x
     lsr                         ; Drop 2 octaves for sub-bass feel
     lsr
-    bne .store_bass
+    bne +
     lda #$05                    ; Prevent silent 0 frequency fallback
-.store_bass:
-    sta cfg_bass_pitch
++
+    sta cfg_bass_pitch_1
+
+    ; Bass Drone Picker 2
+    lda LFSR_W2
+    and #$07                    ; Select notes 0-7 from the active scale
+    clc
+    adc cfg_scale_idx
+    tax
+    lda table_scales, x
+    lsr                         ; Drop 2 octaves for sub-bass feel
+    lsr
+    bne +
+    lda #$05                    ; Prevent silent 0 frequency fallback
++
+    sta cfg_bass_pitch_2
+
+
 
     ; 5. CONFIGURE ADSR ENVELOPES
 
@@ -199,7 +179,7 @@ music_play_frame:
 
 .apply_done:
     ; --------------------------------------------------------------------------
-    ; STANDARD TEMPO CLOCK CHECK (REST OF YOUR ENGINE CONTINUES HERE)
+    ; STANDARD TEMPO CLOCK CHECK
     ; --------------------------------------------------------------------------
     inc clock_ticks
     lda clock_ticks
@@ -216,6 +196,14 @@ music_play_frame:
     adc #1
     and #$0F
     sta step_counter
+
+    bne .skip_phrase_reset      ; Only trigger at the absolute start of a 16 sequence
+    
+    ; Every 16 steps, reload the seed to force the melody to repeat its "hook"
+    lda phrase_snapshot
+    sta runtime_lfsr
+    
+.skip_phrase_reset:
 
     ; --------------------------------------------------------------------------
     ; CHANNEL 1: THE BEAT (TRUE NOISE KICK-START EDITION)
@@ -257,6 +245,7 @@ music_play_frame:
     eor #$B8
 .no_lfsr_feedback:
     sta runtime_lfsr
+    sta phrase_snapshot
 
     ; Evaluate rhythm seed mask to decide if this note plays or rests
     lda step_counter
@@ -266,11 +255,48 @@ music_play_frame:
     and cfg_rhythm_mask
     beq .melody_rest            ; If mask bit is 0, skip note trigger
 
-    ; Translate LFSR math into note scale frequencies
+    ; WEIGHTED PITCH CHOICE
+    ; Isolate a 3-bit slice from the LFSR (Value 0 to 7)
     lda runtime_lfsr
-    and #$07                    ; Limit index to 0-7
+    and #%00000111
+    
+    ; Branch table logic based on the 0-7 result
+    cmp #3
+    bcc .move_up_one            ; 0, 1, 2 -> Go up 1 step
+    
+    cmp #6
+    bcc .move_down_one          ; 3, 4, 5 -> Go down 1 step
+    
+    cmp #6
+    beq .leap_up_two            ; 6       -> Expressive leap up 2 steps
+    
+    jmp .apply_pitch            ; 7       -> Stay on the same note (0 movement)
+
+.move_up_one:
+    inc last_note_idx
+    jmp .clamp_bounds
+
+.move_down_one:
+    dec last_note_idx
+    jmp .clamp_bounds
+
+.leap_up_two:
+    lda last_note_idx
     clc
-    adc cfg_scale_idx           ; Add active scale offset
+    adc #2                      ; Jump up two scale degrees
+    sta last_note_idx
+
+.clamp_bounds:
+    ; Force our running scale index to stay bounded strictly between 0 and 7
+    lda last_note_idx
+    and #$07                    ; Clean wraps from 7->0 or 0->7
+    sta last_note_idx
+
+.apply_pitch:
+    ; Combine our relative note index with the base scale offset
+    lda last_note_idx
+    clc
+    adc cfg_scale_idx
     tax
 
     lda table_scales, x
@@ -290,11 +316,35 @@ music_play_frame:
     ; CHANNEL 3: THE DRONE (STEADY AMBIENT PAD)
     ; --------------------------------------------------------------------------
 .channel3_drone:
-    ; Voice 3 plays a continuous, un-interrupted background room root key
+    ; Voice 4 plays base, changes every 8 beats
     lda #$00
     sta V3_FREQ_LO
-    lda cfg_bass_pitch
+
+    ; assume first note
+    lda cfg_bass_pitch_1
     sta V3_FREQ_HI
+
+    ; second note if needed
+    lda step_counter
+    cmp #8
+    bcc +               ; it was less than 8 for stick with first note
+
+    lda cfg_bass_pitch_2
+    sta V3_FREQ_HI
+
++
+
+
+
+
+
+
+    
+
+
+
+
+
 
     lda #$11                    ; Triangle Waveform + Gate ON (Smooth low drone)
     sta V3_CTRL
@@ -415,6 +465,49 @@ table_scales:
     ; 24: Pentatonic (Classic Arcade/Fast Pace)
     !byte $11, $14, $16, $1A, $1E, $25, $2B, $33
 
+; ------------------------------------------------------------------------------
+; HARDWARE REGISTERS
+; ------------------------------------------------------------------------------
+SID_BASE    = $D400
+
+V1_FREQ_LO  = SID_BASE + 0
+V1_FREQ_HI  = SID_BASE + 1
+V1_PW_LO    = SID_BASE + 2
+V1_PW_HI    = SID_BASE + 3
+V1_CTRL     = SID_BASE + 4
+V1_AD       = SID_BASE + 5
+V1_SR       = SID_BASE + 6
+
+V2_FREQ_LO  = SID_BASE + 7
+V2_FREQ_HI  = SID_BASE + 8
+V2_CTRL     = SID_BASE + 11
+V2_AD       = SID_BASE + 12
+V2_SR       = SID_BASE + 13
+
+V3_FREQ_LO  = SID_BASE + 14
+V3_FREQ_HI  = SID_BASE + 15
+V3_CTRL     = SID_BASE + 18
+V3_AD       = SID_BASE + 19
+V3_SR       = SID_BASE + 20
+
+FILTER_RES  = SID_BASE + 23     ; $D417
+VOLUME_RETI = SID_BASE + 24     ; $D418
+
+; INTERNAL ENGINE CLOCKS
+clock_ticks:    !byte 0         ; Frame counter
+step_counter:   !byte 0         ; 16th-note step (0-15)
+
+; RUNTIME CONFIGURATION GENERATED FROM SEEDS
+runtime_lfsr:   !byte 0         ; Current state of running melody generator
+cfg_scale_idx:  !byte 0         ; Offset into the scale table (0, 8, 16, or 24)
+cfg_rhythm_mask:!byte 0         ; Rests configuration bitmask
+cfg_bass_pitch_1: !byte 0         ; Root pitch 1 for the drone
+cfg_bass_pitch_2: !byte 0         ; Root pitch 1 for the drone
+
 
 warp_timer:     !byte 0         ; 0 = Inactive, 30 to 1 = Playing
+
+phrase_snapshot: !byte 0
+
+last_note_idx:  !byte 0         ; Tracks our current scale step position (0-7)
 
