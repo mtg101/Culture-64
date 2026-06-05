@@ -332,6 +332,16 @@ SYSTEM_SHOW_KEYS:
     lda #>SCREEN_SYSTEM_KEYS_LABEL
     sta TEXT_STRING_PTR+1
     jsr TEXT_DRAW_STRING
+
+    ; set mUSIC color depending on state
+    lda SCREEN_SYSTEM_MUSIC_ON
+    beq +
+    ; music is on, show dark 'm'
+    lda #16
+    sta TEXT_X
+    lda #GREEN
+    sta COLOR_RAM+16
++
     rts     
 
 SCREEN_SYSTEM_GAME_LOOP
@@ -406,6 +416,7 @@ SCREEN_SYSTEM_TOGGLE_THEME_MUSIC
     lda SCREEN_SYSTEM_MUSIC_ON
     eor #01
     sta SCREEN_SYSTEM_MUSIC_ON
+    jsr SYSTEM_SHOW_KEYS    
     rts
 
 SCREEN_SYSTEM_NAME_LABEL
