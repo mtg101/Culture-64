@@ -186,7 +186,7 @@ music_play_frame:
     ; --------------------------------------------------------------------------
     inc clock_ticks
     lda clock_ticks
-    and #$07                    
+    and #$07
     beq .run_sequencer
     rts
 .run_sequencer:
@@ -199,14 +199,6 @@ music_play_frame:
     adc #1
     and #$0F
     sta step_counter
-
-    bne .skip_phrase_reset      ; Only trigger at the absolute start of a 16 sequence
-    
-    ; Every 16 steps, reload the seed to force the melody to repeat its "hook"
-    lda phrase_snapshot
-    sta runtime_lfsr
-    
-.skip_phrase_reset:
 
     ; --------------------------------------------------------------------------
     ; CHANNEL 1: THE BEAT (TRUE NOISE KICK-START EDITION)
@@ -248,8 +240,7 @@ music_play_frame:
     eor #$B8
 .no_lfsr_feedback:
     sta runtime_lfsr
-    sta phrase_snapshot
-
+ 
     ; Evaluate rhythm seed mask to decide if this note plays or rests
     lda step_counter
     cmp #8
@@ -511,8 +502,6 @@ cfg_bass_pitch_2: !byte 0         ; Root pitch 1 for the drone
 
 
 warp_timer:     !byte 0         ; 0 = Inactive, 30 to 1 = Playing
-
-phrase_snapshot: !byte 0
 
 last_note_idx:  !byte 0         ; Tracks our current scale step position (0-7)
 
