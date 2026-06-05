@@ -60,11 +60,22 @@ music_init:
     sta clock_ticks
     sta step_counter
 
-    ; 3. CRITICAL: Force audio paths open and set volume to maximum
-    lda #$00
-    sta FILTER_RES              ; Clear $D417 (Bypasses filter, forces V3 into output)
-    lda #$0f
-    sta VOLUME_RETI             ; Set $D418 to $0F (Max Volume, standard output)
+    ; --------------------------------------------------------------------------
+    ; UPDATED FILTER ROUTING
+    ; --------------------------------------------------------------------------
+    ; Register $D417 (FILTER_RES):
+    ; Bit 7-4: Resonance amount (Let's set it to $4 for a nice wet synth sound)
+    ; Bit 2: Filter Voice 3 (1 = Route through filter!)
+    ; Bit 1: Filter Voice 2 (1 = Route through filter!)
+    ; Bit 0: Filter Voice 1 (0 = Keep drum clean and unfiltered)
+    lda #%01000110              ; Resonance $4 + Route Voice 2 & 3
+    sta FILTER_RES              ; $D417
+
+    ; Register $D418 (VOLUME_RETI):
+    ; Bit 4: Low-Pass Filter Mode (1 = ON)
+    ; Bit 3-0: Master Volume (Start at Max $0F)
+    lda #%00011111              ; Low-Pass Mode ($10) + Max Volume ($0F)
+    sta VOLUME_RETI             ; $D418
 
     ; 4. DERIVE MUSIC ENGINE PARAMETERS FROM YOUR SEEDS
     
@@ -139,15 +150,53 @@ music_play_frame:
 
 +    
     ; music is on
-    lda #$0f
-    sta VOLUME_RETI             ; volume on
 
+    ; --------------------------------------------------------------------------
+    ; DYNAMIC DRONE OSCILLATOR (RUNS EVERY FRAME)
+    ; --------------------------------------------------------------------------
+    ; We read the rapid frame counter to create a running LFO (Low Frequency Oscillator)
+    lda clock_ticks
+    asl                         ; Multiply by 2 to make the oscillation faster
+    and #$3F                    ; Squelch it to a repeating 0-63 triangle ramp range
+    cmp #$20                    ; Symmetrical fold-back mirror check
+    bcc .ramp_up
+    eor #$3F                    ; Flip the wave to create a clean triangle LFO shape
+.ramp_up:
+    ; A now contains a smoothly oscillating value from 0 to 31
+    
+    ; 1. APPLY FILTER CUTOFF SWEEP
+    ; Push our oscillating value into the high byte of the filter cutoff.
+    ; This opens and closes the tone, making it sound "wet" and breathing.
+    clc
+    adc #$15                    ; Add a baseline so the filter never closes completely
+    sta SID_BASE + 22           ; $D416 - Filter Cutoff Frequency High
+
+    ; 2. APPLY THE PUMPING VOLUME TREMOLO
+    ; We map our frame counter directly to the step tracker to duck the volume.
+    ; If the drum is about to hit (step_counter sub-beat low), drop the volume.
+    lda step_counter
+    and #$03
+    bne .volume_swell           ; If not a drum step, swell the volume up
+    
+    ; Drum hit frame: Slam master volume down for heavy side-chain compression thud
+    lda #%00011000              ; Low-Pass Mode ON ($10) + Med Volume ($08)
+    sta VOLUME_RETI
+    jmp .apply_done
+
+.volume_swell:
+    ; Between beats: Open the master volume back up to max
+    lda #%00011111              ; Low-Pass Mode ON ($10) + Max Volume ($0F)
+    sta VOLUME_RETI
+
+.apply_done:
+    ; --------------------------------------------------------------------------
+    ; STANDARD TEMPO CLOCK CHECK (REST OF YOUR ENGINE CONTINUES HERE)
+    ; --------------------------------------------------------------------------
     inc clock_ticks
     lda clock_ticks
-    and #$07                    ; Speed controller: Step sequencer every 8 frames
+    and #$07                    
     beq .run_sequencer
-    rts                         ; Exit early if not a step boundary
-
+    rts
 .run_sequencer:
     lda #0
     sta clock_ticks             ; Reset frame accumulator
