@@ -65,10 +65,13 @@ music_init:
     ; Rhythm Picker
     lda LFSR_W1
 ;    ora #%10001000              ; force melody notes on bars
-    sta cfg_rhythm_mask
+    sta cfg_rhythm_mask_1
+    lda LFSR_W1+1
+;    ora #%10001000              ; force melody notes on bars
+    sta cfg_rhythm_mask_2
 
     ; Bass Drone Picker 1
-    lda LFSR_W1+1
+    lda LFSR_W2
     and #$07                    ; Select notes 0-7 from the active scale
     clc
     adc cfg_scale_idx
@@ -82,7 +85,7 @@ music_init:
     sta cfg_bass_pitch_1
 
     ; Bass Drone Picker 2
-    lda LFSR_W2
+    lda LFSR_W2+1
     and #$07                    ; Select notes 0-7 from the active scale
     clc
     adc cfg_scale_idx
@@ -249,10 +252,22 @@ music_play_frame:
 
     ; Evaluate rhythm seed mask to decide if this note plays or rests
     lda step_counter
+    cmp #8
+    bcc +                       
+    ; second rhythm
     and #$07                    ; Transform step counter to 0-7 bit position
     tax
     lda table_bit_masks, x
-    and cfg_rhythm_mask
+    and cfg_rhythm_mask_2
+    jmp ++
++
+    ; first rhythm
+    and #$07                    ; Transform step counter to 0-7 bit position
+    tax
+    lda table_bit_masks, x
+    and cfg_rhythm_mask_1
+++
+
     beq .melody_rest            ; If mask bit is 0, skip note trigger
 
     ; WEIGHTED PITCH CHOICE
@@ -333,18 +348,6 @@ music_play_frame:
     sta V3_FREQ_HI
 
 +
-
-
-
-
-
-
-    
-
-
-
-
-
 
     lda #$11                    ; Triangle Waveform + Gate ON (Smooth low drone)
     sta V3_CTRL
@@ -500,7 +503,9 @@ step_counter:   !byte 0         ; 16th-note step (0-15)
 ; RUNTIME CONFIGURATION GENERATED FROM SEEDS
 runtime_lfsr:   !byte 0         ; Current state of running melody generator
 cfg_scale_idx:  !byte 0         ; Offset into the scale table (0, 8, 16, or 24)
-cfg_rhythm_mask:!byte 0         ; Rests configuration bitmask
+cfg_rhythm_mask_1:    !byte 0         ; Rests configuration bitmask
+cfg_rhythm_mask_2:  !byte 0         ; Rests configuration bitmask
+
 cfg_bass_pitch_1: !byte 0         ; Root pitch 1 for the drone
 cfg_bass_pitch_2: !byte 0         ; Root pitch 1 for the drone
 
