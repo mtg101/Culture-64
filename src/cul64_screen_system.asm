@@ -403,16 +403,9 @@ SCREEN_SYSTEM_GAME_LOOP
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SCREEN_SYSTEM_TOGGLE_THEME_MUSIC
-    lda SCREEN_SYSTEM_THEME_VOL
-    bne +
-    lda #$0f
-    sta SCREEN_SYSTEM_THEME_VOL
-    jmp ++
-+
-    lda #0
-    sta SCREEN_SYSTEM_THEME_VOL
-++
-    sta VOLUME_RETI             ; Set $D418 to $0F (Max Volume, standard output)
+    lda SCREEN_SYSTEM_MUSIC_ON
+    eor #01
+    sta SCREEN_SYSTEM_MUSIC_ON
     rts
 
 SCREEN_SYSTEM_NAME_LABEL
@@ -595,5 +588,5 @@ SCREEN_SYSTEM_FONT_COLOR
     !byte BLACK, WHITE, BLACK, WHITE, BLACK, BLACK, BLACK, BLACK
 
 ; $00 silent, $0F max vol
-SCREEN_SYSTEM_THEME_VOL
+SCREEN_SYSTEM_MUSIC_ON
     !byte 0

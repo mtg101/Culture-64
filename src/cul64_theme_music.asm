@@ -63,7 +63,7 @@ music_init:
     ; 3. CRITICAL: Force audio paths open and set volume to maximum
     lda #$00
     sta FILTER_RES              ; Clear $D417 (Bypasses filter, forces V3 into output)
-    lda SCREEN_SYSTEM_THEME_VOL
+    lda #$0f
     sta VOLUME_RETI             ; Set $D418 to $0F (Max Volume, standard output)
 
     ; 4. DERIVE MUSIC ENGINE PARAMETERS FROM YOUR SEEDS
@@ -128,6 +128,20 @@ music_init:
 ; Call this exactly once per frame inside your raster interrupt
 ; ==============================================================================
 music_play_frame:
+    ; only if music is on
+    lda SCREEN_SYSTEM_MUSIC_ON
+    bne +
+
+    ; music is off
+    lda #$00
+    sta VOLUME_RETI             ; volume off
+    rts                         
+
++    
+    ; music is on
+    lda #$0f
+    sta VOLUME_RETI             ; volume on
+
     inc clock_ticks
     lda clock_ticks
     and #$07                    ; Speed controller: Step sequencer every 8 frames
