@@ -214,6 +214,9 @@ music_play_frame:
     lda clock_ticks
     and #$07
     beq .run_sequencer
+    ; kill that drum noise
+    lda #$80                    ; Noise Waveform ($80) + Gate OFF ($00)
+    sta V1_CTRL
     rts
 .run_sequencer:
     lda #0
@@ -238,13 +241,12 @@ music_play_frame:
     sta ZP_PTR_1_PAIR
 
     lda (ZP_PTR_1), y
-    beq .decay_drum         ; not playing this beat   
+    beq .skip_drum         ; not playing this beat   
 
     ; STRIKE DRUM
-    ; Step A: Set pitch low so the noise has a heavy, bassy rumble
     lda #$00
     sta V1_FREQ_LO
-    lda #$12                    ; Low frequency register placement
+    lda #$40                    ; Low frequency register placement
     sta V1_FREQ_HI
     
     ; Step B: THE KICK-START TRICK
@@ -257,10 +259,7 @@ music_play_frame:
     sta V1_CTRL
     jmp .channel2_melody
 
-.decay_drum:
-    ; On steps 1, 2, 3 we drop the gate to let the ADSR release phase finish
-    lda #$80                    ; Noise Waveform ($80) + Gate OFF ($00)
-    sta V1_CTRL
+.skip_drum:
 
     ; --------------------------------------------------------------------------
     ; CHANNEL 2: THE MELODY (LFSR SEQUENCER)
