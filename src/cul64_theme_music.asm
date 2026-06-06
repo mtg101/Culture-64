@@ -98,30 +98,49 @@ music_init:
 +
     sta cfg_bass_pitch_2
 
-
-
     ; 5. CONFIGURE ADSR ENVELOPES
+    jsr LFSR_NEXT_SEED      ; and again
 
-    ; Voice 1 (Noise Drum): Instant Attack, snappy decay phase
-    lda #$0A                    ; Instant Attack ($0-), Snappy Decay (-$A)
+    ; drum stuff  variants
+    lda LFSR_W0
+    and #%00000111              ; 0=7
+    tax
+    lda drum_ad_lut, x
     sta V1_AD
-    lda #$00                    ; Zero Sustain and release - crisp
+
+    lda LFSR_W0+1
+    and #%00000111              ; 0=7
+    tax
+    lda drum_sr_lut, x
     sta V1_SR
 
-    ; Voice 2 (Melody): Instant Attack, Medium Release
-    lda #$00
+    ; Voice 2 (Melody): Instant Attack, Medium Release variants
+    lda LFSR_W1
+    and #%00000111              ; 0=7
+    tax
+    lda melody_ad_lut, x
     sta V2_AD
-    lda #$A4
+
+    lda LFSR_W1+1
+    and #%00000111              ; 0=7
+    tax
+    lda melody_sr_lut, x
     sta V2_SR
 
-    ; Voice 3 (Drone): Instant Attack, Infinite Sustain
-    lda #$00
+    ; Voice 3 (Drone): Instant Attack, Infinite Sustain variants
+    lda LFSR_W2
+    and #%00000111              ; 0=7
+    tax
+    lda drone_ad_lut, x
     sta V3_AD
-    lda #$F0
+
+    lda LFSR_W2+1
+    and #%00000111              ; 0=7
+    tax
+    lda drone_sr_lut, x
     sta V3_SR
 
-
-    jsr LFSR_NEXT_SEED      ; that time again...
+    jsr LFSR_NEXT_SEED      ; and again
 
     ; drum pattern
     lda LFSR_W0
@@ -743,3 +762,78 @@ drum_pattern_8
     !byte 0
 
 
+    ; lda #$0A                    ; Instant Attack ($0-), Snappy Decay (-$A)
+    ; sta V1_AD
+    ; lda #$00                    ; Zero Sustain and release - crisp
+    ; sta V1_SR
+drum_ad_lut
+    !byte $0A
+    !byte $0F
+    !byte $0A
+    !byte $04
+    !byte $1A
+    !byte $8F
+    !byte $4A
+    !byte $26
+
+drum_sr_lut
+    !byte $00
+    !byte $02
+    !byte $00
+    !byte $00
+    !byte $28
+    !byte $40
+    !byte $13
+    !byte $10
+
+    ; ; Voice 2 (Melody): Instant Attack, Medium Release
+    ; lda #$00
+    ; sta V2_AD
+    ; lda #$A4
+    ; sta V2_SR
+
+melody_ad_lut
+    !byte $00
+    !byte $10
+    !byte $20
+    !byte $30
+    !byte $01
+    !byte $02
+    !byte $03
+    !byte $64
+
+melody_sr_lut
+    !byte $A4
+    !byte $A4
+    !byte $A0
+    !byte $A0
+    !byte $24
+    !byte $24
+    !byte $9F
+    !byte $97
+
+    ; ; Voice 3 (Drone): Instant Attack, Infinite Sustain
+    ; lda #$00
+    ; sta V3_AD
+    ; lda #$F0
+    ; sta V3_SR
+
+drone_ad_lut
+    !byte $00
+    !byte $10
+    !byte $20
+    !byte $30
+    !byte $02
+    !byte $04
+    !byte $05
+    !byte $82
+
+drone_sr_lut
+    !byte $F1
+    !byte $F2
+    !byte $F3
+    !byte $E4
+    !byte $F5
+    !byte $A6
+    !byte $F1
+    !byte $FB
