@@ -208,6 +208,49 @@ ORBITS_GENERATE_SLOTS:
     jsr PLANET_GENERATE_IN_SLOT
 +
 
+    jsr LFSR_NEXT_SEED          ; planets used it
+
+    lda #0
+    sta ORBITS_OORT_CLOUD
+
+    lda ORBITS_SLOT_7
+    bne .no_oort
+    lda ORBITS_SLOT_8_BUFFER
+    bne .no_oort
+
+    ; so slots 7 and 8 are empty : oort cloud always (it's rare!)
+    lda LFSR_W0
+    and #%00000111
+    tax
+    lda ORBITS_OORT_COLORS, x
+    sta TEXT_COLOR
+
+    lda #0
+    sta TEXT_Y
+
+    lda #92
+    sta TEXT_CHAR
+
+.oort_loop
+    lda #36
+    sta TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+
+    inc TEXT_Y
+    lda TEXT_Y
+    cmp #15
+    beq +
+    jmp .oort_loop
++
+
+
+.no_oort
     jsr ORBITS_GENERATE_MOONS
 
     rts 
@@ -1112,3 +1155,8 @@ ORBITS_MOON_CHARS_LUT
 
 ORBITS_DYSON_SWARM 
     !byte 0
+ORBITS_OORT_CLOUD
+    !byte 0
+
+ORBITS_OORT_COLORS
+    !byte RED, RED, BLUE, BLUE, PURPLE, PURPLE, GREEN, GREEN
