@@ -7,6 +7,7 @@ SUN_SHOW
 
     ldy SUN_TYPE
     lda (ZP_PTR_1), y               ; a has color
+    sta SUN_COLOR
 
     ; write colors
     sta COLOR_RAM+(40*0)
@@ -145,6 +146,9 @@ SUN_SHOW
     rts
 
 SUN_TYPE
+    !byte 0
+
+SUN_COLOR 
     !byte 0
 
 SUN_TYPE_DIST         ; 0-7 types, over 32 for curve

@@ -79,6 +79,9 @@ ORBITS_GENERATE_SLOTS:
     sta ORBITS_SLOT_7_BUFFER
     sta ORBITS_SLOT_8_BUFFER
 
+    lda #0
+    sta ORBITS_DYSON_SWARM
+
     lda ORBITS_SLOT_1
     beq +                       ; empty
     lda #<ORBITS_SLOT_1_PROPS
@@ -92,7 +95,20 @@ ORBITS_GENERATE_SLOTS:
     lda #>ORBITS_SLOT_1_BUFFER
     sta ZP_PTR_2_PAIR
     jsr PLANET_GENERATE_IN_SLOT
+    jmp ++
 +
+    ; empty but if it's kardy ii+ maybe a dyson swarm!
+    lda SCREEN_SYSTEM_TECH_LEVEL
+    cmp #4                          ; 0-3 below kard ii level for dyson
+    bcc ++
+
+    ; empty slot 1, and tech enough for a dyson swarm!
+    lda LFSR_W1
+    and #%00000001
+    bne ++                          ; 50% dyson swarm
+    lda #1
+    sta ORBITS_DYSON_SWARM
+++
     lda ORBITS_SLOT_2
     beq +                       ; empty
     lda #<ORBITS_SLOT_2_PROPS
@@ -193,6 +209,80 @@ ORBITS_GENERATE_SLOTS:
 +
 
     jsr ORBITS_GENERATE_MOONS
+
+    rts 
+
+ORBITS_DYSON_SWARM_SHOW:
+    lda #0
+    sta TEXT_Y
+    lda SUN_COLOR
+    sta TEXT_COLOR
+
+; top 
+    lda #77
+    sta TEXT_CHAR
+
+    lda #4
+    sta TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_Y
+    lda #4
+    sta TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_Y
+    lda #4
+    sta TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+
+; mid
+    inc TEXT_Y
+    lda #41
+    sta TEXT_CHAR
+.dyson_loop_mid:
+    lda #4
+    sta TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_Y
+    lda TEXT_Y
+    cmp #12
+    beq +
+    jmp .dyson_loop_mid
++
+
+; bot
+    lda #78
+    sta TEXT_CHAR
+
+    lda #4
+    sta TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+
+    inc TEXT_Y
+    lda #4
+    sta TEXT_X
+    jsr TEXT_DRAW_CHAR
+    inc TEXT_X
+    jsr TEXT_DRAW_CHAR
+
+    inc TEXT_Y
+    lda #4
+    sta TEXT_X
+    jsr TEXT_DRAW_CHAR
+
 
     rts 
 
@@ -437,6 +527,10 @@ ORBITS_SHOW_SLOTS:
 
     jsr PLANETS_LOAD_UDGS       ; load every time as we're procgen hacking the planet colors
 
+    lda ORBITS_DYSON_SWARM
+    beq +
+    jsr ORBITS_DYSON_SWARM_SHOW
++
     lda ORBITS_SLOT_1
     beq +                       ; empty
     jsr PLANET_SHOW_SLOT_1
@@ -1015,3 +1109,6 @@ ORBITS_SLOT_8_MOON_4
 ORBITS_MOON_CHARS_LUT
     !byte 81, 81, 81, 81, 81, 81, 81, 81
     !byte 87, 42, 90, 86, 46, 43, 81, 81    
+
+ORBITS_DYSON_SWARM 
+    !byte 0
