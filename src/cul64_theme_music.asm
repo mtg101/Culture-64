@@ -243,12 +243,23 @@ music_play_frame:
     lda (ZP_PTR_1), y
     beq .skip_drum         ; not playing this beat   
 
-    ; STRIKE DRUM
+    cmp #2
+    beq +                    ; playing bass
+
+    ; SNARE DRUM
     lda #$00
     sta V1_FREQ_LO
     lda #$40                    ; Low frequency register placement
     sta V1_FREQ_HI
-    
+    jmp ++
++    
+    ; BASS DRUM
+    lda #$00
+    sta V1_FREQ_LO
+    lda #$09                    ; Low frequency register placement
+    sta V1_FREQ_HI
+
+++
     ; Step B: THE KICK-START TRICK
     ; Briefly pulse a Triangle wave to wake up the internal oscillators
     lda #$10                    ; Triangle Wave, Gate OFF
@@ -590,53 +601,53 @@ drum_pattern_lut_high
 drum_pattern_1
     !byte 0001
     !byte 0
-    !byte 0
-    !byte 0
-    !byte 0001
-    !byte 0
-    !byte 0
+    !byte 002
     !byte 0
     !byte 0001
     !byte 0
-    !byte 0
+    !byte 002
     !byte 0
     !byte 0001
     !byte 0
+    !byte 002
     !byte 0
+    !byte 0001
+    !byte 0
+    !byte 002
     !byte 0
 
 drum_pattern_2
+    !byte 002
     !byte 0001
-    !byte 0
+    !byte 002
     !byte 0001
-    !byte 0
+    !byte 002
     !byte 0001
-    !byte 0
+    !byte 002
     !byte 0001
-    !byte 0
+    !byte 002
     !byte 0001
-    !byte 0
+    !byte 002
     !byte 0001
-    !byte 0
+    !byte 002
     !byte 0001
-    !byte 0
+    !byte 002
     !byte 0001
-    !byte 0
 
 drum_pattern_3
-    !byte 0001
+    !byte 002
     !byte 0
     !byte 0001
     !byte 0
-    !byte 0001
+    !byte 002
     !byte 0
     !byte 0
     !byte 0
-    !byte 0001
-    !byte 0
-    !byte 0001
+    !byte 002
     !byte 0
     !byte 0001
+    !byte 0
+    !byte 002
     !byte 0
     !byte 0
     !byte 0
@@ -645,26 +656,26 @@ drum_pattern_4
     !byte 0001
     !byte 0
     !byte 0
-    !byte 0001
-    !byte 0001
-    !byte 0
-    !byte 0
-    !byte 0001
+    !byte 002
     !byte 0001
     !byte 0
     !byte 0
-    !byte 0001
+    !byte 002
     !byte 0001
     !byte 0
     !byte 0
+    !byte 002
     !byte 0001
+    !byte 0
+    !byte 0
+    !byte 002
 
 drum_pattern_5
     !byte 0001
     !byte 0
     !byte 0
     !byte 0
-    !byte 0
+    !byte 002
     !byte 0
     !byte 0
     !byte 0
@@ -672,7 +683,7 @@ drum_pattern_5
     !byte 0
     !byte 0
     !byte 0
-    !byte 0
+    !byte 002
     !byte 0
     !byte 0
     !byte 0
@@ -714,21 +725,21 @@ drum_pattern_7
     !byte 0
 
 drum_pattern_8
-    !byte 0001
-    !byte 0
-    !byte 0
+    !byte 002
     !byte 0
     !byte 0001
     !byte 0
-    !byte 0
-    !byte 0
-    !byte 0001
-    !byte 0
-    !byte 0
+    !byte 002
     !byte 0
     !byte 0001
     !byte 0
+    !byte 002
     !byte 0
+    !byte 0001
+    !byte 0
+    !byte 002
+    !byte 0
+    !byte 0001
     !byte 0
 
 
