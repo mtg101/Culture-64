@@ -259,14 +259,38 @@ SHIP_GAME_LOOP
     beq -
     jmp SCREEN_SYSTEM_SHOW
 +
+    ; h home jump
+    lda #KEY_H_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_H_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_H_COL  ; check released
+    beq -
+    jmp SHIP_GO_HOME    
++
     jmp SHIP_GAME_LOOP
 
+SHIP_GO_HOME:
+    ; jump home: prepopulate jump bb with home system name
 
+    ldx #0
+.ship_go_home_loop:
+    lda SHIP_HOME_BUFFER, x
+    sta BB_TEXT_ENTRY_BUFFER, x
+    inx
+    cmp #0
+    bne .ship_go_home_loop
+    jmp BB_JUMP_SHOW
 
 SHIP_SHIP_LABEL
     !scr "ship", 0
 SHIP_HOME_LABEL
-    !scr "home system", 0
+    !byte 136
+    !scr "ome system", 0
 SHIP_CARGO_LABEL
     !scr "cargo bay", 0
 SHIP_CABIN_LABEL
