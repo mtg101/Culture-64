@@ -152,6 +152,10 @@ BB_JUMP_SHOW
     ; and jump sound
     jsr sfx_trigger_warp
 
+    ; ensure space is black during jump
+    lda #BLACK
+    sta SCREEN_SYSTEM_SPACE_BG
+
     ; jump effect
     lda #BLACK
     sta SCREEN_SYSTEM_COLOR_TOP_SPACE_BORDER
