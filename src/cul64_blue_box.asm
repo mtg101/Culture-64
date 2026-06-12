@@ -267,10 +267,13 @@ BB_TEXT_ENTRY
     sta TEXT_Y
     jsr TEXT_DRAW_STRING
 
+    lda BB_TEXT_ENTRY_PRE_POP
+    bne .bb_text_entry_loop_pre_pop 
     lda #0
     sta BB_TEXT_ENTRY_BUFFER    ; clear buffer (null start)
     sta BB_CHAR_COUNT           ; reset size
-    
+.bb_text_entry_loop_pre_pop 
+    jmp .update_text
 
 .bb_text_entry_loop
     jsr BB_SCAN_MATRIX  ; Scan the hardware
@@ -469,3 +472,5 @@ BB_CHAR_COUNT
     !byte 0
 BB_TEXT_BLANK
     !scr ">                      <", 0
+BB_TEXT_ENTRY_PRE_POP       ; if not zero, caller has provided entry text in BB_TEXT_ENTRY_BUFFER and has set BB_CHAR_COUNT
+    !byte 0

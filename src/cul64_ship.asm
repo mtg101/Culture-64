@@ -284,6 +284,11 @@ SHIP_GO_HOME:
     inx
     cmp #0
     bne .ship_go_home_loop
+
+    dex
+    stx BB_CHAR_COUNT
+    stx BB_TEXT_ENTRY_PRE_POP   ; we have pre-popd, any non-zero works so use x
+
     jmp BB_JUMP_SHOW
 
 SHIP_SHIP_LABEL
