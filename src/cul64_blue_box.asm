@@ -273,6 +273,8 @@ BB_TEXT_ENTRY
     sta BB_TEXT_ENTRY_BUFFER    ; clear buffer (null start)
     sta BB_CHAR_COUNT           ; reset size
 .bb_text_entry_loop_pre_pop 
+    lda #0
+    sta BB_TEXT_ENTRY_PRE_POP   ; reset to blanking
     jmp .update_text
 
 .bb_text_entry_loop
