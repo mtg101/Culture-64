@@ -68,7 +68,7 @@ PLANET_GENERATE_IN_SLOT:
 +
 .planet_size_done
 
-    ; color
+    ; color not black
 -
     lda LFSR_W0+1
     and #%00000111              ; 0-7

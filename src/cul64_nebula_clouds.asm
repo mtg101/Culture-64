@@ -24,8 +24,8 @@ CLOUDS_SHOW_ASTEROID_BELT:
     sta CLOUDS_COLS
     inc CLOUDS_COLS             ; inx before cpx
 
-    lda #1
-    sta CLOUDS_ALWAYS_ON
+    lda #0
+    sta CLOUDS_NEBULA_MODE
 
     jsr CLOUDS_SHOW
     rts
@@ -37,8 +37,8 @@ CLOUDS_SHOW_OORT:
     lda #40
     sta CLOUDS_COLS
 
-    lda #1
-    sta CLOUDS_ALWAYS_ON
+    lda #0
+    sta CLOUDS_NEBULA_MODE
 
     jsr CLOUDS_SHOW
     rts
@@ -50,8 +50,8 @@ CLOUDS_SHOW_NEBULA:
     lda #40
     sta CLOUDS_COLS
 
-    lda #0
-    sta CLOUDS_ALWAYS_ON
+    lda #1
+    sta CLOUDS_NEBULA_MODE
 
     jsr CLOUDS_SHOW
     rts
@@ -59,11 +59,25 @@ CLOUDS_SHOW_NEBULA:
 
 CLOUDS_SHOW:
     jsr LFSR_NEXT_SEED      ; fresh
-    ; dark color from seed
+
     lda LFSR_W2
-    and #%00000011          ; 0-3
+    lda CLOUDS_NEBULA_MODE
+    beq +
+    ; nebula dark colors
+    and #%00000111          ; 0-3
     tax 
-    lda CLOUDS_COLORS_LUT, x 
+    lda CLOUDS_NEBULA_COLORS_LUT, x 
+    jmp ++
++
+    ; asteroids & oort any non black
+-
+    lda LFSR_W0+1
+    and #%00000111              ; 0-7
+    bne +                       ; not black
+    jsr LFSR_NEXT_SEED          ; try next
+    jmp -
++
+++
     sta TEXT_COLOR
 
     jsr LFSR_NEXT_SEED      ; fresh
@@ -158,8 +172,8 @@ CLOUDS_SHOW:
     lsr                         ; Accumulator = 0 to 15
 
     pha                         ; store 0-15
-    lda CLOUDS_ALWAYS_ON
-    beq .clouds_col_nebula
+    lda CLOUDS_NEBULA_MODE
+    bne .clouds_col_nebula
 .clouds_col_oort:
     pla                         ; restore 0-15
     lsr 
@@ -317,9 +331,8 @@ CLOUDS_SINE_LUT
     !byte $0b,$0c,$0d,$0d,$0e,$0f,$10,$10,$11,$12,$13,$14,$15,$16,$16,$17
     !byte $18,$19,$1a,$1b,$1c,$1d,$1e,$1f,$20,$21,$22,$23,$24,$25,$26,$27
 
-CLOUDS_COLORS_LUT
+CLOUDS_NEBULA_COLORS_LUT
     !byte PURPLE, GREEN, RED, BLUE
-
 
 CLOUDS_UDG_BASE = 196
 CLOUDS_ROWS = 15
@@ -327,5 +340,5 @@ CLOUDS_COLS
     !byte 40
 CLOUDS_COLS_START 
     !byte 0
-CLOUDS_ALWAYS_ON
+CLOUDS_NEBULA_MODE
     !byte 0
