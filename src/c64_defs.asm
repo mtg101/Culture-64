@@ -247,11 +247,17 @@ ZP_PTR_1_PAIR   = $FC  ; Safe Zero Page Uses $FB and $FC
 ZP_PTR_2        = $FD  ; Safe Zero Page Uses $FD and $FE
 ZP_PTR_2_PAIR   = $FE  ; Safe Zero Page Uses $FD and $FE
 
-ZP_PTR_TEMP_0        = $1B  
-ZP_PTR_TEMP_0_PAIR   = $1C  
+ZP_PTR_TEMP_0           = $1B  
+ZP_PTR_TEMP_0_PAIR      = $1C  
 
-ZP_PTR_TEMP_1        = $1D  
-ZP_PTR_TEMP_1_PAIR   = $1E  
+ZP_PTR_TEMP_1           = $1D  
+ZP_PTR_TEMP_1_PAIR      = $1E  
+
+ZP_PTR_JUMP             = $10
+ZP_PTR_JUMP_PAIR        = $11  
+ZP_PTR_RETURN           = $12  
+ZP_PTR_RETURN_PAIR      = $13  
+
 
 
 ; --- Interrupts ---

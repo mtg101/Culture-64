@@ -20,7 +20,7 @@ PLANET_GENERATE_IN_SLOT:
 +
     cmp #4                      ; 0-3 but 0-1 already done: 2-3
     bcs +
-    ; 2-4 - size=2x2
+    ; 2-4 - size=2x
     lda #2
     sta (ZP_PTR_1), y           ; save to slot props
     jmp .planet_size_done
@@ -59,7 +59,7 @@ PLANET_GENERATE_IN_SLOT:
     ; ZP_PTR_2 and pair already has dest address
     jsr SYS_MEM_COPY    
 
-    rts 
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_1:
     ; color
@@ -81,7 +81,7 @@ PLANET_SHOW_SLOT_1:
     lda PLANETS_1x1_1
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR
-    rts
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_2:
     ; color
@@ -103,7 +103,7 @@ PLANET_SHOW_SLOT_2:
     lda PLANETS_1x1_2
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR
-    rts
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_3:
     ; color
@@ -145,7 +145,7 @@ PLANET_SHOW_SLOT_3:
     lda #>PLANETS_2x2_B_3
     sta TEXT_STRING_PTR+1
     jsr TEXT_DRAW_STRING
-    rts
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_4:
     ; color
@@ -187,7 +187,7 @@ PLANET_SHOW_SLOT_4:
     lda #>PLANETS_2x2_B_4
     sta TEXT_STRING_PTR+1
     jsr TEXT_DRAW_STRING
-    rts
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_5:
     ; color
@@ -229,7 +229,7 @@ PLANET_SHOW_SLOT_5:
     lda #>PLANETS_3x3_B_5
     sta TEXT_STRING_PTR+1
     jsr TEXT_DRAW_STRING
-    rts
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_6:
     ; color
@@ -271,7 +271,7 @@ PLANET_SHOW_SLOT_6:
     lda #>PLANETS_3x3_B_6
     sta TEXT_STRING_PTR+1
     jsr TEXT_DRAW_STRING
-    rts
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_7:
     ; color
@@ -313,7 +313,7 @@ PLANET_SHOW_SLOT_7:
     lda #>PLANETS_3x3_B_7
     sta TEXT_STRING_PTR+1
     jsr TEXT_DRAW_STRING
-    rts
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_8:
     ; color
@@ -355,7 +355,93 @@ PLANET_SHOW_SLOT_8:
     lda #>PLANETS_3x3_B_8
     sta TEXT_STRING_PTR+1
     jsr TEXT_DRAW_STRING
-    rts
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
+
+
+PLANET_SHOW_ASTEROID_BELT:
+    ; color
+    lda ORBITS_CURRENT_SLOT
+    tax
+    lda ORBITS_SLOT_1_PROPS, x
+    sta TEXT_COLOR
+
+    ; y
+    lda #0
+    sta TEXT_Y
+    ; x
+    lda ORBITS_CURRENT_SLOT
+    tax 
+    lda ORBITS_SLOT_1_X, x
+    sta TEXT_X
+
+    ; string ptr
+    lda #<PLANET_SHOW_ASTEROID_BELT_HACK
+    sta TEXT_STRING_PTR
+    lda #>PLANET_SHOW_ASTEROID_BELT_HACK
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT    
+
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
+; hack remove me
+PLANET_SHOW_ASTEROID_BELT_HACK
+    !scr "$$$$$$$$$$", 0
+PLANET_SHOW_JUMP_GATE:
+    ; color
+    lda ORBITS_CURRENT_SLOT
+    tax
+    lda ORBITS_SLOT_1_PROPS, x
+    sta TEXT_COLOR
+
+    ; y
+    lda #ORBITS_Y-5
+    sta TEXT_Y
+    ; x
+    lda ORBITS_CURRENT_SLOT
+    tax 
+    lda ORBITS_SLOT_1_X, x
+    sta TEXT_X
+
+    ; string ptr
+    lda #<PLANET_SHOW_JUMP_GATE_HACK
+    sta TEXT_STRING_PTR
+    lda #>PLANET_SHOW_JUMP_GATE_HACK
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT    
+
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
+; hack remove me
+PLANET_SHOW_JUMP_GATE_HACK
+    !scr "gate", 0
+PLANET_SHOW_STATION:
+    ; color
+    lda ORBITS_CURRENT_SLOT
+    tax
+    lda ORBITS_SLOT_1_PROPS, x
+    sta TEXT_COLOR
+
+    ; y
+    lda #ORBITS_Y-5
+    sta TEXT_Y
+    ; x
+    lda ORBITS_CURRENT_SLOT
+    tax 
+    lda ORBITS_SLOT_1_X, x
+    sta TEXT_X
+
+    ; string ptr
+    lda #<PLANET_SHOW_STATION_HACK
+    sta TEXT_STRING_PTR
+    lda #>PLANET_SHOW_STATION_HACK
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_CENTER_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT    
+
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
+; hack remove me
+PLANET_SHOW_STATION_HACK
+    !scr "+xox+", 0
 
 
 PLANETS_LOAD_UDGS:
@@ -558,6 +644,82 @@ PLANETS_LOAD_UDGS_BLOCK:
     cpy ZP_PTR_TEMP_0_PAIR
     bne -
     rts
+
+PLANET_GENERATE_ASTEROID_BELT_IN_SLOT:
+    jsr LFSR_NEXT_SEED              ; own seed
+
+    ; color
+-
+    lda LFSR_W0+1
+    and #%00000111              ; 0-7
+    bne +                       ; not black
+    jsr LFSR_NEXT_SEED          ; try next
+    jmp -
++
+    ldy #0
+    sta (ZP_PTR_1), y           ; save to slot props
+
+    ; planet name
+    lda #<ORBITS_ASTEROID_BELT_LABEL
+    sta ZP_PTR_1
+    lda #>ORBITS_ASTEROID_BELT_LABEL
+    sta ZP_PTR_1_PAIR
+    ; ZP_PTR_2 and pair already has dest address
+    jsr SYS_MEM_COPY    
+
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
+
+PLANET_GENERATE_JUMP_GATE_IN_SLOT: 
+    jsr LFSR_NEXT_SEED              ; own seed
+
+    ; color
+-
+    lda LFSR_W0+1
+    and #%00000111              ; 0-7
+    bne +                       ; not black
+    jsr LFSR_NEXT_SEED          ; try next
+    jmp -
++
+    ldy #0
+    sta (ZP_PTR_1), y           ; save to slot props
+
+    ; planet name
+    lda #<ORBITS_JUMP_GATE_LABEL
+    sta ZP_PTR_1
+    lda #>ORBITS_JUMP_GATE_LABEL
+    sta ZP_PTR_1_PAIR
+    ; ZP_PTR_2 and pair already has dest address
+    jsr SYS_MEM_COPY    
+
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
+
+PLANET_GENERATE_STATION_IN_SLOT: 
+    jsr LFSR_NEXT_SEED              ; own seed
+
+    ; color
+-
+    lda LFSR_W0+1
+    and #%00000111              ; 0-7
+    bne +                       ; not black
+    jsr LFSR_NEXT_SEED          ; try next
+    jmp -
++
+    ldy #0
+    sta (ZP_PTR_1), y           ; save to slot props
+
+    ; planet name
+    lda #<ORBITS_STATION_LABEL
+    sta ZP_PTR_1
+    lda #>ORBITS_STATION_LABEL
+    sta ZP_PTR_1_PAIR
+    ; ZP_PTR_2 and pair already has dest address
+    jsr SYS_MEM_COPY    
+
+    jmp (ZP_PTR_RETURN)             ; jump back to next orbit
+
+
+
+
 
 PLANETS_TEMP
     !byte 0
