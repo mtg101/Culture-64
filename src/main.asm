@@ -42,6 +42,7 @@ MAIN
     jsr SCREEN_CHAR_COPY_ROM_3000_FROM_64
     jsr SCREEN_PATCH_3000_FONT
     jsr CLOUDS_PATCH_FONT
+    jsr PLANETS_JUMP_GATE_PATCH_FONT
 
     jmp SYS_NO_BASIC_NO_KERNEL_ROM  ; also does raster irq setup - jmp as it's reclaiming the stack
 SYS_NO_BASIC_NO_KERNEL_ROM_DONE    

@@ -2,7 +2,7 @@
 
 CLOUDS_PATCH_FONT:
     ; --- Setup Pointers in Zero Page ---
-    ; CLOUDS_UDG_BASE 196*8=1568/$620
+    ; CLOUDS_UDG_BASE 196*8=1568/$620 base $3000
     lda #$20
     sta ZP_PTR_2            ; Destination Low ($20 of $3620)
     lda #$36                ; Destination High ($36 of $3620)

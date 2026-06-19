@@ -1,3 +1,21 @@
+PLANETS_JUMP_GATE_PATCH_FONT:
+    ; --- Setup Pointers in Zero Page ---
+    ; PLANETS_JUMP_GATE_UDGS 187*8=1496/$5D8 base $3000
+    lda #$D8
+    sta ZP_PTR_2            ; Destination Low ($D8 of $35D8)
+    lda #$35                ; Destination High ($35 of $35D8)
+    sta ZP_PTR_2_PAIR
+
+    ldy #0                  ; Clear Y index
+    
+-
+    lda PLANETS_JUMP_GATE_UDGS,y       ; Grab byte from UDG
+    sta (ZP_PTR_2),y        ; Write byte to font
+    iny                     ; Next byte
+    cpy #72                 ; 9 chars 72 bytes
+    bne -
+    rts 
+
 ; zptr_1 holds ptr to properties
 ; #%76543210
 ; 0-2 size (1-3)
@@ -374,29 +392,41 @@ PLANET_SHOW_JUMP_GATE:
     lda ORBITS_CURRENT_SLOT
     tax
     lda ORBITS_SLOT_1_PROPS, x
+    ora #%00001000              ; set bit 3 for MCM
     sta TEXT_COLOR
 
     ; y
-    lda #ORBITS_Y-5
+    lda #ORBITS_Y-1
     sta TEXT_Y
     ; x
     lda ORBITS_CURRENT_SLOT
     tax 
     lda ORBITS_SLOT_1_X, x
     sta TEXT_X
+    dec TEXT_X
 
-    ; string ptr
-    lda #<PLANET_SHOW_JUMP_GATE_HACK
+    lda #<PLANETS_JUMP_GATE_TOP
     sta TEXT_STRING_PTR
-    lda #>PLANET_SHOW_JUMP_GATE_HACK
+    lda #>PLANETS_JUMP_GATE_TOP
     sta TEXT_STRING_PTR+1
-    jsr TEXT_CENTER_STRING_VERT
-    jsr TEXT_DRAW_STRING_VERT    
+    jsr TEXT_DRAW_STRING
+
+    inc TEXT_Y
+    lda #<PLANETS_JUMP_GATE_MID
+    sta TEXT_STRING_PTR
+    lda #>PLANETS_JUMP_GATE_MID
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
+
+    inc TEXT_Y
+    lda #<PLANETS_JUMP_GATE_BOT
+    sta TEXT_STRING_PTR
+    lda #>PLANETS_JUMP_GATE_BOT
+    sta TEXT_STRING_PTR+1
+    jsr TEXT_DRAW_STRING
 
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
-; hack remove me
-PLANET_SHOW_JUMP_GATE_HACK
-    !scr "gate", 0
+
 PLANET_SHOW_STATION:
     ; color
     lda ORBITS_CURRENT_SLOT
@@ -822,3 +852,21 @@ PLANETS_COLOR_LUT_3
     !byte %11111111, %11111111, %11110111, %11111011
 PLANETS_COLOR_LUT_4
     !byte %11111111, %11111111, %11111101, %11111110
+
+
+PLANETS_JUMP_GATE_UDGS
+!byte $00,$03,$03,$0D,$0D,$36,$36,$D8,$FF,$55,$55,$AA,$AA,$00,$14,$00
+!byte $00,$C0,$C0,$70,$70,$9C,$9C,$27
+!byte $D8,$D8,$D8,$DB,$DB,$D8,$D8,$D8,$00,$00,$00,$00,$00,$00,$00,$00
+!byte $27,$27,$27,$E7,$E7,$27,$27,$27
+!byte $D8,$36,$36,$0D,$0D,$03,$03,$00,$00,$28,$00,$AA,$AA,$55,$55,$FF
+!byte $27,$9C,$9C,$70,$70,$C0,$C0,$00
+
+PLANETS_JUMP_GATE_UDG_BASE = 187
+
+PLANETS_JUMP_GATE_TOP
+    !byte 187, 188, 189, 0
+PLANETS_JUMP_GATE_MID
+    !byte 190, 191, 192, 0
+PLANETS_JUMP_GATE_BOT
+    !byte 193, 194, 195, 0
