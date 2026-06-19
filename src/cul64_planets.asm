@@ -359,28 +359,11 @@ PLANET_SHOW_SLOT_8:
 
 
 PLANET_SHOW_ASTEROID_BELT:
-    ; color
-    lda ORBITS_CURRENT_SLOT
-    tax
-    lda ORBITS_SLOT_1_PROPS, x
-    sta TEXT_COLOR
-
-    ; y
-    lda #0
-    sta TEXT_Y
     ; x
     lda ORBITS_CURRENT_SLOT
     tax 
     lda ORBITS_SLOT_1_X, x
-    sta TEXT_X
-
-    ; string ptr
-    lda #<PLANET_SHOW_ASTEROID_BELT_HACK
-    sta TEXT_STRING_PTR
-    lda #>PLANET_SHOW_ASTEROID_BELT_HACK
-    sta TEXT_STRING_PTR+1
-    jsr TEXT_CENTER_STRING_VERT
-    jsr TEXT_DRAW_STRING_VERT    
+    jsr CLOUDS_SHOW_ASTEROID_BELT
 
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 ; hack remove me

@@ -18,12 +18,27 @@ CLOUDS_PATCH_FONT:
     bne -
     rts 
 
+; a has x col to draw in
+CLOUDS_SHOW_ASTEROID_BELT:
+    sta CLOUDS_COLS_START 
+    sta CLOUDS_COLS
+    inc CLOUDS_COLS             ; inx before cpx
+
+    lda #1
+    sta CLOUDS_ALWAYS_ON
+
+    jsr CLOUDS_SHOW
+    rts
+
 CLOUDS_SHOW_OORT:
     lda #36
     sta CLOUDS_COLS_START   ; last 4 cols
 
+    lda #40
+    sta CLOUDS_COLS
+
     lda #1
-    sta CLOUDS_OORT_ON
+    sta CLOUDS_ALWAYS_ON
 
     jsr CLOUDS_SHOW
     rts
@@ -32,8 +47,11 @@ CLOUDS_SHOW_NEBULA:
     lda #0
     sta CLOUDS_COLS_START   ; start on full left
 
+    lda #40
+    sta CLOUDS_COLS
+
     lda #0
-    sta CLOUDS_OORT_ON
+    sta CLOUDS_ALWAYS_ON
 
     jsr CLOUDS_SHOW
     rts
@@ -140,7 +158,7 @@ CLOUDS_SHOW:
     lsr                         ; Accumulator = 0 to 15
 
     pha                         ; store 0-15
-    lda CLOUDS_OORT_ON
+    lda CLOUDS_ALWAYS_ON
     beq .clouds_col_nebula
 .clouds_col_oort:
     pla                         ; restore 0-15
@@ -183,7 +201,7 @@ CLOUDS_SHOW:
 
     ; next col
     inx 
-    cpx #CLOUDS_COLS
+    cpx CLOUDS_COLS
     bne .clouds_col_loop
 
     ; --- END OF ROW: ADVANCE ROW ANCHORS ---
@@ -305,8 +323,9 @@ CLOUDS_COLORS_LUT
 
 CLOUDS_UDG_BASE = 196
 CLOUDS_ROWS = 15
-CLOUDS_COLS  = 40
+CLOUDS_COLS
+    !byte 40
 CLOUDS_COLS_START 
     !byte 0
-CLOUDS_OORT_ON
+CLOUDS_ALWAYS_ON
     !byte 0
