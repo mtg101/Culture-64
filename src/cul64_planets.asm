@@ -16,6 +16,24 @@ PLANETS_JUMP_GATE_PATCH_FONT:
     bne -
     rts 
 
+PLANETS_STATION_PATCH_FONT:
+    ; --- Setup Pointers in Zero Page ---
+    ; PLANETS_JUMP_GATE_UDGS 184*8=1472/$5C0 base $3000
+    lda #$C0
+    sta ZP_PTR_2            ; Destination Low ($C0 of $35D8)
+    lda #$35                ; Destination High ($35 of $35D8)
+    sta ZP_PTR_2_PAIR
+
+    ldy #0                  ; Clear Y index
+    
+-
+    lda PLANETS_STATION_UDGS,y       ; Grab byte from UDG
+    sta (ZP_PTR_2),y        ; Write byte to font
+    iny                     ; Next byte
+    cpy #24                 ; 3 chars 72 bytes
+    bne -
+    rts 
+
 ; zptr_1 holds ptr to properties
 ; #%76543210
 ; 0-2 size (1-3)
@@ -384,7 +402,7 @@ PLANET_SHOW_ASTEROID_BELT:
     jsr CLOUDS_SHOW_ASTEROID_BELT
 
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
-; hack remove me
+
 PLANET_SHOW_ASTEROID_BELT_HACK
     !scr "$$$$$$$$$$", 0
 PLANET_SHOW_JUMP_GATE:
@@ -432,30 +450,26 @@ PLANET_SHOW_STATION:
     lda ORBITS_CURRENT_SLOT
     tax
     lda ORBITS_SLOT_1_PROPS, x
+    ora #%00001000              ; set bit 3 for MCM
     sta TEXT_COLOR
 
     ; y
-    lda #ORBITS_Y-5
+    lda #ORBITS_Y-1
     sta TEXT_Y
     ; x
     lda ORBITS_CURRENT_SLOT
     tax 
     lda ORBITS_SLOT_1_X, x
     sta TEXT_X
+    dec TEXT_X
 
-    ; string ptr
-    lda #<PLANET_SHOW_STATION_HACK
+    lda #<PLANETS_STATION
     sta TEXT_STRING_PTR
-    lda #>PLANET_SHOW_STATION_HACK
+    lda #>PLANETS_STATION
     sta TEXT_STRING_PTR+1
-    jsr TEXT_CENTER_STRING_VERT
-    jsr TEXT_DRAW_STRING_VERT    
+    jsr TEXT_DRAW_STRING_VERT
 
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
-; hack remove me
-PLANET_SHOW_STATION_HACK
-    !scr "+xox+", 0
-
 
 PLANETS_LOAD_UDGS:
     ; slot 1 - 1x1
@@ -731,9 +745,6 @@ PLANET_GENERATE_STATION_IN_SLOT:
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 
-
-
-
 PLANETS_TEMP
     !byte 0
 
@@ -870,3 +881,14 @@ PLANETS_JUMP_GATE_MID
     !byte 190, 191, 192, 0
 PLANETS_JUMP_GATE_BOT
     !byte 193, 194, 195, 0
+
+PLANETS_STATION_UDGS
+!byte $FF,$55,$3C,$3C,$3C,$3C,$3C,$FF
+!byte $FF,$5E,$5E,$5E,$7A,$7A,$7A,$FF
+!byte $FF,$3C,$3C,$3C,$3C,$3C,$55,$FF
+
+PLANETS_STATION_UDG_BASE = 184
+
+PLANETS_STATION
+    !byte 184, 185, 186, 0
+
