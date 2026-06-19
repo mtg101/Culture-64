@@ -11,7 +11,7 @@ SCREEN_SYSTEM_SHOW
     ; background space
     jsr STARS_FILL_SCREEN
     jsr STARS_CLEAR_LOWER
-    jsr CLOUDS_SHOW
+    jsr CLOUDS_SHOW_NEBULA
 
     jsr SYSTEM_GEN_SYS          ; huh 'gen sys' / 'genesis' 
     jsr SYSTEM_SHOW_LABELS

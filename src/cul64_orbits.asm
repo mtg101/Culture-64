@@ -108,6 +108,19 @@ ORBITS_GENERATE_SLOTS:
     bne ++                          ; 50% dyson swarm
     lda #1
     sta ORBITS_DYSON_SWARM
+
+    ; src
+    lda #<ORBITS_DYSON_SWARM_LABEL
+    sta ZP_PTR_1
+    lda #>ORBITS_DYSON_SWARM_LABEL
+    sta ZP_PTR_1_PAIR
+    ; dest
+    lda #<ORBITS_SLOT_1_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_1_BUFFER
+    sta ZP_PTR_2_PAIR
+    jsr SYS_MEM_COPY    
+
 ++
     lda ORBITS_SLOT_2
     beq +                       ; empty
@@ -219,35 +232,19 @@ ORBITS_GENERATE_SLOTS:
     bne .no_oort
 
     ; so slots 7 and 8 are empty : oort cloud always (it's rare!)
-    lda LFSR_W0
-    and #%00000111
-    tax
-    lda ORBITS_OORT_COLORS, x
-    sta TEXT_COLOR
+    jsr CLOUDS_SHOW_OORT
 
-    lda #0
-    sta TEXT_Y
-
-    lda #92
-    sta TEXT_CHAR
-
-.oort_loop
-    lda #36
-    sta TEXT_X
-    jsr TEXT_DRAW_CHAR
-    inc TEXT_X
-    jsr TEXT_DRAW_CHAR
-    inc TEXT_X
-    jsr TEXT_DRAW_CHAR
-    inc TEXT_X
-    jsr TEXT_DRAW_CHAR
-
-    inc TEXT_Y
-    lda TEXT_Y
-    cmp #15
-    beq +
-    jmp .oort_loop
-+
+    ; src
+    lda #<ORBITS_OORT_CLOUD_LABEL
+    sta ZP_PTR_1
+    lda #>ORBITS_OORT_CLOUD_LABEL
+    sta ZP_PTR_1_PAIR
+    ; dest
+    lda #<ORBITS_SLOT_8_BUFFER
+    sta ZP_PTR_2
+    lda #>ORBITS_SLOT_8_BUFFER
+    sta ZP_PTR_2_PAIR
+    jsr SYS_MEM_COPY    
 
 
 .no_oort
@@ -1160,3 +1157,10 @@ ORBITS_OORT_CLOUD
 
 ORBITS_OORT_COLORS
     !byte RED, RED, BLUE, BLUE, PURPLE, PURPLE, GREEN, GREEN
+
+ORBITS_DYSON_SWARM_LABEL
+    !scr "dyson swarm", 0
+
+ORBITS_OORT_CLOUD_LABEL
+    !scr "oort cloud", 0
+

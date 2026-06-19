@@ -18,6 +18,27 @@ CLOUDS_PATCH_FONT:
     bne -
     rts 
 
+CLOUDS_SHOW_OORT:
+    lda #36
+    sta CLOUDS_COLS_START   ; last 4 cols
+
+    lda #1
+    sta CLOUDS_OORT_ON
+
+    jsr CLOUDS_SHOW
+    rts
+
+CLOUDS_SHOW_NEBULA:
+    lda #0
+    sta CLOUDS_COLS_START   ; start on full left
+
+    lda #0
+    sta CLOUDS_OORT_ON
+
+    jsr CLOUDS_SHOW
+    rts
+
+
 CLOUDS_SHOW:
     jsr LFSR_NEXT_SEED      ; fresh
     ; dark color from seed
@@ -90,7 +111,7 @@ CLOUDS_SHOW:
     lda CLOUDS_W3_ROW_BASE
     sta CLOUDS_W3_INDEX
 
-    ldx #0                      ; x 0-39 cols
+    ldx CLOUDS_COLS_START                      ; x CLOUD_COLS_START - CLOUDS_COLS cols
 .clouds_col_loop:
     stx TEXT_X
 
@@ -116,8 +137,23 @@ CLOUDS_SHOW:
     lsr
     lsr
     lsr
-    lsr                     ; Accumulator = 0 to 15
+    lsr                         ; Accumulator = 0 to 15
 
+    pha                         ; store 0-15
+    lda CLOUDS_OORT_ON
+    beq .clouds_col_nebula
+.clouds_col_oort:
+    pla                         ; restore 0-15
+    lsr 
+    lsr                         ; now 0-3
+    clc
+    adc #CLOUDS_UDG_BASE         ; add base udg for gradient
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR 
+    jmp +
+
+.clouds_col_nebula:
+    pla                         ; restore 0-15
     ; only 12-15 show - bt 15 never turns up so...
     sec 
     cmp #11
@@ -127,7 +163,6 @@ CLOUDS_SHOW:
     sta TEXT_CHAR
     jsr TEXT_DRAW_CHAR 
 +
-
 
     ; --- ADVANCE 8-BIT INDICES INSTANTLY FOR THE NEXT COLUMN ---
     ; By adding directly to our 8-bit indices, they instantly wrap around
@@ -267,6 +302,11 @@ CLOUDS_SINE_LUT
 CLOUDS_COLORS_LUT
     !byte PURPLE, GREEN, RED, BLUE
 
+
 CLOUDS_UDG_BASE = 196
 CLOUDS_ROWS = 15
-CLOUDS_COLS = 40
+CLOUDS_COLS  = 40
+CLOUDS_COLS_START 
+    !byte 0
+CLOUDS_OORT_ON
+    !byte 0
