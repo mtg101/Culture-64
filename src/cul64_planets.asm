@@ -461,7 +461,6 @@ PLANET_SHOW_STATION:
     tax 
     lda ORBITS_SLOT_1_X, x
     sta TEXT_X
-    dec TEXT_X
 
     lda #<PLANETS_STATION
     sta TEXT_STRING_PTR
