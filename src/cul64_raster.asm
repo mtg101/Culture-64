@@ -219,9 +219,11 @@ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_OFF
     sta BG_COL
     sta BORDER_COL
 
+    inc RASTER_FRAME_COUNTER_L0         ; Increment low byte
+    bne +                               ; If low byte didn't roll over to 0, skip high byte
+    inc RASTER_FRAME_COUNTER_HI         ; Increment high byte (only runs once every 256 frames)
 +    
     +RASTER_INTERRUPT_SET_ROW_256 2
-
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_LAST
 
@@ -254,4 +256,9 @@ RASTER_BOTTOM_BORDER
     !byte $00
 RASTER_BLUE_BOX_STATUS
     !byte $00
+
+RASTER_FRAME_COUNTER_L0
+    !byte 0
+RASTER_FRAME_COUNTER_HI
+    !byte 0
 

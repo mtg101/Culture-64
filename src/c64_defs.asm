@@ -35,10 +35,10 @@ SCREEN_HEIGHT_CHARS_SCROLL = 24
 
 ; --- Common VIC-II Registers ---
 BORDER_COL  = $D020
-BG_COL      = $D021
-BG_COL_1    = $D022
-BG_COL_2    = $D023
-COLOR_RAM   = $D800
+BG_COL      = $D021         ; single bg colour
+BG_COL_1    = $D022         ; mcm shared bg1
+BG_COL_2    = $D023         ; mcm shared bg2
+COLOR_RAM   = $D800         ; individual bytes per character
 
 SCREEN_RAM  = $0400  ; default
 SCREEN_RAM_800  = $0800  ; next block

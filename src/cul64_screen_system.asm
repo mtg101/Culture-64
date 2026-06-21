@@ -153,6 +153,13 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     lda LFSR_W0+1
     sta SCREEN_SYSTEM_KEPLER
 
+    ; bg anim speed
+    lda LFSR_W1
+    and #%00000110
+    lsr                         ; always even / off issue....
+    tax 
+    lda SCREEN_SYSTEM_BG_COL_SPEED_LUT, x
+    sta SCREEN_SYSTEM_BG_COL_SPEED
     rts
 
 SYSTEM_SHOW_VALUES
@@ -410,14 +417,30 @@ SCREEN_SYSTEM_GAME_LOOP
     beq -
     jmp DIPLOMAT_SHOW
 +
+
+    ; bg colour animation
+    lda RASTER_FRAME_COUNTER_L0
+    and SCREEN_SYSTEM_BG_COL_SPEED
+    bne +
+    jsr SCREEN_SYSTEM_TOGGLE_SHARED_COLORS
++
     jmp SCREEN_SYSTEM_GAME_LOOP
 
-SCREEN_SYSTEM_TOGGLE_THEME_MUSIC
+SCREEN_SYSTEM_TOGGLE_THEME_MUSIC:
     lda SCREEN_SYSTEM_MUSIC_ON
     eor #01
     sta SCREEN_SYSTEM_MUSIC_ON
     jsr SYSTEM_SHOW_KEYS    
     rts
+
+SCREEN_SYSTEM_TOGGLE_SHARED_COLORS:
+    lda BG_COL_1
+    tax
+    lda BG_COL_2
+    sta BG_COL_1
+    txa 
+    sta BG_COL_2
+    rts 
 
 SCREEN_SYSTEM_NAME_LABEL
     !scr "system", 0
@@ -603,3 +626,9 @@ SCREEN_SYSTEM_MUSIC_ON
     !byte 0
 SCREEN_SYSTEM_MUSIC_JUMPING
     !byte 0
+SCREEN_SYSTEM_BG_COL_SPEED
+    !byte 0    
+
+SCREEN_SYSTEM_BG_COL_SPEED_LUT
+    !byte %01111111, %00111111, %00111111, %00011111
+
