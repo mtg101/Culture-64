@@ -223,6 +223,8 @@ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_OFF
     bne +                               ; If low byte didn't roll over to 0, skip high byte
     inc RASTER_FRAME_COUNTER_HI         ; Increment high byte (only runs once every 256 frames)
 +    
+    jsr SCREEN_SYSTEM_RASTER_INT
+
     +RASTER_INTERRUPT_SET_ROW_256 2
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_LAST

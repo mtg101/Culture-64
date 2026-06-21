@@ -156,7 +156,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     ; bg anim speed
     lda LFSR_W1
     and #%00000110
-    lsr                         ; always even / off issue....
+    lsr                         ; always even / od issue...
     tax 
     lda SCREEN_SYSTEM_BG_COL_SPEED_LUT, x
     sta SCREEN_SYSTEM_BG_COL_SPEED
@@ -417,13 +417,6 @@ SCREEN_SYSTEM_GAME_LOOP
     beq -
     jmp DIPLOMAT_SHOW
 +
-
-    ; bg colour animation
-    lda RASTER_FRAME_COUNTER_L0
-    and SCREEN_SYSTEM_BG_COL_SPEED
-    bne +
-    jsr SCREEN_SYSTEM_TOGGLE_SHARED_COLORS
-+
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SCREEN_SYSTEM_TOGGLE_THEME_MUSIC:
@@ -440,6 +433,15 @@ SCREEN_SYSTEM_TOGGLE_SHARED_COLORS:
     sta BG_COL_1
     txa 
     sta BG_COL_2
+    rts 
+
+SCREEN_SYSTEM_RASTER_INT:
+    ; bg colour animation
+    lda RASTER_FRAME_COUNTER_L0
+    and SCREEN_SYSTEM_BG_COL_SPEED
+    bne +
+    jsr SCREEN_SYSTEM_TOGGLE_SHARED_COLORS
++
     rts 
 
 SCREEN_SYSTEM_NAME_LABEL
