@@ -149,6 +149,14 @@ BB_JUMP_SHOW
     ; pause music during jump
     lda #1
     sta SCREEN_SYSTEM_MUSIC_JUMPING
+
+    ; load ship's seed for jump sound
+    lda #<SHIP_NAME_BUFFER
+    sta LFSR_NAME_PTR
+    lda #>SHIP_NAME_BUFFER
+    sta LFSR_NAME_PTR+1
+    jsr LFSR_SEED_FROM_NAME
+
     ; and jump sound
     jsr sfx_trigger_warp
 

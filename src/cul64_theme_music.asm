@@ -411,43 +411,55 @@ music_play_frame:
 
 ; ==============================================================================
 ; Call this the exact frame the player initiates the jump
+; seed needs to set from ship's seed for ship=based jump sound
 ; ==============================================================================
 sfx_trigger_warp:
-    ; 1. Set effect duration to 30 frames (~0.5 second - 50hz won't be too long)
-    lda #30
+    lda LFSR_W0                     
+    and #%00000110          ; always even it seems? so use middle and shift
+    lsr
+    sta jump_sound_speed    ; 0-3
+
+    lda #%01000000              ; Resonance $4 + NOT Route Voice 2 & 3
+    sta FILTER_RES              ; $D417
+
+    ; 1. Set effect duration - 30 frames (~0.5 second - 50hz won't be too long)
+    lda LFSR_W1
+    and #%00111111          ; 0-63
+    clc
+    adc #10                 ; 10-73
     sta warp_timer
+    sta warp_timer_start
 
     ; 2. Ensure Master Volume is wide open
     lda #$0F
     sta VOLUME_RETI
 
-    ; 3. Setup Voice 1 Envelope (Sawtooth Whine - Quick attack, infinite sustain)
+    ; 3. Setup Voice Envelopes
     lda #$00                    ; Instant Attack
     sta V1_AD
+    sta V2_AD
+    sta V3_AD
     lda #$F0                    ; Full Sustain
     sta V1_SR
-
-    ; 4. Setup Voice 2 Envelope (Noise Splash - Instant attack, rapid decay)
-    lda #$0A                    ; Snappy Decay
-    sta V2_AD
-    lda #$00                    ; No Sustain
     sta V2_SR
+    sta V3_SR
 
-    ; 5. Set initial starting frequencies
+    ; 5. Set initial starting frequencies -low to rise during jump
     lda #$00
     sta V1_FREQ_LO
-    sta V1_FREQ_HI              ; Start Voice 1 at absolute bass bottom
-    
+    sta V1_FREQ_HI              
     sta V2_FREQ_LO
-    lda #$18                    ; Deeper, lower frequency for heavy noise blast
     sta V2_FREQ_HI
+    sta V3_FREQ_LO
+    sta V3_FREQ_HI
 
     ; 6. Gate both voices ON
-    lda #$21                    ; Sawtooth + Gate ON
+    lda #%00100001              ; Sawtooth + Gate ON voice 1
     sta V1_CTRL
-    
-    lda #$81                    ; Noise + Gate ON
+    lda #%00010001              ; triangle + Gate ON voice 2
     sta V2_CTRL
+    lda #%10000001              ; noise + Gate ON voice 3
+    sta V3_CTRL
 
     rts
 
@@ -461,14 +473,16 @@ sfx_update_frame_warp:
     rts                         ; Otherwise, exit immediately
 
 .process_sfx:
-    dec warp_timer              ; Count down from 30 to 0
+    dec warp_timer              ; Count down to 0
     bne .calculate_sweep        ; If it hasn't hit 0, calculate the sweep
     
-    ; --- EFFECT ENDS (Frame 30) ---
-    lda #$20                    ; Gate OFF Voice 1
+    ; --- EFFECT ENDS ---
+    lda #$00                    ; Gate OFF Voice 1
     sta V1_CTRL
-    lda #$80                    ; Gate OFF Voice 2
-    sta V1_CTRL
+    lda #$00                    ; Gate OFF Voice 2
+    sta V2_CTRL
+    lda #$00                    ; Gate OFF Voice 3
+    sta V3_CTRL
     rts
 
 .calculate_sweep:
@@ -476,26 +490,40 @@ sfx_update_frame_warp:
     ; To make the jump feel like it accelerates, we calculate the sweep using:
     ; Current Pitch = (30 - warp_timer)
     ; This creates a linear upward ramp.
-    lda #30
+    lda warp_timer_start
     sec
     sbc warp_timer              ; A now goes from 1 (start) to 59 (end)
     
-    ; Shift left to multiply by 2 or 4 to make the pitch climb rapidly
-;    asl
-    asl                         ; Max value around $EC (perfect for FREQ_HI)
+    ; Shift left to multiply by 0/2/4/8 to make the pitch climb rapidly differently
+
+    ldx jump_sound_speed
+.sweep_speed_loop:
+    asl
+    dex
+    bmi +
+    jmp .sweep_speed_loop
++
     sta V1_FREQ_HI              ; Slam it straight into Voice 1's pitch
-    
     ; Optional: Add a bit of texture to the low byte to create ring vibrato
     sta V1_FREQ_LO
 
+    sta V2_FREQ_HI              ; Slam it straight into Voice 1's pitch
+    ; Optional: Add a bit of texture to the low byte to create ring vibrato
+    sta V2_FREQ_LO
+
+    sta V3_FREQ_HI              ; Slam it straight into Voice 1's pitch
+    ; Optional: Add a bit of texture to the low byte to create ring vibrato
+    sta V3_FREQ_LO
+
+
     ; --- GRADUAL NOISE DECAY OVERRIDE ---
     ; Slowly drop the Noise gate halfway through to keep it clean
-    lda warp_timer
-    cmp #15                     ; Halfway mark (0.5 seconds in)
-    bne .exit
+    ; lda warp_timer
+    ; cmp #15                     ; Halfway mark (0.5 seconds in)
+    ; bne .exit
     
-    lda #$80                    ; Force Gate OFF on Noise to let it bleed out
-    sta V2_CTRL
+    ; lda #$80                    ; Force Gate OFF on Noise to let it bleed out
+    ; sta V2_CTRL
 
 .exit:
     rts
@@ -564,7 +592,9 @@ cfg_bass_pitch_1: !byte 0         ; Root pitch 1 for the drone
 cfg_bass_pitch_2: !byte 0         ; Root pitch 1 for the drone
 
 
-warp_timer:     !byte 0         ; 0 = Inactive, 30 to 1 = Playing
+warp_timer:     !byte 0         ; 0 = Inactive, counts down
+warp_timer_start: !byte 0       ; start value
+
 
 last_note_idx:  !byte 0         ; Tracks our current scale step position (0-7)
 
@@ -837,3 +867,7 @@ drone_sr_lut
     !byte $A6
     !byte $F1
     !byte $FB
+
+jump_sound_speed            ; 0 means i ASL other 2 ASL
+    !byte $00
+
