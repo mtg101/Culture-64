@@ -453,10 +453,24 @@ sfx_trigger_warp:
     sta V3_FREQ_LO
     sta V3_FREQ_HI
 
+    ; pulse type
+    lda LFSR_W0+1
+    sta V1_PW_LO
+    lda LFSR_W1
+    sta V1_PW_HI
+
     ; 6. Gate both voices ON
-    lda #%00100001              ; Sawtooth + Gate ON voice 1
+    lda #%01000001              ; pulse + Gate ON voice 1
     sta V1_CTRL
+
+    lda LFSR_W1+1
+    and #%00100000
+    bne +
     lda #%00010001              ; triangle + Gate ON voice 2
+    jmp ++
++
+    lda #%00100001              ; saw + Gate ON voice 2
+++
     sta V2_CTRL
     lda #%10000001              ; noise + Gate ON voice 3
     sta V3_CTRL
