@@ -175,6 +175,12 @@ RASTER_IRQ_TEXT_AREA_TOP_BORDER_OFF
     sta BG_COL
     sta BORDER_COL
 
+    inc RASTER_FRAME_COUNTER_L0         ; Increment low byte
+    bne +                               ; If low byte didn't roll over to 0, skip high byte
+    inc RASTER_FRAME_COUNTER_HI         ; Increment high byte (only runs once every 256 frames)
++    
+    jsr SCREEN_SYSTEM_RASTER_INT
+
     +RASTER_INTERRUPT_SET_ROW 250
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_END_MAIN_SCREEN
@@ -218,12 +224,6 @@ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_OFF
     lda SCREEN_SYSTEM_COLOR_TEXT_BG
     sta BG_COL
     sta BORDER_COL
-
-    inc RASTER_FRAME_COUNTER_L0         ; Increment low byte
-    bne +                               ; If low byte didn't roll over to 0, skip high byte
-    inc RASTER_FRAME_COUNTER_HI         ; Increment high byte (only runs once every 256 frames)
-+    
-    jsr SCREEN_SYSTEM_RASTER_INT
 
     +RASTER_INTERRUPT_SET_ROW_256 2
     +ACK_IRQ

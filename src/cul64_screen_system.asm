@@ -160,6 +160,37 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     tax 
     lda SCREEN_SYSTEM_BG_COL_SPEED_LUT, x
     sta SCREEN_SYSTEM_BG_COL_SPEED
+
+    ; bg flash
+    ; todo: 1 in 256 chance it actually flashes... 
+    lda #1
+    sta SCREEN_SYSTEM_BG_FLASH_ON
+
+    ; prob when showing
+    lda LFSR_W1+1
+    and #%00000110
+    lsr                             ; odd even bug?
+    tax 
+    lda SCREEN_SYSTEM_BG_FLASH_PROB_LUT, x
+    sta SCREEN_SYSTEM_BG_FLASH_PROB
+
+    ; colour type
+    lda LFSR_W2
+    and #%00000110
+    lsr                             ; even odd bug?
+    sta SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
+
+    ; static colour
+    ; color not black
+-
+    lda LFSR_W2+1
+    and #%00000111              ; 0-7
+    bne +                       ; not black
+    jsr LFSR_NEXT_SEED          ; try next
+    jmp -
++
+    sta SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
+
     rts
 
 SYSTEM_SHOW_VALUES
@@ -442,7 +473,27 @@ SCREEN_SYSTEM_RASTER_INT:
     bne +
     jsr SCREEN_SYSTEM_TOGGLE_SHARED_COLORS
 +
+    ; bg flash
+    lda SCREEN_SYSTEM_BG_FLASH_ON
+    beq +
+    jsr SCREEN_SYSTEM_FLASH_BG
++
     rts 
+
+
+SCREEN_SYSTEM_FLASH_BG:
+    jsr LFSR_NEXT_SEED
+    lda LFSR_W0
+    and SCREEN_SYSTEM_BG_FLASH_PROB
+    bne + 
+    lda #RED
+    sta SCREEN_SYSTEM_SPACE_BG
+    jmp ++
++
+    lda #BLACK
+    sta SCREEN_SYSTEM_SPACE_BG
+++
+   rts 
 
 SCREEN_SYSTEM_NAME_LABEL
     !scr "system", 0
@@ -630,7 +681,19 @@ SCREEN_SYSTEM_MUSIC_JUMPING
     !byte 0
 SCREEN_SYSTEM_BG_COL_SPEED
     !byte 0    
-
 SCREEN_SYSTEM_BG_COL_SPEED_LUT
     !byte %01111111, %00111111, %00111111, %00011111
-
+SCREEN_SYSTEM_BG_FLASH_ON
+    !byte 0    
+SCREEN_SYSTEM_BG_FLASH_PROB
+    !byte 0    
+SCREEN_SYSTEM_BG_FLASH_PROB_LUT
+    !byte %11111111, %01111111, %00111111, %00011111
+; 0 sun color
+; 1 nebula color
+; 2 static random
+; 3 random per flash
+SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
+    !byte 0   
+SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
+    !byte 0   
