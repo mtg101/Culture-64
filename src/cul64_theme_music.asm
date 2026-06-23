@@ -415,8 +415,7 @@ music_play_frame:
 ; ==============================================================================
 sfx_trigger_warp:
     lda LFSR_W0                     
-    and #%00000110          ; always even it seems? so use middle and shift
-    lsr
+    and #%00000011          
     sta jump_sound_speed    ; 0-3
 
     lda #%01000000              ; Resonance $4 + NOT Route Voice 2 & 3

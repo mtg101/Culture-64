@@ -159,31 +159,33 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
 
     ; bg anim speed
     lda LFSR_W1
-    and #%00000110
-    lsr                         ; always even / od issue...
+    and #%00000011
     tax 
     lda SCREEN_SYSTEM_BG_COL_SPEED_LUT, x
     sta SCREEN_SYSTEM_BG_COL_SPEED
 
     ; bg flash
-    ; todo: 1 in 256 chance it actually flashes... 
+    ; todo: 1 in 32 chance it actually flashes (bit high, but want to see it sometimes!)
     lda LFSR_W1+1
-    lsr                         ; odd / even?
-    and #%00000001
+    and #%00011111
+    bne +
+    lda #1                          ; on when 0 (1 in 256)
+    jmp ++
++
+    lda #0                          ; normally off
+++
     sta SCREEN_SYSTEM_BG_FLASH_ON
 
     ; prob when showing
     lda LFSR_W2
-    and #%00000110
-    lsr                             ; odd even bug?
+    and #%00000011
     tax 
     lda SCREEN_SYSTEM_BG_FLASH_PROB_LUT, x
     sta SCREEN_SYSTEM_BG_FLASH_PROB
 
     ; colour type
     lda LFSR_W2+1
-    and #%00000110
-    lsr                             ; even odd bug?
+    and #%00000011
     sta SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
 
     jsr LFSR_NEXT_SEED          ; new seed needed
