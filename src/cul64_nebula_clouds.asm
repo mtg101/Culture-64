@@ -79,6 +79,7 @@ CLOUDS_SHOW:
 +
 ++
     sta TEXT_COLOR
+    sta CLOUDS_COLOR
 
     jsr LFSR_NEXT_SEED      ; fresh
     ; copy to cloud seed (yep - cloud seeding 5g Chinese Bill covid chips GAyTES omg!!eleven)
@@ -341,4 +342,6 @@ CLOUDS_COLS
 CLOUDS_COLS_START 
     !byte 0
 CLOUDS_NEBULA_MODE
+    !byte 0
+CLOUDS_COLOR
     !byte 0

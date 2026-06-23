@@ -27,6 +27,10 @@ SCREEN_SYSTEM_SHOW
     ; music!
     jsr music_init
 
+    ; we are in space to start with
+    lda #1
+    sta SCREEN_SYSTEM_SPACE_SHOWING
+
     jsr SCREEN_ON
 
     jmp SCREEN_SYSTEM_GAME_LOOP
@@ -163,11 +167,13 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
 
     ; bg flash
     ; todo: 1 in 256 chance it actually flashes... 
-    lda #1
+    lda LFSR_W1+1
+    lsr                         ; odd / even?
+    and #%00000001
     sta SCREEN_SYSTEM_BG_FLASH_ON
 
     ; prob when showing
-    lda LFSR_W1+1
+    lda LFSR_W2
     and #%00000110
     lsr                             ; odd even bug?
     tax 
@@ -175,22 +181,47 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     sta SCREEN_SYSTEM_BG_FLASH_PROB
 
     ; colour type
-    lda LFSR_W2
+    lda LFSR_W2+1
     and #%00000110
     lsr                             ; even odd bug?
     sta SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
 
-    ; static colour
+    jsr LFSR_NEXT_SEED          ; new seed needed
+
+    bne +
+    ; 0 sun color
+    lda SUN_COLOR
+    sta SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
+    jmp ++
++
+    lda SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
+    cmp #1
+    bne +
+    ; 1 nebula color
+    lda CLOUDS_COLOR
+    sta SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
+    jmp ++
++
+    lda SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
+    cmp #2
+    bne +
+    ; 2 static random
     ; color not black
 -
-    lda LFSR_W2+1
+    lda LFSR_W0
     and #%00000111              ; 0-7
-    bne +                       ; not black
+    bne +++                     ; not black
     jsr LFSR_NEXT_SEED          ; try next
     jmp -
-+
++++
     sta SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
-
+    jmp ++
++
+    ; 3 random per flash
+    ; so don't need static but set white for debug
+    lda #WHITE
+    sta SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
+++
     rts
 
 SYSTEM_SHOW_VALUES
@@ -467,6 +498,12 @@ SCREEN_SYSTEM_TOGGLE_SHARED_COLORS:
     rts 
 
 SCREEN_SYSTEM_RASTER_INT:
+    ; check space is showing
+    lda SCREEN_SYSTEM_SPACE_SHOWING
+    bne +
+    rts                             ; space not showing, don't do anything
++
+
     ; bg colour animation
     lda RASTER_FRAME_COUNTER_L0
     and SCREEN_SYSTEM_BG_COL_SPEED
@@ -485,15 +522,27 @@ SCREEN_SYSTEM_FLASH_BG:
     jsr LFSR_NEXT_SEED
     lda LFSR_W0
     and SCREEN_SYSTEM_BG_FLASH_PROB
-    bne + 
-    lda #RED
-    sta SCREEN_SYSTEM_SPACE_BG
-    jmp ++
+    bne .no_flash
+    lda SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
+    cmp #3                          ; is it random color?
+    bne .static_flash
+    ; 2-15 color 1 (not black white)
+-
+    lda LFSR_W0
+    and #%00001111
+    cmp #2
+    bcs +                       ; not black or white
+    jsr LFSR_NEXT_SEED          ; try next seed
+    jmp -
 +
+.static_flash:
+    lda SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
+    jmp .flash_done
+.no_flash:
     lda #BLACK
+.flash_done:
     sta SCREEN_SYSTEM_SPACE_BG
-++
-   rts 
+    rts 
 
 SCREEN_SYSTEM_NAME_LABEL
     !scr "system", 0
@@ -697,3 +746,6 @@ SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
     !byte 0   
 SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
     !byte 0   
+SCREEN_SYSTEM_SPACE_SHOWING
+    !byte 0
+    

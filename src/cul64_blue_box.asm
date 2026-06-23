@@ -146,6 +146,10 @@ BB_JUMP_SHOW
     lda #0
     sta RASTER_BLUE_BOX_STATUS
 
+    ; no longer in system space
+    lda #0
+    sta SCREEN_SYSTEM_SPACE_SHOWING    
+
     ; pause music during jump
     lda #1
     sta SCREEN_SYSTEM_MUSIC_JUMPING
