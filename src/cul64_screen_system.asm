@@ -1,4 +1,4 @@
-SCREEN_SYSTEM_SHOW
+SCREEN_SYSTEM_LOAD:
     jsr SCREEN_OFF
 
     ; seed from name
@@ -8,17 +8,22 @@ SCREEN_SYSTEM_SHOW
     sta LFSR_NAME_PTR+1
     jsr LFSR_SEED_FROM_NAME
 
-    ; background space
-    jsr STARS_FILL_SCREEN
-    jsr STARS_CLEAR_LOWER
-    jsr CLOUDS_SHOW_NEBULA
 
     jsr SYSTEM_GEN_SYS          ; huh 'gen sys' / 'genesis' 
-    jsr SYSTEM_SHOW_LABELS
-    jsr SYSTEM_SHOW_VALUES
+ 
+    ; background space
+    jsr STARS_FILL_SPACE_OFF
+    jsr CLOUDS_SHOW_NEBULA
     jsr SUN_SHOW
     jsr ORBITS_SHOW_SLOTS
-    jsr SYSTEM_SHOW_KEYS
+
+    jsr SCREEN_SYSTEM_COPY_SPACE_TO_SCREEN
+
+    jsr SYSTEM_SHOW_KEYS        ; overlay on copied space
+    ; lower text
+    jsr STARS_CLEAR_LOWER
+    jsr SYSTEM_SHOW_LABELS
+    jsr SYSTEM_SHOW_VALUES
     
     ; black bg
     lda #BLACK
@@ -33,6 +38,14 @@ SCREEN_SYSTEM_SHOW
 
     jsr SCREEN_ON
 
+    jmp SCREEN_SYSTEM_GAME_LOOP
+
+SCREEN_SYSTEM_RESHOW:
+    ; black bg
+    lda #BLACK
+    sta SCREEN_SYSTEM_SPACE_BG
+    jsr SCREEN_SYSTEM_COPY_SPACE_TO_SCREEN
+    jsr SYSTEM_SHOW_KEYS        ; overlay on copied space
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis' 
@@ -546,6 +559,109 @@ SCREEN_SYSTEM_FLASH_BG:
     sta SCREEN_SYSTEM_SPACE_BG
     rts 
 
+; only copies the 600 space chars & colours
+; in 250/ 250 / 100 blocks
+SCREEN_SYSTEM_COPY_SPACE_TO_SCREEN:
+
+    ; first 250
+
+    ; source chars
+    lda #<SCREEN_800_RAM_250_0
+    sta ZP_PTR_1
+    lda #>SCREEN_800_RAM_250_0
+    sta ZP_PTR_1_PAIR
+    ; target chars
+    lda #<SCREEN_RAM_250_0
+    sta ZP_PTR_2
+    lda #>SCREEN_RAM_250_0
+    sta ZP_PTR_2_PAIR
+    ; 250
+    lda #250
+    sta ZP_PTR_TEMP_0
+    jsr SYS_MEM_COPY_NUM
+
+    ; source colours
+    lda #<SCREEN_C00_COL_RAM_250_0
+    sta ZP_PTR_1
+    lda #>SCREEN_C00_COL_RAM_250_0
+    sta ZP_PTR_1_PAIR
+    ; target colours
+    lda #<SCREEN_COL_RAM_250_0
+    sta ZP_PTR_2
+    lda #>SCREEN_COL_RAM_250_0
+    sta ZP_PTR_2_PAIR
+    ; num
+    lda #250
+    sta ZP_PTR_TEMP_0
+    jsr SYS_MEM_COPY_NUM
+
+    ; second 250
+
+    ; source chars
+    lda #<SCREEN_800_RAM_250_1
+    sta ZP_PTR_1
+    lda #>SCREEN_800_RAM_250_1
+    sta ZP_PTR_1_PAIR
+    ; target chars
+    lda #<SCREEN_RAM_250_1
+    sta ZP_PTR_2
+    lda #>SCREEN_RAM_250_1
+    sta ZP_PTR_2_PAIR
+    ; 250
+    lda #250
+    sta ZP_PTR_TEMP_0
+    jsr SYS_MEM_COPY_NUM
+
+    ; source colours
+    lda #<SCREEN_C00_COL_RAM_250_1
+    sta ZP_PTR_1
+    lda #>SCREEN_C00_COL_RAM_250_1
+    sta ZP_PTR_1_PAIR
+    ; target colours
+    lda #<SCREEN_COL_RAM_250_1
+    sta ZP_PTR_2
+    lda #>SCREEN_COL_RAM_250_1
+    sta ZP_PTR_2_PAIR
+    ; num
+    lda #250
+    sta ZP_PTR_TEMP_0
+    jsr SYS_MEM_COPY_NUM
+
+    ; last 100
+
+    ; source chars
+    lda #<SCREEN_800_RAM_250_2
+    sta ZP_PTR_1
+    lda #>SCREEN_800_RAM_250_2
+    sta ZP_PTR_1_PAIR
+    ; target chars
+    lda #<SCREEN_RAM_250_2
+    sta ZP_PTR_2
+    lda #>SCREEN_RAM_250_2
+    sta ZP_PTR_2_PAIR
+    ; 250
+    lda #100
+    sta ZP_PTR_TEMP_0
+    jsr SYS_MEM_COPY_NUM
+
+    ; source colours
+    lda #<SCREEN_C00_COL_RAM_250_2
+    sta ZP_PTR_1
+    lda #>SCREEN_C00_COL_RAM_250_2
+    sta ZP_PTR_1_PAIR
+    ; target colours
+    lda #<SCREEN_COL_RAM_250_2
+    sta ZP_PTR_2
+    lda #>SCREEN_COL_RAM_250_2
+    sta ZP_PTR_2_PAIR
+    ; num
+    lda #100
+    sta ZP_PTR_TEMP_0
+    jsr SYS_MEM_COPY_NUM
+
+    rts 
+
+
 SCREEN_SYSTEM_NAME_LABEL
     !scr "system", 0
 ; add $80 to each char to invert    
@@ -692,7 +808,7 @@ SCREEN_SYSTEM_COLOR_BOTTOM_BORDER
 SCREEN_SYSTEM_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
 SCREEN_SYSTEM_KEYS_LABEL
-    ; sHIP jMUMP iNFO
+    ; jUMP mUSIC dIPLOMAT sHIP iNFO
     !byte 138           ; jump 4 = 4
     !scr "ump"
     !byte 32            ; space +1 = 5
@@ -710,7 +826,7 @@ SCREEN_SYSTEM_KEYS_LABEL
     !byte  0                            ; +1 = 30
 
 SCREEN_SYSTEM_KEYS_LABEL_BLANK      ; I'll worry about these waster bytes when I run out of bytes... TODO
-    !fill 30, 32                        ; fill (phil ;) spaces
+    !fill 29, 32                        ; fill (phil ;) spaces
 
 SCREEN_SYSTEM_SPACE_BG
     !byte 0
@@ -750,4 +866,3 @@ SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
     !byte 0   
 SCREEN_SYSTEM_SPACE_SHOWING
     !byte 0
-    

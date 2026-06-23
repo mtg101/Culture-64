@@ -1,3 +1,12 @@
+; draws to offscreen, including colors
+TEXT_DRAW_CHAR_OFF
+    lda #1
+    sta TEXT_OFFSCREEN
+    jsr TEXT_DRAW_CHAR
+    lda #0
+    sta TEXT_OFFSCREEN
+    rts 
+
 ; draws TEXT_CHAR to screen based on variables TEXT_X, TEXT_Y, TEXT_COLOR
 ; copy/pasta TODO don't waste bytes ;)
 TEXT_DRAW_CHAR
@@ -11,10 +20,19 @@ TEXT_DRAW_CHAR
     sta TEXT_SCR_PTR+1
 
     ; col ptr row
-    lda SCREEN_COL_LOW, y
+    lda SCREEN_ROW_LOW, y
     sta TEXT_COL_PTR
     lda SCREEN_COL_HIGH, y
     sta TEXT_COL_PTR+1
+
+    ; fix ptrs for offscreen
+    lda TEXT_OFFSCREEN
+    beq +                       ; quickly jump if not offscreen
+    lda SCREEN_800_ROW_HIGH, y
+    sta TEXT_SCR_PTR+1
+    lda SCREEN_C00_COL_HIGH, y
+    sta TEXT_COL_PTR+1
++
 
     ; add col to screen
     lda TEXT_SCR_PTR
@@ -59,6 +77,14 @@ TEXT_DRAW_CHAR
 
     rts
 
+; draws to offscreen, including colors
+TEXT_DRAW_STRING_OFF
+    lda #1
+    sta TEXT_OFFSCREEN
+    jsr TEXT_DRAW_STRING
+    lda #0
+    sta TEXT_OFFSCREEN
+    rts 
 
 ; draws string to screen based on variables
 TEXT_DRAW_STRING
@@ -72,10 +98,19 @@ TEXT_DRAW_STRING
     sta TEXT_SCR_PTR+1
 
     ; col ptr row
-    lda SCREEN_COL_LOW, y
+    lda SCREEN_ROW_LOW, y
     sta TEXT_COL_PTR
     lda SCREEN_COL_HIGH, y
     sta TEXT_COL_PTR+1
+
+    ; fix ptrs for offscreen
+    lda TEXT_OFFSCREEN
+    beq +                       ; quickly jump if not offscreen
+    lda SCREEN_800_ROW_HIGH, y
+    sta TEXT_SCR_PTR+1
+    lda SCREEN_C00_COL_HIGH, y
+    sta TEXT_COL_PTR+1
++
 
     ; add col to screen
     lda TEXT_SCR_PTR
@@ -140,6 +175,15 @@ TEXT_DRAW_STRING
 .string_done
     rts
 
+; draws to offscreen, including colors
+TEXT_DRAW_STRING_VERT_OFF
+    lda #1
+    sta TEXT_OFFSCREEN
+    jsr TEXT_DRAW_STRING_VERT
+    lda #0
+    sta TEXT_OFFSCREEN
+    rts 
+
 TEXT_DRAW_STRING_VERT:
     ; y is row
     ldy TEXT_Y 
@@ -151,10 +195,19 @@ TEXT_DRAW_STRING_VERT:
     sta TEXT_SCR_PTR+1
 
     ; col ptr row
-    lda SCREEN_COL_LOW, y
+    lda SCREEN_ROW_LOW, y
     sta TEXT_COL_PTR
     lda SCREEN_COL_HIGH, y
     sta TEXT_COL_PTR+1
+
+    ; fix ptrs for offscreen
+    lda TEXT_OFFSCREEN
+    beq +                       ; quickly jump if not offscreen
+    lda SCREEN_800_ROW_HIGH, y
+    sta TEXT_SCR_PTR+1
+    lda SCREEN_C00_COL_HIGH, y
+    sta TEXT_COL_PTR+1
++
 
     ; add col to screen
     lda TEXT_SCR_PTR
@@ -405,23 +458,19 @@ TEXT_WAIT_FOR_ENTER_SPACE
 
 TEXT_X
     !byte 0
-
 TEXT_Y
     !byte 0
-
 TEXT_COLOR
     !byte 0
-
 TEXT_STRING_PTR
     !word 0
-
 TEXT_SCR_PTR
     !word 0
-
 TEXT_COL_PTR
     !word 0
 TEXT_STRING_LEN
     !byte 0
-
 TEXT_CHAR           ; also used as number...
+    !byte 0
+TEXT_OFFSCREEN
     !byte 0

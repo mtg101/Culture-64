@@ -40,8 +40,11 @@ BG_COL_1    = $D022         ; mcm shared bg1
 BG_COL_2    = $D023         ; mcm shared bg2
 COLOR_RAM   = $D800         ; individual bytes per character
 
+
+; bank 0 default VIC
 SCREEN_RAM  = $0400  ; default
-SCREEN_RAM_800  = $0800  ; next block
+SCREEN_RAM_800 = $0800  ; next block
+SCREEN_RAM_C00 = $0C00  ; next block
 
 
 DEFAULT_CHR = $14   ; Value for $D018 to use Uppercase/Graphics

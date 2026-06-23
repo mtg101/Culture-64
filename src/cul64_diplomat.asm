@@ -148,7 +148,7 @@ DIPLOMAT_GAME_LOOP
     lda CIA1_PRB
     and #KEY_D_COL  ; check released
     beq -
-    jmp SCREEN_SYSTEM_SHOW
+    jmp SCREEN_SYSTEM_RESHOW
 +
     jmp DIPLOMAT_GAME_LOOP
 

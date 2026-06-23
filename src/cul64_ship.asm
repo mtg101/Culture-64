@@ -261,7 +261,7 @@ SHIP_GAME_LOOP
     lda CIA1_PRB
     and #KEY_S_COL  ; check released
     beq -
-    jmp SCREEN_SYSTEM_SHOW
+    jmp SCREEN_SYSTEM_RESHOW
 +
     ; h home jump
     lda #KEY_H_ROW

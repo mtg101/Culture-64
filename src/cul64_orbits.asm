@@ -379,21 +379,21 @@ ORBITS_DYSON_SWARM_SHOW:
 
     lda #4
     sta TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_Y
     lda #4
     sta TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_Y
     lda #4
     sta TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 
 ; mid
     inc TEXT_Y
@@ -402,11 +402,11 @@ ORBITS_DYSON_SWARM_SHOW:
 .dyson_loop_mid:
     lda #4
     sta TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_Y
     lda TEXT_Y
     cmp #12
@@ -420,23 +420,23 @@ ORBITS_DYSON_SWARM_SHOW:
 
     lda #4
     sta TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 
     inc TEXT_Y
     lda #4
     sta TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     inc TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 
     inc TEXT_Y
     lda #4
     sta TEXT_X
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 
 
     rts 
@@ -858,7 +858,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_3_MOON_1
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_3_MOON_2
     and #%00000111           
@@ -870,7 +870,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_3_MOON_2
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_4_MOON_1
     and #%00000111           
@@ -882,7 +882,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_4_MOON_1
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_4_MOON_2
     and #%00000111           
@@ -894,7 +894,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_4_MOON_2
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_5_MOON_1
     and #%00000111           
@@ -906,7 +906,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_5_MOON_1
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_5_MOON_2
     and #%00000111           
@@ -918,7 +918,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_5_MOON_2
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_5_MOON_3
     and #%00000111           
@@ -930,7 +930,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_5_MOON_3
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_5_MOON_4
     and #%00000111           
@@ -942,7 +942,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_5_MOON_4
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_6_MOON_1
     and #%00000111           
@@ -954,7 +954,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_6_MOON_1
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_6_MOON_2
     and #%00000111           
@@ -966,7 +966,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_6_MOON_2
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_6_MOON_3
     and #%00000111           
@@ -978,7 +978,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_6_MOON_3
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_6_MOON_4
     and #%00000111           
@@ -990,7 +990,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_6_MOON_4
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_7_MOON_1
     and #%00000111           
@@ -1002,7 +1002,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_7_MOON_1
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_7_MOON_2
     and #%00000111           
@@ -1014,7 +1014,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_7_MOON_2
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_7_MOON_3
     and #%00000111           
@@ -1026,7 +1026,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_7_MOON_3
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_7_MOON_4
     and #%00000111           
@@ -1038,7 +1038,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_7_MOON_4
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_8_MOON_1
     and #%00000111           
@@ -1050,7 +1050,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_8_MOON_1
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_8_MOON_2
     and #%00000111           
@@ -1062,7 +1062,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_8_MOON_2
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_8_MOON_3
     and #%00000111           
@@ -1074,7 +1074,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_8_MOON_3
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     lda ORBITS_SLOT_8_MOON_4
     and #%00000111           
@@ -1086,7 +1086,7 @@ ORBITS_SHOW_MOONS:
     sta TEXT_X
     lda ORBITS_SLOT_8_MOON_4
     jsr ORBITS_SET_MOON_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
 +
     rts 
 
@@ -1252,7 +1252,7 @@ ORBITS_GAME_LOOP:
     lda CIA1_PRB
     and #KEY_I_COL  ; check released
     beq -
-    jmp SCREEN_SYSTEM_SHOW
+    jmp SCREEN_SYSTEM_RESHOW
 +
     jmp ORBITS_GAME_LOOP
 

@@ -188,7 +188,7 @@ BB_JUMP_SHOW
     cpx #BB_MAX_CHARS
     bne -
 
-    jmp SCREEN_SYSTEM_SHOW
+    jmp SCREEN_SYSTEM_LOAD
 
 BB_JUMP_WHERE
     !scr "jump to which system?", 0
@@ -241,7 +241,7 @@ BB_SHIP_NAME_SHOW
     cpx #BB_MAX_CHARS
     bne -
 
-    jmp SCREEN_SYSTEM_SHOW
+    jmp SCREEN_SYSTEM_LOAD
 
 BB_SHIP_NAME
     !scr "ship, what is your name?", 0

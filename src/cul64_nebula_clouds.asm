@@ -182,7 +182,7 @@ CLOUDS_SHOW:
     clc
     adc #CLOUDS_UDG_BASE         ; add base udg for gradient
     sta TEXT_CHAR
-    jsr TEXT_DRAW_CHAR 
+    jsr TEXT_DRAW_CHAR_OFF
     jmp +
 
 .clouds_col_nebula:
@@ -194,7 +194,7 @@ CLOUDS_SHOW:
     clc
     adc #CLOUDS_UDG_BASE-11 ; -11 for the offset (assuming 15 not used)
     sta TEXT_CHAR
-    jsr TEXT_DRAW_CHAR 
+    jsr TEXT_DRAW_CHAR_OFF
 +
 
     ; --- ADVANCE 8-BIT INDICES INSTANTLY FOR THE NEXT COLUMN ---

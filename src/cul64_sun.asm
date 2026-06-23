@@ -9,39 +9,39 @@ SUN_SHOW
     lda (ZP_PTR_1), y               ; a has color
     sta SUN_COLOR
 
-    ; write colors
-    sta COLOR_RAM+(40*0)
-    sta COLOR_RAM+(40*0)+1
-    sta COLOR_RAM+(40*1)
-    sta COLOR_RAM+(40*1)+1
-    sta COLOR_RAM+(40*2)
-    sta COLOR_RAM+(40*2)+1
-    sta COLOR_RAM+(40*3)
-    sta COLOR_RAM+(40*3)+1
-    sta COLOR_RAM+(40*4)
-    sta COLOR_RAM+(40*4)+1
+    ; write colors to offscreen
+    sta SCREEN_RAM_C00+(40*0)
+    sta SCREEN_RAM_C00+(40*0)+1
+    sta SCREEN_RAM_C00+(40*1)
+    sta SCREEN_RAM_C00+(40*1)+1
+    sta SCREEN_RAM_C00+(40*2)
+    sta SCREEN_RAM_C00+(40*2)+1
+    sta SCREEN_RAM_C00+(40*3)
+    sta SCREEN_RAM_C00+(40*3)+1
+    sta SCREEN_RAM_C00+(40*4)
+    sta SCREEN_RAM_C00+(40*4)+1
 
-    sta COLOR_RAM+(40*5)
-    sta COLOR_RAM+(40*5)+1
-    sta COLOR_RAM+(40*6)
-    sta COLOR_RAM+(40*6)+1
-    sta COLOR_RAM+(40*7)
-    sta COLOR_RAM+(40*7)+1
-    sta COLOR_RAM+(40*8)
-    sta COLOR_RAM+(40*8)+1
-    sta COLOR_RAM+(40*9)
-    sta COLOR_RAM+(40*9)+1
+    sta SCREEN_RAM_C00+(40*5)
+    sta SCREEN_RAM_C00+(40*5)+1
+    sta SCREEN_RAM_C00+(40*6)
+    sta SCREEN_RAM_C00+(40*6)+1
+    sta SCREEN_RAM_C00+(40*7)
+    sta SCREEN_RAM_C00+(40*7)+1
+    sta SCREEN_RAM_C00+(40*8)
+    sta SCREEN_RAM_C00+(40*8)+1
+    sta SCREEN_RAM_C00+(40*9)
+    sta SCREEN_RAM_C00+(40*9)+1
 
-    sta COLOR_RAM+(40*10)
-    sta COLOR_RAM+(40*10)+1
-    sta COLOR_RAM+(40*11)
-    sta COLOR_RAM+(40*11)+1
-    sta COLOR_RAM+(40*12)
-    sta COLOR_RAM+(40*12)+1
-    sta COLOR_RAM+(40*13)
-    sta COLOR_RAM+(40*13)+1
-    sta COLOR_RAM+(40*14)
-    sta COLOR_RAM+(40*14)+1
+    sta SCREEN_RAM_C00+(40*10)
+    sta SCREEN_RAM_C00+(40*10)+1
+    sta SCREEN_RAM_C00+(40*11)
+    sta SCREEN_RAM_C00+(40*11)+1
+    sta SCREEN_RAM_C00+(40*12)
+    sta SCREEN_RAM_C00+(40*12)+1
+    sta SCREEN_RAM_C00+(40*13)
+    sta SCREEN_RAM_C00+(40*13)+1
+    sta SCREEN_RAM_C00+(40*14)
+    sta SCREEN_RAM_C00+(40*14)+1
 
     ; lut
     ldx SUN_TYPE
@@ -52,96 +52,96 @@ SUN_SHOW
 
     ldy #0
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*0)
+    sta SCREEN_RAM_800+(40*0)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*0)+1
+    sta SCREEN_RAM_800+(40*0)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*1)
+    sta SCREEN_RAM_800+(40*1)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*1)+1
+    sta SCREEN_RAM_800+(40*1)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*2)
+    sta SCREEN_RAM_800+(40*2)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*2)+1
+    sta SCREEN_RAM_800+(40*2)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*3)
+    sta SCREEN_RAM_800+(40*3)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*3)+1
+    sta SCREEN_RAM_800+(40*3)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*4)
+    sta SCREEN_RAM_800+(40*4)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*4)+1
+    sta SCREEN_RAM_800+(40*4)+1
 
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*5)
+    sta SCREEN_RAM_800+(40*5)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*5)+1
+    sta SCREEN_RAM_800+(40*5)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*6)
+    sta SCREEN_RAM_800+(40*6)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*6)+1
+    sta SCREEN_RAM_800+(40*6)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*7)
+    sta SCREEN_RAM_800+(40*7)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*7)+1
+    sta SCREEN_RAM_800+(40*7)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*8)
+    sta SCREEN_RAM_800+(40*8)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*8)+1
+    sta SCREEN_RAM_800+(40*8)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*9)
+    sta SCREEN_RAM_800+(40*9)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*9)+1
+    sta SCREEN_RAM_800+(40*9)+1
 
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*10)
+    sta SCREEN_RAM_800+(40*10)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*10)+1
+    sta SCREEN_RAM_800+(40*10)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*11)
+    sta SCREEN_RAM_800+(40*11)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*11)+1
+    sta SCREEN_RAM_800+(40*11)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*12)
+    sta SCREEN_RAM_800+(40*12)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*12)+1
+    sta SCREEN_RAM_800+(40*12)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*13)
+    sta SCREEN_RAM_800+(40*13)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*13)+1
+    sta SCREEN_RAM_800+(40*13)+1
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*14)
+    sta SCREEN_RAM_800+(40*14)
     iny
     lda (ZP_PTR_1), y
-    sta SCREEN_RAM+(40*14)+1
+    sta SCREEN_RAM_800+(40*14)+1
 
     rts
 

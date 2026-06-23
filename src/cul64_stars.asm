@@ -76,6 +76,51 @@ STARS_FILL_SCREEN
 
     rts
 
+STARS_FILL_SPACE_OFF:
+    ldx #0
+-
+    jsr STARS_GEN_CHAR
+    sta SCREEN_800_RAM_250_0, x
+
+    jsr STARS_GEN_COLOR
+    sta SCREEN_C00_COL_RAM_250_0, x
+
+    jsr LFSR_NEXT_SEED
+
+    inx
+    cpx #250
+    bne -
+
+    ldx #0
+-
+    jsr STARS_GEN_CHAR
+    sta SCREEN_800_RAM_250_1, x
+
+    jsr STARS_GEN_COLOR
+    sta SCREEN_C00_COL_RAM_250_1, x
+
+    jsr LFSR_NEXT_SEED
+
+    inx
+    cpx #250
+    bne -
+
+    ldx #0
+-
+    jsr STARS_GEN_CHAR
+    sta SCREEN_800_RAM_250_2, x
+
+    jsr STARS_GEN_COLOR
+    sta SCREEN_C00_COL_RAM_250_2, x
+
+    jsr LFSR_NEXT_SEED
+
+    inx
+    cpx #100
+    bne -
+
+    rts 
+
 ; stores random COLOR in a
 ; 1 in 8 CYAN, 2 in 8 white, 5 in 8 yellow
 STARS_GEN_COLOR

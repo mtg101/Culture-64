@@ -116,7 +116,7 @@ PLANET_SHOW_SLOT_1:
     ; char
     lda PLANETS_1x1_1
     sta TEXT_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_2:
@@ -138,7 +138,7 @@ PLANET_SHOW_SLOT_2:
     ; char
     lda PLANETS_1x1_2
     sta TEXT_CHAR
-    jsr TEXT_DRAW_CHAR
+    jsr TEXT_DRAW_CHAR_OFF
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_3:
@@ -166,21 +166,21 @@ PLANET_SHOW_SLOT_3:
     sta TEXT_STRING_PTR
     lda #>PLANETS_2x2_T_3
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_2x2_M_3
     sta TEXT_STRING_PTR
     lda #>PLANETS_2x2_M_3
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_2x2_B_3
     sta TEXT_STRING_PTR
     lda #>PLANETS_2x2_B_3
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_4:
@@ -208,21 +208,21 @@ PLANET_SHOW_SLOT_4:
     sta TEXT_STRING_PTR
     lda #>PLANETS_2x2_T_4
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_2x2_M_4
     sta TEXT_STRING_PTR
     lda #>PLANETS_2x2_M_4
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_2x2_B_4
     sta TEXT_STRING_PTR
     lda #>PLANETS_2x2_B_4
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_5:
@@ -250,21 +250,21 @@ PLANET_SHOW_SLOT_5:
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_T_5
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_3x3_M_5
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_M_5
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_3x3_B_5
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_B_5
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_6:
@@ -292,21 +292,21 @@ PLANET_SHOW_SLOT_6:
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_T_6
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_3x3_M_6
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_M_6
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_3x3_B_6
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_B_6
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_7:
@@ -334,21 +334,21 @@ PLANET_SHOW_SLOT_7:
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_T_7
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_3x3_M_7
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_M_7
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_3x3_B_7
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_B_7
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 PLANET_SHOW_SLOT_8:
@@ -376,21 +376,21 @@ PLANET_SHOW_SLOT_8:
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_T_8
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_3x3_M_8
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_M_8
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_3x3_B_8
     sta TEXT_STRING_PTR
     lda #>PLANETS_3x3_B_8
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
 
@@ -427,21 +427,21 @@ PLANET_SHOW_JUMP_GATE:
     sta TEXT_STRING_PTR
     lda #>PLANETS_JUMP_GATE_TOP
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_JUMP_GATE_MID
     sta TEXT_STRING_PTR
     lda #>PLANETS_JUMP_GATE_MID
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     inc TEXT_Y
     lda #<PLANETS_JUMP_GATE_BOT
     sta TEXT_STRING_PTR
     lda #>PLANETS_JUMP_GATE_BOT
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    jsr TEXT_DRAW_STRING_OFF
 
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
@@ -466,7 +466,7 @@ PLANET_SHOW_STATION:
     sta TEXT_STRING_PTR
     lda #>PLANETS_STATION
     sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING_VERT
+    jsr TEXT_DRAW_STRING_VERT_OFF
 
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
