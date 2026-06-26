@@ -170,12 +170,14 @@ SHIP_SHOW:
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SHIP_CARGO_LABEL
+    lda #<SHIP_CABIN_LABEL
     sta TEXT_STRING_PTR
-    lda #>SHIP_CARGO_LABEL
+    lda #>SHIP_CABIN_LABEL
     sta TEXT_STRING_PTR+1
     lda #8
     sta TEXT_Y
+    lda #2
+    sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
@@ -187,30 +189,6 @@ SHIP_SHOW:
     lda #11
     sta TEXT_Y
     lda #4
-    sta TEXT_X
-    lda #WHITE
-    sta TEXT_COLOR
-    jsr TEXT_DRAW_STRING
-
-    lda #<SHIP_CABIN_LABEL
-    sta TEXT_STRING_PTR
-    lda #>SHIP_CABIN_LABEL
-    sta TEXT_STRING_PTR+1
-    lda #8
-    sta TEXT_Y
-    lda #20
-    sta TEXT_X
-    lda #WHITE
-    sta TEXT_COLOR
-    jsr TEXT_DRAW_STRING
-
-    lda #<SHIP_EMPTY_LABEL
-    sta TEXT_STRING_PTR
-    lda #>SHIP_EMPTY_LABEL
-    sta TEXT_STRING_PTR+1
-    lda #11
-    sta TEXT_Y
-    lda #22
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -300,8 +278,6 @@ SHIP_SHIP_LABEL
 SHIP_HOME_LABEL
     !byte 136
     !scr "ome system", 0
-SHIP_CARGO_LABEL
-    !scr "cargo bay", 0
 SHIP_CABIN_LABEL
     !scr "passenger cabin", 0
 SHIP_EMPTY_LABEL

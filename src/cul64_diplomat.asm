@@ -82,10 +82,10 @@ DIPLOMAT_SHOW:
     sta LOGO_Y
     jsr LOGO_RENDER
 
-    ; show cargo label
-    lda #<DIPLOMAT_CARGO_LABEL
+    ; show passenger label
+    lda #<DIPLOMAT_PASSENGER_LABEL
     sta TEXT_STRING_PTR
-    lda #>DIPLOMAT_CARGO_LABEL
+    lda #>DIPLOMAT_PASSENGER_LABEL
     sta TEXT_STRING_PTR+1
     lda #5
     sta TEXT_Y
@@ -103,32 +103,6 @@ DIPLOMAT_SHOW:
     lda #7
     sta TEXT_Y
     lda #4
-    sta TEXT_X
-    lda #WHITE
-    sta TEXT_COLOR
-    jsr TEXT_DRAW_STRING
-
-    ; show passenger label
-    lda #<DIPLOMAT_PASSENGER_LABEL
-    sta TEXT_STRING_PTR
-    lda #>DIPLOMAT_PASSENGER_LABEL
-    sta TEXT_STRING_PTR+1
-    lda #5
-    sta TEXT_Y
-    lda #20
-    sta TEXT_X
-    lda #WHITE
-    sta TEXT_COLOR
-    jsr TEXT_DRAW_STRING
-
-    ; show no cargo
-    lda #<DIPLOMAT_NONE_LABEL
-    sta TEXT_STRING_PTR
-    lda #>DIPLOMAT_NONE_LABEL
-    sta TEXT_STRING_PTR+1
-    lda #7
-    sta TEXT_Y
-    lda #22
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -153,8 +127,6 @@ DIPLOMAT_GAME_LOOP
     jmp DIPLOMAT_GAME_LOOP
 
 
-DIPLOMAT_CARGO_LABEL
-    !scr "cargo", 0
 DIPLOMAT_PASSENGER_LABEL
     !scr "passenger", 0
 DIPLOMAT_NONE_LABEL
