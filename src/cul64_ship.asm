@@ -231,7 +231,7 @@ SHIP_SHOW:
     sta TEXT_STRING_PTR+1
     lda #5
     sta TEXT_Y
-    lda #2
+    lda #4
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -331,17 +331,17 @@ SHIP_EMPTY_LABEL
     !scr "< empty >", 0
 
 SHIP_CHARS_1
-    !scr "+----+----+----+", 0
+    !scr "+---+---+---+", 0
 SHIP_CHARS_2
-    !scr "+----+----+----+", 0
+    !scr "+---+---+---+", 0
 SHIP_CHARS_3
-    !scr "+----+----+----+", 0
+    !scr "+---+---+---+", 0
 SHIP_CHARS_4
-    !scr "+----+----+----+", 0
+    !scr "+---+---+---+", 0
 SHIP_CHARS_5
-    !scr "+----+----+----+", 0
+    !scr "+---+---+---+", 0
 SHIP_CHARS_6
-    !scr "+----+----+----+", 0
+    !scr "+---+---+---+", 0
 
 
 SHIP_NAME_BUFFER
