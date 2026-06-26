@@ -46,6 +46,9 @@ SCREEN_SYSTEM_RESHOW:
     sta SCREEN_SYSTEM_SPACE_BG
     jsr SCREEN_SYSTEM_COPY_SPACE_TO_SCREEN
     jsr SYSTEM_SHOW_KEYS        ; overlay on copied space
+    ; we are in space
+    lda #1
+    sta SCREEN_SYSTEM_SPACE_SHOWING
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis' 
