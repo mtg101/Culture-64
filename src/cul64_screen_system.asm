@@ -109,11 +109,41 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     jsr LFSR_NEXT_SEED          ; new seed needed
  
     ; 0-7 sun type
-    lda LFSR_W2
+    lda LFSR_W0
     and #%00011111              ; 0-31
     tax                         ; offset in x
     lda SUN_TYPE_DIST, x
     sta SUN_TYPE
+
+    ; sun color
+    lda #<SUN_TYPE_0_COLOR
+    sta ZP_PTR_1
+    lda #>SUN_TYPE_0_COLOR
+    sta ZP_PTR_1_PAIR
+
+    ldy SUN_TYPE
+    lda (ZP_PTR_1), y               ; a has color
+    sta SUN_COLOR
+
+    ; special for binary
+    lda SUN_TYPE
+    cmp #7
+    bne +                           ; skip if not binary
+
+    ; binary so diff sun colour for each one
+    lda LFSR_W0+1
+    and #%00000111                  ; 0-7
+    tay
+    lda (ZP_PTR_1), y               ; a has color
+    sta SUN_COLOR
+
+    lda LFSR_W1
+    and #%00000111                  ; 0-7
+    tay
+    lda (ZP_PTR_1), y               ; a has color
+    sta SUN_COLOR_2
+
++
 
     ; 0-7 planets
     lda LFSR_W1+1

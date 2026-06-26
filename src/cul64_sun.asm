@@ -1,13 +1,6 @@
 
 SUN_SHOW
-    lda #<SUN_TYPE_0_COLOR
-    sta ZP_PTR_1
-    lda #>SUN_TYPE_0_COLOR
-    sta ZP_PTR_1_PAIR
-
-    ldy SUN_TYPE
-    lda (ZP_PTR_1), y               ; a has color
-    sta SUN_COLOR
+    lda SUN_COLOR
 
     ; write colors to offscreen
     sta SCREEN_RAM_C00+(40*0)
@@ -31,6 +24,12 @@ SUN_SHOW
     sta SCREEN_RAM_C00+(40*8)+1
     sta SCREEN_RAM_C00+(40*9)
     sta SCREEN_RAM_C00+(40*9)+1
+
+    ldx SUN_TYPE
+    cpx #7                          ; only for binary suns
+    bne +
+    lda SUN_COLOR_2                 ; flip for second sun
++
 
     sta SCREEN_RAM_C00+(40*10)
     sta SCREEN_RAM_C00+(40*10)+1
@@ -149,6 +148,8 @@ SUN_TYPE
     !byte 0
 
 SUN_COLOR 
+    !byte 0
+SUN_COLOR_2
     !byte 0
 
 SUN_TYPE_DIST         ; 0-7 types, over 32 for curve
