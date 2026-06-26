@@ -255,11 +255,11 @@ music_play_frame:
     tay
 
     lda drum_pattern_ptr
-    sta ZP_PTR_1
+    sta ZP_PTR_MUSIC
     lda drum_pattern_ptr+1
-    sta ZP_PTR_1_PAIR
+    sta ZP_PTR_MUSIC_PAIR
 
-    lda (ZP_PTR_1), y
+    lda (ZP_PTR_MUSIC), y
     beq .skip_drum         ; not playing this beat   
 
     cmp #2

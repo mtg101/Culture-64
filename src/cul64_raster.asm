@@ -94,6 +94,8 @@ RASTER_IRQ_START_MAIN_SCREEN
     lda #01
     sta RASTER_CHASE_BEAM 
 
+    jsr music_play_frame
+
     +RASTER_INTERRUPT_SET_ROW 100
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_START_BLUE_BOX
@@ -241,9 +243,6 @@ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_LAST
     sta BG_COL
     sta BORDER_COL
 +    
-
-    jsr music_play_frame
-
     +RASTER_INTERRUPT_SET_ROW 0
     +ACK_IRQ
     +SET_IRQ RASTER_IRQ_TOP

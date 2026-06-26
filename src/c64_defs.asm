@@ -265,6 +265,8 @@ ZP_PTR_JUMP_PAIR        = $11
 ZP_PTR_RETURN           = $12  
 ZP_PTR_RETURN_PAIR      = $13  
 
+ZP_PTR_MUSIC           = $14  
+ZP_PTR_MUSIC_PAIR      = $15  
 
 
 ; --- Interrupts ---
