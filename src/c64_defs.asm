@@ -46,6 +46,10 @@ SCREEN_RAM  = $0400  ; default
 SCREEN_RAM_800 = $0800  ; next block
 SCREEN_RAM_C00 = $0C00  ; next block
 
+MEM_BANK_1 = $0000
+MEM_BANK_2 = $4000
+MEM_BANK_3 = $8000
+MEM_BANK_4 = $C000
 
 DEFAULT_CHR = $14   ; Value for $D018 to use Uppercase/Graphics
 LOWER_CHR   = $16   ; Value for $D018 to use Lower/Upper

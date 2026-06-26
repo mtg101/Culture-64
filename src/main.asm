@@ -7,32 +7,73 @@
 
     jmp MAIN
 
-; data in memory includes
 
-; all the code (no location specific data) in bank 1 full 16k to use
-*=$4000
-
+; just defs no memory used
 !source "src/c64_defs.asm"
+
+
+
+; data in bank 2 full 16k (only rom charset and vic is pointing to bank 1)
+*=MEM_BANK_3
+
+!source "src/c64_screen_data.asm"
+!source "src/c64_system_data.asm"
+!source "src/cul64_blue_box_data.asm"
+!source "src/cul64_diplomat_data.asm"
+!source "src/cul64_lfsr_data.asm"
+!source "src/cul64_logo_data.asm"
+!source "src/cul64_name_data.asm"
+!source "src/cul64_nebula_clouds_data.asm"
+!source "src/cul64_orbits_data.asm"
+!source "src/cul64_planets_data.asm"
+!source "src/cul64_raster_data.asm"
+!source "src/cul64_screen_system_data.asm"
+!source "src/cul64_screen_title_data.asm"
+!source "src/cul64_ship_data.asm"
+!source "src/cul64_stars_data.asm"
+!source "src/cul64_sun_data.asm"
+!source "src/cul64_text_data.asm"
+!source "src/cul64_theme_music_data.asm"
+
+; --- End of code section ---
+!ifndef DATA_PASS1 {
+    DATA_PASS1 = 1
+} else {
+    !ifndef DATA_PASS2 {
+        DATA_PASS2 = 1
+    } else {
+        !ifndef DATA_PASS3 {
+            !warn "Data size is ", *-MEM_BANK_3, " of max 16383 (0x3fff) (ending at ", *, " of max 49151 (0xbfff))"
+            !if * > $bFFF {
+                !error "Code has hit the bank 1 boundary!"
+            }
+            DATA_PASS3 = 1
+        }
+    }
+}
+
+
+; code in bank 1 full 16k to use
+*=MEM_BANK_2
+
 !source "src/c64_screen.asm"
 !source "src/c64_system.asm"
-
-!source "src/cul64_raster.asm"
-!source "src/cul64_text.asm"
-!source "src/cul64_stars.asm"
-!source "src/cul64_sun.asm"
+!source "src/cul64_blue_box.asm"
+!source "src/cul64_diplomat.asm"
+!source "src/cul64_lfsr.asm"
+!source "src/cul64_logo.asm"
+!source "src/cul64_name.asm"
+!source "src/cul64_nebula_clouds.asm"
 !source "src/cul64_orbits.asm"
 !source "src/cul64_planets.asm"
-!source "src/cul64_logo.asm"
-!source "src/cul64_blue_box.asm"
-!source "src/cul64_lfsr.asm"
-!source "src/cul64_name.asm"
-!source "src/cul64_ship.asm"
-!source "src/cul64_diplomat.asm"
-!source "src/cul64_nebula_clouds.asm"
-!source "src/cul64_theme_music.asm"
-
-!source "src/cul64_screen_title.asm"
+!source "src/cul64_raster.asm"
 !source "src/cul64_screen_system.asm"
+!source "src/cul64_screen_title.asm"
+!source "src/cul64_ship.asm"
+!source "src/cul64_stars.asm"
+!source "src/cul64_sun.asm"
+!source "src/cul64_text.asm"
+!source "src/cul64_theme_music.asm"
 
 
 MAIN
@@ -52,22 +93,18 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
 ; screens have their own game loops
 
 ; --- End of code section ---
-
-!ifndef PASS1 {
-;    !warn "Pass 1"
-    PASS1 = 1
+!ifndef CODE_PASS1 {
+    CODE_PASS1 = 1
 } else {
-    !ifndef PASS2 {
-;        !warn "Pass 2"
-        PASS2 = 1
+    !ifndef CODE_PASS2 {
+        CODE_PASS2 = 1
     } else {
-        !ifndef PASS3 {
-;            !warn "Pass 3"
-            !warn "Code size is ", *-$4000, " of max 16383 (0x3fff) (ending at ", *, " of max 32767 (0x7fff))"
+        !ifndef CODE_PASS3 {
+            !warn "Code size is ", *-MEM_BANK_2, " of max 16383 (0x3fff) (ending at ", *, " of max 32767 (0x7fff))"
             !if * > $7FFF {
                 !error "Code has hit the bank 1 boundary!"
             }
-            PASS3 = 1
+            CODE_PASS3 = 1
         }
     }
 }

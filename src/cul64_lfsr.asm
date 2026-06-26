@@ -85,16 +85,3 @@ LFSR_RESET
     rts
 
 ; the 48bit seed 
-LFSR_W0
-    !word LFSR_W0_START
-LFSR_W1
-    !word LFSR_W1_START
-LFSR_W2
-    !word LFSR_W2_START
-
-LFSR_W0_START = 42
-LFSR_W1_START = 23
-LFSR_W2_START = 187
-
-LFSR_NAME_PTR
-    !word 0
