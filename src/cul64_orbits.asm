@@ -1239,8 +1239,8 @@ ORBITS_SHOW_SLOTS_INFO:
     jsr TEXT_CENTER_STRING_VERT
     jsr TEXT_DRAW_STRING_VERT
 
-; into...
-ORBITS_GAME_LOOP:
+; fall into info game loop...
+ORBITS_GAME_INFO_LOOP:
     ; i info
     lda #KEY_I_ROW
     sta CIA1_PRA
@@ -1254,7 +1254,8 @@ ORBITS_GAME_LOOP:
     beq -
     jmp SCREEN_SYSTEM_RESHOW
 +
-    jmp ORBITS_GAME_LOOP
+    jsr SCREEN_SYSTEM_ANIMATE           ; animates every frame
+    jmp ORBITS_GAME_INFO_LOOP
 
 
 ORBITS_INFO_STATUS

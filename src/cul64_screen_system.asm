@@ -32,10 +32,6 @@ SCREEN_SYSTEM_LOAD:
     ; music!
     jsr music_init
 
-    ; we are in space to start with
-    lda #1
-    sta SCREEN_SYSTEM_SPACE_SHOWING
-
     jsr SCREEN_ON
 
     jmp SCREEN_SYSTEM_GAME_LOOP
@@ -46,9 +42,6 @@ SCREEN_SYSTEM_RESHOW:
     sta SCREEN_SYSTEM_SPACE_BG
     jsr SCREEN_SYSTEM_COPY_SPACE_TO_SCREEN
     jsr SYSTEM_SHOW_KEYS        ; overlay on copied space
-    ; we are in space
-    lda #1
-    sta SCREEN_SYSTEM_SPACE_SHOWING
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis' 
@@ -527,6 +520,7 @@ SCREEN_SYSTEM_GAME_LOOP
     beq -
     jmp DIPLOMAT_SHOW
 +
+    jsr SCREEN_SYSTEM_ANIMATE           ; animates every frame
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SCREEN_SYSTEM_TOGGLE_THEME_MUSIC:
@@ -545,13 +539,11 @@ SCREEN_SYSTEM_TOGGLE_SHARED_COLORS:
     sta BG_COL_2
     rts 
 
-SCREEN_SYSTEM_RASTER_INT:
-    ; check space is showing
-    lda SCREEN_SYSTEM_SPACE_SHOWING
+SCREEN_SYSTEM_ANIMATE:
+    lda RASTER_FRAME_FLAG
     bne +
-    rts                             ; space not showing, don't do anything
-+
-
+    rts                 ; flag not set, don't do anything
++   
     ; bg colour animation
     lda RASTER_FRAME_COUNTER_L0
     and SCREEN_SYSTEM_BG_COL_SPEED
@@ -563,6 +555,8 @@ SCREEN_SYSTEM_RASTER_INT:
     beq +
     jsr SCREEN_SYSTEM_FLASH_BG
 +
+    lda #0
+    sta RASTER_FRAME_FLAG
     rts 
 
 
@@ -897,5 +891,3 @@ SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
     !byte 0   
 SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
     !byte 0   
-SCREEN_SYSTEM_SPACE_SHOWING
-    !byte 0

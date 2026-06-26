@@ -1,8 +1,4 @@
 DIPLOMAT_SHOW:
-    ; no longer in space
-    lda #0
-    sta SCREEN_SYSTEM_SPACE_SHOWING    
-
     ; clear bg
     ldx #0
 -

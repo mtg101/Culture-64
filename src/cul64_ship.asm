@@ -87,10 +87,6 @@ SHIP_COPY_TO_LOGO:
 
 
 SHIP_SHOW:
-    ; no longer in space
-    lda #0
-    sta SCREEN_SYSTEM_SPACE_SHOWING    
-
     ; play theme music
     lda #<SHIP_NAME_BUFFER
     sta LFSR_NAME_PTR

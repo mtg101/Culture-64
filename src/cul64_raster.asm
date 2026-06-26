@@ -179,7 +179,6 @@ RASTER_IRQ_TEXT_AREA_TOP_BORDER_OFF
     bne +                               ; If low byte didn't roll over to 0, skip high byte
     inc RASTER_FRAME_COUNTER_HI         ; Increment high byte (only runs once every 256 frames)
 +    
-    jsr SCREEN_SYSTEM_RASTER_INT
 
     +RASTER_INTERRUPT_SET_ROW 250
     +ACK_IRQ
@@ -191,7 +190,7 @@ RASTER_IRQ_END_MAIN_SCREEN
     +PUSH_ALL
 
     lda #01
-    sta RASTER_BOTTOM_BORDER
+    sta RASTER_FRAME_FLAG
 
     +RASTER_INTERRUPT_SET_ROW 253
     +ACK_IRQ
@@ -254,13 +253,14 @@ RASTER_IRQ_TEXT_AREA_BOTTOM_BORDER_LAST
 ; raster flags go 1 when they're ready for main loop (which will need to clear)
 RASTER_CHASE_BEAM
     !byte $00
-RASTER_BOTTOM_BORDER
-    !byte $00
 RASTER_BLUE_BOX_STATUS
     !byte $00
 
 RASTER_FRAME_COUNTER_L0
     !byte 0
 RASTER_FRAME_COUNTER_HI
+    !byte 0
+
+RASTER_FRAME_FLAG
     !byte 0
 
