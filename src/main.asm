@@ -36,6 +36,7 @@
 !source "src/cul64_theme_music_data.asm"
 
 ; --- End of code section ---
+!zone Data
 !ifndef DATA_PASS1 {
     DATA_PASS1 = 1
 } else {
@@ -43,7 +44,7 @@
         DATA_PASS2 = 1
     } else {
         !ifndef DATA_PASS3 {
-            !warn "Data size is ", *-MEM_BANK_3, " of max 16383 (0x3fff) (ending at ", *, " of max 49151 (0xbfff))"
+            !warn "Data size is ", *-MEM_BANK_3, " of max 16383 (0x3fff) (ending at ", *, " of max 49151 (0xbfff)) -- leaving ", 0x3fff-(*-MEM_BANK_3) 
             !if * > $bFFF {
                 !error "Code has hit the bank 1 boundary!"
             }
@@ -93,6 +94,7 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
 ; screens have their own game loops
 
 ; --- End of code section ---
+!zone Code
 !ifndef CODE_PASS1 {
     CODE_PASS1 = 1
 } else {
@@ -100,7 +102,7 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
         CODE_PASS2 = 1
     } else {
         !ifndef CODE_PASS3 {
-            !warn "Code size is ", *-MEM_BANK_2, " of max 16383 (0x3fff) (ending at ", *, " of max 32767 (0x7fff))"
+            !warn "Code size is ", *-MEM_BANK_2, " of max 16383 (0x3fff) (ending at ", *, " of max 32767 (0x7fff)) -- leaving ", 0x3fff-(*-MEM_BANK_2) 
             !if * > $7FFF {
                 !error "Code has hit the bank 1 boundary!"
             }
@@ -110,4 +112,5 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
 }
 
 ; sources with fixed memory locations
+!zone font
 !source "src/cul64_font.asm"
