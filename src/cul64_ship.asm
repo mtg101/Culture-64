@@ -156,23 +156,13 @@ SHIP_SHOW:
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    lda #<SHIP_HOME_LABEL
-    sta TEXT_STRING_PTR
-    lda #>SHIP_HOME_LABEL
-    sta TEXT_STRING_PTR+1
-    lda #5
-    sta TEXT_Y
-    lda #WHITE
-    sta TEXT_COLOR
-    jsr TEXT_DRAW_STRING
-
     lda #<SHIP_CABIN_LABEL
     sta TEXT_STRING_PTR
     lda #>SHIP_CABIN_LABEL
     sta TEXT_STRING_PTR+1
-    lda #8
+    lda #5
     sta TEXT_Y
-    lda #2
+    lda #20
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -182,9 +172,9 @@ SHIP_SHOW:
     sta TEXT_STRING_PTR
     lda #>SHIP_EMPTY_LABEL
     sta TEXT_STRING_PTR+1
-    lda #11
+    lda #7
     sta TEXT_Y
-    lda #4
+    lda #22
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -203,11 +193,23 @@ SHIP_SHOW:
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
+    lda #<SHIP_HOME_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SHIP_HOME_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #13
+    sta TEXT_Y
+    lda #2
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
     lda #<SHIP_HOME_BUFFER
     sta TEXT_STRING_PTR
     lda #>SHIP_HOME_BUFFER
     sta TEXT_STRING_PTR+1
-    lda #5
+    lda #13
     sta TEXT_Y
     lda #20
     sta TEXT_X
@@ -221,6 +223,55 @@ SHIP_SHOW:
     sta LOGO_Y
     jsr SHIP_COPY_TO_LOGO
     jsr LOGO_RENDER
+
+    ; show ship
+    lda #<SHIP_CHARS_1
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_1
+    sta TEXT_STRING_PTR+1
+    lda #5
+    sta TEXT_Y
+    lda #2
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_2
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_2
+    sta TEXT_STRING_PTR+1
+    lda #6
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_3
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_3
+    sta TEXT_STRING_PTR+1
+    lda #7
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_4
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_4
+    sta TEXT_STRING_PTR+1
+    lda #8
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_5
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_5
+    sta TEXT_STRING_PTR+1
+    lda #9
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_6
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_6
+    sta TEXT_STRING_PTR+1
+    lda #10
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+
 
 ; into...
 SHIP_GAME_LOOP
@@ -278,6 +329,20 @@ SHIP_CABIN_LABEL
     !scr "passenger cabin", 0
 SHIP_EMPTY_LABEL
     !scr "< empty >", 0
+
+SHIP_CHARS_1
+    !scr "+----+----+----+", 0
+SHIP_CHARS_2
+    !scr "+----+----+----+", 0
+SHIP_CHARS_3
+    !scr "+----+----+----+", 0
+SHIP_CHARS_4
+    !scr "+----+----+----+", 0
+SHIP_CHARS_5
+    !scr "+----+----+----+", 0
+SHIP_CHARS_6
+    !scr "+----+----+----+", 0
+
 
 SHIP_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0

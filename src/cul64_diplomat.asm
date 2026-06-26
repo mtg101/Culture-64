@@ -91,7 +91,7 @@ DIPLOMAT_SHOW:
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
-    ; show no cargo
+    ; show empty passenger cabin
     lda #<DIPLOMAT_NONE_LABEL
     sta TEXT_STRING_PTR
     lda #>DIPLOMAT_NONE_LABEL
@@ -104,6 +104,57 @@ DIPLOMAT_SHOW:
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
+    ; show comms label
+    lda #<DIPLOMAT_COMMS_LABEL
+    sta TEXT_STRING_PTR
+    lda #>DIPLOMAT_COMMS_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #5
+    sta TEXT_Y
+    lda #20
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    ; show send message label
+    lda #<DIPLOMAT_READ_LABEL
+    sta TEXT_STRING_PTR
+    lda #>DIPLOMAT_COMMS_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #7
+    sta TEXT_Y
+    lda #22
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    ; show read message label
+    lda #<DIPLOMAT_SEND_LABEL
+    sta TEXT_STRING_PTR
+    lda #>DIPLOMAT_COMMS_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #9
+    sta TEXT_Y
+    lda #22
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    ; show call label
+    lda #<DIPLOMAT_CALL_LABEL
+    sta TEXT_STRING_PTR
+    lda #>DIPLOMAT_CALL_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #11
+    sta TEXT_Y
+    lda #22
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
 
 ; into...
 DIPLOMAT_GAME_LOOP
@@ -129,6 +180,15 @@ DIPLOMAT_NONE_LABEL
     !scr "< none >", 0
 DIPLOMAT_DIPLOMAT_LABEL
     !scr "diplomat", 0
+DIPLOMAT_COMMS_LABEL
+    !scr "comms", 0
+DIPLOMAT_CALL_LABEL
+    !scr "call ship", 0
+DIPLOMAT_SEND_LABEL
+    !scr "send message", 0
+DIPLOMAT_READ_LABEL
+    !scr "read message", 0
+
 DIPLOMAT_BUFFER
     !fill BB_MAX_CHARS+1, 0
 
