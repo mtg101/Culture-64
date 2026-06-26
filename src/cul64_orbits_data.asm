@@ -252,7 +252,7 @@ ORBITS_SLOT_8_MOON_4
 
 ORBITS_MOON_CHARS_LUT
     !byte 81, 81, 81, 81, 81, 81, 81, 81
-    !byte 87, 42, 90, 86, 46, 43, 81, 81    
+    !byte 87, 42, 90, 86, 88, 43, 81, 81    
 
 ORBITS_DYSON_SWARM 
     !byte 0
