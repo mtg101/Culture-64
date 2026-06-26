@@ -403,8 +403,6 @@ PLANET_SHOW_ASTEROID_BELT:
 
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
 
-PLANET_SHOW_ASTEROID_BELT_HACK
-    !scr "$$$$$$$$$$", 0
 PLANET_SHOW_JUMP_GATE:
     ; color
     lda ORBITS_CURRENT_SLOT

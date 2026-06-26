@@ -34,3 +34,16 @@ BB_TEXT_BLANK
     !scr ">                      <", 0
 BB_TEXT_ENTRY_PRE_POP       ; if not zero, caller has provided entry text in BB_TEXT_ENTRY_BUFFER and has set BB_CHAR_COUNT
     !byte 0
+
+BB_TEXT_RETURN
+    !scr "> return <", 0
+
+BB_SHIP_NAME
+    !scr "ship, what is your name?", 0
+
+BB_JUMP_WHERE
+    !scr "jump to which system?", 0
+
+BB_JUMP_WHO
+    !scr "who you gonna call?", 0
+
