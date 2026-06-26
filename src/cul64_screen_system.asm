@@ -8,6 +8,8 @@ SCREEN_SYSTEM_LOAD:
     sta LFSR_NAME_PTR+1
     jsr LFSR_SEED_FROM_NAME
 
+    ; music!
+    jsr music_init
 
     jsr SYSTEM_GEN_SYS          ; huh 'gen sys' / 'genesis' 
  
@@ -29,14 +31,19 @@ SCREEN_SYSTEM_LOAD:
     lda #BLACK
     sta SCREEN_SYSTEM_SPACE_BG
 
-    ; music!
-    jsr music_init
-
     jsr SCREEN_ON
 
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SCREEN_SYSTEM_RESHOW:
+    ; seed from name
+    lda #<SCREEN_SYSTEM_NAME_BUFFER
+    sta LFSR_NAME_PTR
+    lda #>SCREEN_SYSTEM_NAME_BUFFER
+    sta LFSR_NAME_PTR+1
+    jsr LFSR_SEED_FROM_NAME
+    jsr music_init
+
     ; black bg
     lda #BLACK
     sta SCREEN_SYSTEM_SPACE_BG
@@ -455,7 +462,7 @@ SYSTEM_SHOW_KEYS:
     rts     
 
 SCREEN_SYSTEM_GAME_LOOP
-    ; j jump
+    ; m music
     lda #KEY_M_ROW
     sta CIA1_PRA
 
@@ -851,9 +858,6 @@ SCREEN_SYSTEM_KEYS_LABEL
     !byte 137           ; +4 = 29
     !scr "nfo"
     !byte  0                            ; +1 = 30
-
-SCREEN_SYSTEM_KEYS_LABEL_BLANK      ; I'll worry about these waster bytes when I run out of bytes... TODO
-    !fill 29, 32                        ; fill (phil ;) spaces
 
 SCREEN_SYSTEM_SPACE_BG
     !byte 0

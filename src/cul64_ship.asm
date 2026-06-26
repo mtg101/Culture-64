@@ -272,7 +272,6 @@ SHIP_SHOW:
     sta TEXT_Y
     jsr TEXT_DRAW_STRING
 
-
 ; into...
 SHIP_GAME_LOOP
     ; s ship
@@ -320,6 +319,232 @@ SHIP_GO_HOME:
 
     jmp BB_JUMP_SHOW
 
+SHIP_SHOW_CALL:
+    ; play friend's theme music
+    lda #<SHIP_CALL_NAME_BUFFER
+    sta LFSR_NAME_PTR
+    lda #>SHIP_CALL_NAME_BUFFER
+    sta LFSR_NAME_PTR+1
+    jsr LFSR_SEED_FROM_NAME
+    jsr music_init
+
+    ; clear bg
+    ldx #0
+-
+    lda #$20                    ; space
+    sta SCREEN_RAM_250_0, x
+    lda #YELLOW
+    sta SCREEN_COL_RAM_250_0, x
+    inx
+    cpx #250
+    bne -
+
+    ldx #0
+-
+    lda #$20                    ; space
+    sta SCREEN_RAM_250_1, x
+    lda #YELLOW
+    sta SCREEN_COL_RAM_250_1, x
+    inx
+    cpx #250
+    bne -
+
+    ldx #0
+-
+    lda #$20                    ; space
+    sta SCREEN_RAM_250_2, x
+    lda #YELLOW
+    sta SCREEN_COL_RAM_250_2, x
+    inx
+    cpx #100
+    bne -
+
+    ; invert C in top right
+    lda #0 
+    sta TEXT_Y
+    lda #39
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    lda #131                ; invert C
+    sta TEXT_CHAR
+    jsr TEXT_DRAW_CHAR
+
+    ; blue bg
+    lda #BLUE
+    sta SCREEN_SYSTEM_SPACE_BG
+
+    lda #<SHIP_NAME_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>SHIP_NAME_BUFFER
+    sta TEXT_STRING_PTR+1
+    lda #5
+    sta TEXT_Y
+    lda #2
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    ; logo
+    lda #1
+    sta LOGO_X
+    lda #0
+    sta LOGO_Y
+    jsr SHIP_COPY_TO_LOGO
+    jsr LOGO_RENDER
+
+    ; show ship
+    lda #<SHIP_CHARS_1
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_1
+    sta TEXT_STRING_PTR+1
+    lda #8
+    sta TEXT_Y
+    lda #4
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_2
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_2
+    sta TEXT_STRING_PTR+1
+    lda #9
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_3
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_3
+    sta TEXT_STRING_PTR+1
+    lda #10
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_4
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_4
+    sta TEXT_STRING_PTR+1
+    lda #11
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_5
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_5
+    sta TEXT_STRING_PTR+1
+    lda #12
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_6
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_6
+    sta TEXT_STRING_PTR+1
+    lda #13
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+
+    ; friend ship (lols)
+    lda #<SHIP_CALL_NAME_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CALL_NAME_BUFFER
+    sta TEXT_STRING_PTR+1
+    lda #5
+    sta TEXT_Y
+    lda #20
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    ; friend logo
+    lda #19
+    sta LOGO_X
+    lda #0
+    sta LOGO_Y
+
+    lda #<SHIP_CALL_NAME_BUFFER
+    sta LFSR_NAME_PTR
+    lda #>SHIP_CALL_NAME_BUFFER
+    sta LFSR_NAME_PTR+1
+    jsr LFSR_SEED_FROM_NAME
+    jsr LOGO_GENERATE
+    jsr LOGO_RENDER
+
+    ; show friend ship (rofl)
+    lda #<SHIP_CHARS_1
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_1
+    sta TEXT_STRING_PTR+1
+    lda #8
+    sta TEXT_Y
+    lda #23
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_2
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_2
+    sta TEXT_STRING_PTR+1
+    lda #9
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_3
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_3
+    sta TEXT_STRING_PTR+1
+    lda #10
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_4
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_4
+    sta TEXT_STRING_PTR+1
+    lda #11
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_5
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_5
+    sta TEXT_STRING_PTR+1
+    lda #12
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+    lda #<SHIP_CHARS_6
+    sta TEXT_STRING_PTR
+    lda #>SHIP_CHARS_6
+    sta TEXT_STRING_PTR+1
+    lda #13
+    sta TEXT_Y
+    jsr TEXT_DRAW_STRING
+
+
+; into...
+SHIP_GAME_CALL_LOOP:
+    ; c call
+    lda #KEY_C_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_C_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_C_COL  ; check released
+    beq -
+    ; reset music
+    ; seed from name
+    lda #<SCREEN_SYSTEM_NAME_BUFFER
+    sta LFSR_NAME_PTR
+    lda #>SCREEN_SYSTEM_NAME_BUFFER
+    sta LFSR_NAME_PTR+1
+    jsr LFSR_SEED_FROM_NAME
+    jsr music_init
+
+    jmp DIPLOMAT_SHOW
++
+    jmp SHIP_GAME_CALL_LOOP
+
+
 SHIP_SHIP_LABEL
     !scr "ship", 0
 SHIP_HOME_LABEL
@@ -347,6 +572,8 @@ SHIP_CHARS_6
 SHIP_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
 SHIP_HOME_BUFFER
+    !fill BB_MAX_CHARS+1, 0
+SHIP_CALL_NAME_BUFFER
     !fill BB_MAX_CHARS+1, 0
 
 SHIP_LOGO_TL_CHAR

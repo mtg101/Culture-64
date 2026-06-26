@@ -1102,16 +1102,8 @@ ORBITS_SET_MOON_CHAR:
     rts 
 
 ORBITS_SHOW_SLOTS_INFO:
-    ; clear sHIP jUMP iNFO
-    lda #0 
-    sta TEXT_Y
-    lda #11
-    sta TEXT_X
-    lda #<SCREEN_SYSTEM_KEYS_LABEL_BLANK
-    sta TEXT_STRING_PTR
-    lda #>SCREEN_SYSTEM_KEYS_LABEL_BLANK
-    sta TEXT_STRING_PTR+1
-    jsr TEXT_DRAW_STRING
+    ; reshow space
+    jsr SCREEN_SYSTEM_COPY_SPACE_TO_SCREEN
 
     ; invert I in top right
     lda #0 

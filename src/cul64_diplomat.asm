@@ -120,7 +120,7 @@ DIPLOMAT_SHOW:
     ; show send message label
     lda #<DIPLOMAT_READ_LABEL
     sta TEXT_STRING_PTR
-    lda #>DIPLOMAT_COMMS_LABEL
+    lda #>DIPLOMAT_READ_LABEL
     sta TEXT_STRING_PTR+1
     lda #7
     sta TEXT_Y
@@ -133,7 +133,7 @@ DIPLOMAT_SHOW:
     ; show read message label
     lda #<DIPLOMAT_SEND_LABEL
     sta TEXT_STRING_PTR
-    lda #>DIPLOMAT_COMMS_LABEL
+    lda #>DIPLOMAT_SEND_LABEL
     sta TEXT_STRING_PTR+1
     lda #9
     sta TEXT_Y
@@ -171,6 +171,21 @@ DIPLOMAT_GAME_LOOP
     beq -
     jmp SCREEN_SYSTEM_RESHOW
 +
+
+    ; c call
+    lda #KEY_C_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_C_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_C_COL  ; check released
+    beq -
+    jmp BB_CALL_SHOW
++
+
     jmp DIPLOMAT_GAME_LOOP
 
 
@@ -183,7 +198,8 @@ DIPLOMAT_DIPLOMAT_LABEL
 DIPLOMAT_COMMS_LABEL
     !scr "comms", 0
 DIPLOMAT_CALL_LABEL
-    !scr "call ship", 0
+    !byte 131
+    !scr "all ship", 0
 DIPLOMAT_SEND_LABEL
     !scr "send message", 0
 DIPLOMAT_READ_LABEL

@@ -129,7 +129,35 @@ BB_DRAW_BOX
 
     rts
 
-BB_JUMP_SHOW
+BB_CALL_SHOW:
+    ; turn on blue box mode
+    lda #1
+    sta RASTER_BLUE_BOX_STATUS
+
+    ; who string
+    lda #<BB_JUMP_WHO
+    sta TEXT_STRING_PTR
+    lda #>BB_JUMP_WHO
+    sta TEXT_STRING_PTR+1
+
+    jsr BB_SHOW_TEXT_ENTRY_BOX
+
+    ; turn off blue box mode
+    lda #0
+    sta RASTER_BLUE_BOX_STATUS
+
+    ; save friend name
+    ldx #0
+-
+    lda BB_TEXT_ENTRY_BUFFER, x
+    sta SHIP_CALL_NAME_BUFFER, x
+    inx
+    cpx #BB_MAX_CHARS
+    bne -
+
+    jmp SHIP_SHOW_CALL
+
+BB_JUMP_SHOW:
     ; turn on blue box mode
     lda #1
     sta RASTER_BLUE_BOX_STATUS
@@ -188,6 +216,9 @@ BB_JUMP_SHOW
 
 BB_JUMP_WHERE
     !scr "jump to which system?", 0
+
+BB_JUMP_WHO
+    !scr "who you gonna call?", 0
 
 BB_SHIP_NAME_SHOW
     ; turn on blue box mode
