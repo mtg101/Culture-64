@@ -85,7 +85,7 @@ DIPLOMAT_SHOW:
     sta TEXT_STRING_PTR+1
     lda #5
     sta TEXT_Y
-    lda #2
+    lda #20
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -98,7 +98,7 @@ DIPLOMAT_SHOW:
     sta TEXT_STRING_PTR+1
     lda #7
     sta TEXT_Y
-    lda #4
+    lda #22
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -111,7 +111,7 @@ DIPLOMAT_SHOW:
     sta TEXT_STRING_PTR+1
     lda #5
     sta TEXT_Y
-    lda #20
+    lda #2
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -124,7 +124,7 @@ DIPLOMAT_SHOW:
     sta TEXT_STRING_PTR+1
     lda #7
     sta TEXT_Y
-    lda #22
+    lda #4
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -137,7 +137,7 @@ DIPLOMAT_SHOW:
     sta TEXT_STRING_PTR+1
     lda #9
     sta TEXT_Y
-    lda #22
+    lda #4
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
@@ -150,7 +150,7 @@ DIPLOMAT_SHOW:
     sta TEXT_STRING_PTR+1
     lda #11
     sta TEXT_Y
-    lda #22
+    lda #4
     sta TEXT_X
     lda #WHITE
     sta TEXT_COLOR
