@@ -7,6 +7,9 @@ SHIP_CABIN_LABEL
     !scr "passenger cabin", 0
 SHIP_EMPTY_LABEL
     !scr "< empty >", 0
+SHIP_DEST_LABEL
+    !byte 132
+    !scr "estination", 0
 
 SHIP_CHARS_1
     !scr "+---+---+---+", 0
@@ -47,3 +50,17 @@ SHIP_LOGO_BR_COL
     !byte 0
 SHIP_LOGO_BORDER_COLOR
     !byte 0
+
+SHIP_PASSENGER_BUFFER
+    !fill BB_MAX_CHARS+1, 0
+SHIP_PASSENGER_DEST_BUFFER
+    !fill BB_MAX_CHARS+1, 0
+
+SHIP_HAS_PASSENGER
+    !byte 0
+SHIP_PASSENGER_SEED_W0
+    !word 0
+SHIP_PASSENGER_SEED_W1
+    !word 0
+SHIP_PASSENGER_SEED_W2
+    !word 0

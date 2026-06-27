@@ -52,7 +52,7 @@ NAME_GENERATE_SYSTEM
 
     rts 
 
-NAME_GENERATE_DIPLOMAT
+NAME_GENERATE_PERSON_NAME
     jsr LFSR_NEXT_SEED          ; start fresh
 
     ; setup zptr

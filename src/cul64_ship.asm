@@ -25,6 +25,94 @@ SHIP_GEN_FROM_NAME:
 
     rts
 
+SHIP_SHOW_PASSENGER:
+    ; load passenger seed
+    lda SHIP_PASSENGER_SEED_W0
+    sta LFSR_W0
+    lda SHIP_PASSENGER_SEED_W0+1
+    sta LFSR_W0+1
+    lda SHIP_PASSENGER_SEED_W1
+    sta LFSR_W1
+    lda SHIP_PASSENGER_SEED_W1+1
+    sta LFSR_W1+1
+    lda SHIP_PASSENGER_SEED_W2
+    sta LFSR_W2
+    lda SHIP_PASSENGER_SEED_W2+1
+    sta LFSR_W2+1
+
+    ; get passenger logo
+    jsr LOGO_GENERATE
+    lda #36
+    sta LOGO_X
+    lda #4
+    sta LOGO_Y
+    jsr LOGO_RENDER
+
+    ; get passenger name
+    jsr NAME_GENERATE_PERSON_NAME
+    lda #<NAME_BUFFER
+    sta ZP_PTR_1
+    lda #>NAME_BUFFER
+    sta ZP_PTR_1_PAIR
+    lda #<SHIP_PASSENGER_BUFFER
+    sta ZP_PTR_2
+    lda #>SHIP_PASSENGER_BUFFER
+    sta ZP_PTR_2_PAIR
+    jsr SYS_MEM_COPY
+
+    ; show passenger name
+    lda #<SHIP_PASSENGER_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>SHIP_PASSENGER_BUFFER
+    sta TEXT_STRING_PTR+1
+    lda #8
+    sta TEXT_Y
+    lda #20
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    ; show passenger dest label
+    lda #<SHIP_DEST_LABEL
+    sta TEXT_STRING_PTR
+    lda #>SHIP_DEST_LABEL
+    sta TEXT_STRING_PTR+1
+    lda #10
+    sta TEXT_Y
+    lda #20
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    ; get dest system
+    jsr NAME_GENERATE_SYSTEM
+    lda #<NAME_BUFFER
+    sta ZP_PTR_1
+    lda #>NAME_BUFFER
+    sta ZP_PTR_1_PAIR
+    lda #<SHIP_PASSENGER_DEST_BUFFER
+    sta ZP_PTR_2
+    lda #>SHIP_PASSENGER_DEST_BUFFER
+    sta ZP_PTR_2_PAIR
+    jsr SYS_MEM_COPY
+
+    ; show passenger dest system
+    lda #<SHIP_PASSENGER_DEST_BUFFER
+    sta TEXT_STRING_PTR
+    lda #>SHIP_PASSENGER_DEST_BUFFER
+    sta TEXT_STRING_PTR+1
+    lda #11
+    sta TEXT_Y
+    lda #20
+    sta TEXT_X
+    lda #WHITE
+    sta TEXT_COLOR
+    jsr TEXT_DRAW_STRING
+
+    rts 
+
 SHIP_COPY_FROM_LOGO:
     lda LOGO_TL_CHAR
     sta SHIP_LOGO_TL_CHAR
@@ -160,7 +248,7 @@ SHIP_SHOW:
     sta TEXT_STRING_PTR
     lda #>SHIP_CABIN_LABEL
     sta TEXT_STRING_PTR+1
-    lda #5
+    lda #4
     sta TEXT_Y
     lda #20
     sta TEXT_X
@@ -168,6 +256,13 @@ SHIP_SHOW:
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
 
+    ; passenger or empty?
+    lda SHIP_HAS_PASSENGER
+    beq +
+    ; have passenger
+    jsr SHIP_SHOW_PASSENGER
+    jmp ++
++
     lda #<SHIP_EMPTY_LABEL
     sta TEXT_STRING_PTR
     lda #>SHIP_EMPTY_LABEL
@@ -179,7 +274,7 @@ SHIP_SHOW:
     lda #WHITE
     sta TEXT_COLOR
     jsr TEXT_DRAW_STRING
-
+++
     ; show values
     lda #<SHIP_NAME_BUFFER
     sta TEXT_STRING_PTR
@@ -300,6 +395,23 @@ SHIP_GAME_LOOP
     beq -
     jmp SHIP_GO_HOME    
 +
+    ; do we have passenger
+    lda SHIP_HAS_PASSENGER
+    beq +
+    ; have passenger
+    ; h home jump
+    lda #KEY_D_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_D_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_D_COL  ; check released
+    beq -
+    jmp SHIP_GO_PASS_DEST
++
     jmp SHIP_GAME_LOOP
 
 SHIP_GO_HOME:
@@ -318,6 +430,24 @@ SHIP_GO_HOME:
     stx BB_TEXT_ENTRY_PRE_POP   ; we have pre-popd, any non-zero works so use x
 
     jmp BB_JUMP_SHOW
+
+SHIP_GO_PASS_DEST
+    ; jump home: prepopulate jump bb with home system name
+
+    ldx #0
+.ship_go_pass_dest_loop:
+    lda SHIP_PASSENGER_DEST_BUFFER, x
+    sta BB_TEXT_ENTRY_BUFFER, x
+    inx
+    cmp #0
+    bne .ship_go_pass_dest_loop
+
+    dex
+    stx BB_CHAR_COUNT
+    stx BB_TEXT_ENTRY_PRE_POP   ; we have pre-popd, any non-zero works so use x
+
+    jmp BB_JUMP_SHOW
+
 
 SHIP_SHOW_CALL:
     ; play friend's theme music

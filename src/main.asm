@@ -112,5 +112,5 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
 }
 
 ; sources with fixed memory locations
-!zone font
+!zone Font
 !source "src/cul64_font.asm"

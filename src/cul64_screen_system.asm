@@ -156,7 +156,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     sta SCREEN_SYSTEM_NUM_PLANETS_CHAR
 
     ; diplomat name
-    jsr NAME_GENERATE_DIPLOMAT
+    jsr NAME_GENERATE_PERSON_NAME
     lda #<NAME_BUFFER
     sta ZP_PTR_1
     lda #>NAME_BUFFER
@@ -169,6 +169,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
 
     ; diplomat logo
     jsr LOGO_GENERATE
+    jsr DIPLOMAT_COPY_FROM_LOGO
 
     ; 0-7 tech level
     lda LFSR_W2
@@ -270,6 +271,52 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     lda #WHITE
     sta SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
 ++
+
+    ; passenger
+    lda #0
+    sta DIPLOMAT_HAS_PASSENGER
+    lda #16                ; regular p
+    sta DIPLOMAT_PASSENGER_LABEL
+
+    lda LFSR_W0+1
+    clc 
+    adc RASTER_FRAME_COUNTER_L0         ; and 'random' factor each time
+    and #%00000011
+;    beq +                   ; 1 in 4 has passenger
+    ; has passenger
+    lda #1
+    sta DIPLOMAT_HAS_PASSENGER          
+
+    ; use frame counter to 'random' factor the passenger seed
+    lda LFSR_W1
+    clc
+    adc RASTER_FRAME_COUNTER_L0
+    sta LFSR_W1
+    lda LFSR_W2
+    clc
+    adc RASTER_FRAME_COUNTER_HI
+    sta LFSR_W2
+
+    jsr LFSR_NEXT_SEED      ; fresh seed
+    lda LFSR_W0
+    sta DIPLOMAT_PASSENGER_SEED_W0
+    lda LFSR_W0+1
+    sta DIPLOMAT_PASSENGER_SEED_W0+1
+    lda LFSR_W1
+    sta DIPLOMAT_PASSENGER_SEED_W1
+    lda LFSR_W1+1
+    sta DIPLOMAT_PASSENGER_SEED_W1+1
+    lda LFSR_W2
+    sta DIPLOMAT_PASSENGER_SEED_W2
+    lda LFSR_W2+1
+    sta DIPLOMAT_PASSENGER_SEED_W2+1
+
+    ; only if don't already have one
+    lda SHIP_HAS_PASSENGER
+    bne +
+    lda #144                ; inverted p
+    sta DIPLOMAT_PASSENGER_LABEL
++   
     rts
 
 SYSTEM_SHOW_VALUES
