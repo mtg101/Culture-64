@@ -15,6 +15,5 @@ SCREEN_TITLE_DREAMS
     !scr "procedural dreams", 0
 SCREEN_TITLE_MATHS
     !scr "where math stores the universe", 0
-SCREEN_TITLE_PROMPT
-    !scr "> return to space <", 0
+
 

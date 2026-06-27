@@ -64,7 +64,7 @@ CLOUDS_SHOW:
     beq +
     ; nebula dark colors
     lda LFSR_W0
-    and #%00000111          ; 0-3
+    and #%00000011          ; 0-3
     tax 
     lda CLOUDS_NEBULA_COLORS_LUT, x 
     jmp ++

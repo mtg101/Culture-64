@@ -134,6 +134,43 @@ SCREEN_SYSTEM_CUL_STATUS_7_STRING
     !scr "culture system", 0
 
 
+SCREEN_SYSTEM_THANKS_LUT_LO
+    !byte <SCREEN_SYSTEM_THANKS_0
+    !byte <SCREEN_SYSTEM_THANKS_1
+    !byte <SCREEN_SYSTEM_THANKS_2
+    !byte <SCREEN_SYSTEM_THANKS_3
+    !byte <SCREEN_SYSTEM_THANKS_4
+    !byte <SCREEN_SYSTEM_THANKS_5
+    !byte <SCREEN_SYSTEM_THANKS_6
+    !byte <SCREEN_SYSTEM_THANKS_7
+SCREEN_SYSTEM_THANKS_LUT_HI
+    !byte >SCREEN_SYSTEM_THANKS_0
+    !byte >SCREEN_SYSTEM_THANKS_1
+    !byte >SCREEN_SYSTEM_THANKS_2
+    !byte >SCREEN_SYSTEM_THANKS_3
+    !byte >SCREEN_SYSTEM_THANKS_4
+    !byte >SCREEN_SYSTEM_THANKS_5
+    !byte >SCREEN_SYSTEM_THANKS_6
+    !byte >SCREEN_SYSTEM_THANKS_7
+
+SCREEN_SYSTEM_THANKS_0
+    !scr "\"thanks for the lift!\"", 0
+SCREEN_SYSTEM_THANKS_1
+    !scr "\"arigatou gozaimasu\"", 0
+SCREEN_SYSTEM_THANKS_2
+    !scr "\"gam-sa-ham-ni-da\"", 0
+SCREEN_SYSTEM_THANKS_3
+    !scr "\"danke schoen\"", 0
+SCREEN_SYSTEM_THANKS_4
+    !scr "\"cheers guv!\"", 0
+SCREEN_SYSTEM_THANKS_5
+    !scr "\"ta mate!\"", 0
+SCREEN_SYSTEM_THANKS_6
+    !scr "\"efharisto poli!\"", 0
+SCREEN_SYSTEM_THANKS_7
+    !scr "\"muchas gracias\"", 0
+
+
 SCREEN_SYSTEM_COLOR_TOP_SPACE_BORDER 
     !byte 0
 SCREEN_SYSTEM_COLOR_TEXT_BG

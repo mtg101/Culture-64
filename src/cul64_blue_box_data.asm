@@ -36,7 +36,7 @@ BB_TEXT_ENTRY_PRE_POP       ; if not zero, caller has provided entry text in BB_
     !byte 0
 
 BB_TEXT_RETURN
-    !scr "> return <", 0
+    !scr "> return to space <", 0
 
 BB_SHIP_NAME
     !scr "ship, what is your name?", 0
@@ -46,4 +46,7 @@ BB_JUMP_WHERE
 
 BB_JUMP_WHO
     !scr "who you gonna call?", 0
+
+BB_TEXT_LOGO
+    !byte 0
 

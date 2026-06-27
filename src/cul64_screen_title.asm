@@ -146,9 +146,9 @@ SCREEN_TITLE_SHOW
     jsr TEXT_DRAW_STRING
 
     ; prompt string
-    lda #<SCREEN_TITLE_PROMPT
+    lda #<BB_TEXT_RETURN
     sta TEXT_STRING_PTR
-    lda #>SCREEN_TITLE_PROMPT
+    lda #>BB_TEXT_RETURN
     sta TEXT_STRING_PTR+1
 
     jsr TEXT_CENTER_STRING

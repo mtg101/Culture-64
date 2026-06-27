@@ -1,4 +1,8 @@
 BB_SHOW_TEXT_BOX
+    ; turn on blue box mode
+    lda #1
+    sta RASTER_BLUE_BOX_STATUS
+
     jsr BB_DRAW_BOX
 
     ; center white text
@@ -15,11 +19,26 @@ BB_SHOW_TEXT_BOX
     lda #>BB_TEXT_RETURN
     sta TEXT_STRING_PTR+1
     jsr TEXT_CENTER_STRING
-    lda #10
+    lda #9
     sta TEXT_Y
     jsr TEXT_DRAW_STRING
 
+    ; logo
+    lda BB_TEXT_LOGO
+    beq +
+    ; show logo
+    lda #36
+    sta LOGO_X
+    lda #7
+    sta LOGO_Y
+    jsr LOGO_RENDER
+
++
     jsr TEXT_WAIT_FOR_ENTER_SPACE
+    ; turn off blue box mode
+    lda #0
+    sta RASTER_BLUE_BOX_STATUS
+        
     rts
 
 BB_SHOW_OPTIONS_BOX

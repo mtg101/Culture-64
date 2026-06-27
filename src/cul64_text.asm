@@ -456,3 +456,26 @@ TEXT_WAIT_FOR_ENTER_SPACE
 
     rts
 
+; ZP_PTR_1 points to known string
+; ZP_PTR_2 points to compare string
+; returns: in a - 0=not same 1=same
+TEXT_COMPARE_STRINGS:
+    ldy #0
+
+.text_compare_strings_loop:
+    lda (ZP_PTR_1), y
+    bne +
+    ; null pointer reached, so the same, return true
+    lda #1
+    rts
++
+    ; compare
+    cmp (ZP_PTR_2), y
+    beq +               ; same so check next
+    ; not same, return false
+    lda #0
+    rts
++
+    iny
+    jmp .text_compare_strings_loop
+

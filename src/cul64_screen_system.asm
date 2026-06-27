@@ -37,10 +37,57 @@ SCREEN_SYSTEM_LOAD:
     lda SHIP_HAS_PASSENGER
     beq +
     ; have passenger
-    
 
+    ; compare system name and dest name
+    lda #<SCREEN_SYSTEM_NAME_BUFFER
+    sta ZP_PTR_1
+    lda #>SCREEN_SYSTEM_NAME_BUFFER
+    sta ZP_PTR_1_PAIR
 
+    lda #<SHIP_PASSENGER_DEST_BUFFER
+    sta ZP_PTR_2
+    lda #>SHIP_PASSENGER_DEST_BUFFER
+    sta ZP_PTR_2_PAIR
 
+    jsr TEXT_COMPARE_STRINGS        ; a 0=diff, 1=same
+    beq +
+    ; matches!
+
+    ; load passenger seed
+    lda SHIP_PASSENGER_SEED_W0
+    sta LFSR_W0
+    lda SHIP_PASSENGER_SEED_W0+1
+    sta LFSR_W0+1
+    lda SHIP_PASSENGER_SEED_W1
+    sta LFSR_W1
+    lda SHIP_PASSENGER_SEED_W1+1
+    sta LFSR_W1+1
+    lda SHIP_PASSENGER_SEED_W2
+    sta LFSR_W2
+    lda SHIP_PASSENGER_SEED_W2+1
+    sta LFSR_W2+1
+
+    ; get passenger logo
+    jsr LOGO_GENERATE
+
+    ; show thankyou
+    lda LFSR_W0
+    and #%00000111          ; 0-7
+    tax
+    lda SCREEN_SYSTEM_THANKS_LUT_LO, x
+    sta TEXT_STRING_PTR
+    lda SCREEN_SYSTEM_THANKS_LUT_HI, x
+    sta TEXT_STRING_PTR+1
+
+    lda #1
+    sta BB_TEXT_LOGO
+
+    jsr BB_SHOW_TEXT_BOX
+
+    ; clear passenger
+    lda #0
+    sta SHIP_HAS_PASSENGER
+    jmp SCREEN_SYSTEM_RESHOW        ; clears bb
 +
     jmp SCREEN_SYSTEM_GAME_LOOP
 
@@ -290,21 +337,11 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     lda LFSR_W0+1
     clc 
     adc RASTER_FRAME_COUNTER_L0         ; and 'random' factor each time
-    and #%00000011
-;    beq +                   ; 1 in 4 has passenger
+    and #%00000001
+    bne +                   ; 1 in 2 has passenger - enough to show both without jumping 5 times without finfing one to test...
     ; has passenger
     lda #1
     sta DIPLOMAT_HAS_PASSENGER          
-
-    ; use frame counter to 'random' factor the passenger seed
-    lda LFSR_W1
-    clc
-    adc RASTER_FRAME_COUNTER_L0
-    sta LFSR_W1
-    lda LFSR_W2
-    clc
-    adc RASTER_FRAME_COUNTER_HI
-    sta LFSR_W2
 
     jsr LFSR_NEXT_SEED      ; fresh seed
     lda LFSR_W0
@@ -319,6 +356,16 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     sta DIPLOMAT_PASSENGER_SEED_W2
     lda LFSR_W2+1
     sta DIPLOMAT_PASSENGER_SEED_W2+1
+
+    ; use frame counter to 'random' factor the passenger seed
+    lda DIPLOMAT_PASSENGER_SEED_W1
+    clc
+    adc RASTER_FRAME_COUNTER_L0
+    sta DIPLOMAT_PASSENGER_SEED_W1
+    lda DIPLOMAT_PASSENGER_SEED_W2
+    clc
+    adc RASTER_FRAME_COUNTER_HI
+    sta DIPLOMAT_PASSENGER_SEED_W2
 
     ; only if don't already have one
     lda SHIP_HAS_PASSENGER
