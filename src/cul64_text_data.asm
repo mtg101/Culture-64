@@ -131,4 +131,154 @@ TEXT_BITS_TO_CHAR_LUT
     !byte 45 ; -
 
 
+TEXT_WORD_LUT_LO
+    !byte <TEXT_WORD_0
+    !byte <TEXT_WORD_1
+    !byte <TEXT_WORD_2
+    !byte <TEXT_WORD_3
+    !byte <TEXT_WORD_4
+    !byte <TEXT_WORD_5
+    !byte <TEXT_WORD_6
+    !byte <TEXT_WORD_7
+
+    !byte <TEXT_WORD_8
+    !byte <TEXT_WORD_9
+    !byte <TEXT_WORD_10
+    !byte <TEXT_WORD_11
+    !byte <TEXT_WORD_12
+    !byte <TEXT_WORD_13
+    !byte <TEXT_WORD_14
+    !byte <TEXT_WORD_15
+
+    !byte <TEXT_WORD_16
+    !byte <TEXT_WORD_17
+    !byte <TEXT_WORD_18
+    !byte <TEXT_WORD_19
+    !byte <TEXT_WORD_20
+    !byte <TEXT_WORD_21
+    !byte <TEXT_WORD_22
+    !byte <TEXT_WORD_23
+
+    !byte <TEXT_WORD_24
+    !byte <TEXT_WORD_25
+    !byte <TEXT_WORD_26
+    !byte <TEXT_WORD_27
+    !byte <TEXT_WORD_28
+    !byte <TEXT_WORD_29
+    !byte <TEXT_WORD_30
+    !byte <TEXT_WORD_31
+
+TEXT_WORD_LUT_HI
+    !byte >TEXT_WORD_0
+    !byte >TEXT_WORD_1
+    !byte >TEXT_WORD_2
+    !byte >TEXT_WORD_3
+    !byte >TEXT_WORD_4
+    !byte >TEXT_WORD_5
+    !byte >TEXT_WORD_6
+    !byte >TEXT_WORD_7
+
+    !byte >TEXT_WORD_8
+    !byte >TEXT_WORD_9
+    !byte >TEXT_WORD_10
+    !byte >TEXT_WORD_11
+    !byte >TEXT_WORD_12
+    !byte >TEXT_WORD_13
+    !byte >TEXT_WORD_14
+    !byte >TEXT_WORD_15
+
+    !byte >TEXT_WORD_16
+    !byte >TEXT_WORD_17
+    !byte >TEXT_WORD_18
+    !byte >TEXT_WORD_19
+    !byte >TEXT_WORD_20
+    !byte >TEXT_WORD_21
+    !byte >TEXT_WORD_22
+    !byte >TEXT_WORD_23
+
+    !byte >TEXT_WORD_24
+    !byte >TEXT_WORD_25
+    !byte >TEXT_WORD_26
+    !byte >TEXT_WORD_27
+    !byte >TEXT_WORD_28
+    !byte >TEXT_WORD_29
+    !byte >TEXT_WORD_30
+    !byte >TEXT_WORD_31
+
+
+
+
+
+TEXT_WORD_0
+    !byte 0
+; greetings and formalities
+TEXT_WORD_1
+    !scr "hello"
+TEXT_WORD_2
+    !scr "friend"
+TEXT_WORD_3
+    !scr "ahn-nyeong-ha-se-yo"
+TEXT_WORD_4
+    !scr "konnichiwa"
+TEXT_WORD_5
+    !scr "clear skies"
+TEXT_WORD_6
+    !scr "take care"
+TEXT_WORD_7
+    !scr "ciao"
+
+; common language
+TEXT_WORD_8
+    !scr "kudasai"
+TEXT_WORD_9
+    !scr "por favor"
+TEXT_WORD_10
+    !scr "why?"
+TEXT_WORD_11
+    !scr "right?"
+TEXT_WORD_12
+    !scr "good"
+TEXT_WORD_13
+    !scr "bad"
+TEXT_WORD_14
+    !scr "fraking"
+TEXT_WORD_15
+    !scr "yata!"
+
+; things
+TEXT_WORD_16
+    !scr "planet"
+TEXT_WORD_17
+    !scr "star"
+TEXT_WORD_18
+    !scr "station"
+TEXT_WORD_19
+    !scr "system"
+TEXT_WORD_20
+    !scr "jump gate"
+TEXT_WORD_21
+    !scr "ship"
+TEXT_WORD_22
+    !scr "mind"
+TEXT_WORD_23
+    !scr "you"
+
+; actions
+TEXT_WORD_24
+    !scr "repair"
+TEXT_WORD_25
+    !scr "help"
+TEXT_WORD_26
+    !scr "investigate"
+TEXT_WORD_27
+    !scr "contact"
+TEXT_WORD_28
+    !scr "send"
+TEXT_WORD_29
+    !scr "escape"
+TEXT_WORD_30
+    !scr "i will"
+TEXT_WORD_31
+    !scr "---"
+
 
