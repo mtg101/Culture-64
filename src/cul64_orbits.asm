@@ -346,8 +346,8 @@ ORBITS_GENERATE_SLOT_DONE:
     lda ORBITS_SLOT_8
     bne .no_oort
 
-    ; so slots 7 and 8 are empty : oort cloud always (it's rare!)
-    jsr CLOUDS_SHOW_OORT
+    lda #1
+    sta ORBITS_OORT_CLOUD
 
     ; src
     lda #<ORBITS_OORT_CLOUD_LABEL
@@ -360,7 +360,6 @@ ORBITS_GENERATE_SLOT_DONE:
     lda #>ORBITS_SLOT_8_BUFFER
     sta ZP_PTR_2_PAIR
     jsr SYS_MEM_COPY    
-
 
 .no_oort
     jsr ORBITS_GENERATE_MOONS
@@ -844,7 +843,12 @@ ORBITS_SHOW_SLOT_8:
     jmp (ZP_PTR_JUMP)
 +
 ORBITS_SHOW_SLOT_DONE:
-    jsr ORBITS_SHOW_MOONS
+    ; check oort
+    lda ORBITS_OORT_CLOUD
+    beq +
+    jsr CLOUDS_SHOW_OORT
++
+    jsr ORBITS_SHOW_MOONS   
     rts 
 
 ORBITS_SHOW_MOONS:

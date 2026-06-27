@@ -60,10 +60,10 @@ CLOUDS_SHOW_NEBULA:
 CLOUDS_SHOW:
     jsr LFSR_NEXT_SEED      ; fresh
 
-    lda LFSR_W2
     lda CLOUDS_NEBULA_MODE
     beq +
     ; nebula dark colors
+    lda LFSR_W0
     and #%00000111          ; 0-3
     tax 
     lda CLOUDS_NEBULA_COLORS_LUT, x 

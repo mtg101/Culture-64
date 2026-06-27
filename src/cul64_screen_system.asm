@@ -33,6 +33,15 @@ SCREEN_SYSTEM_LOAD:
 
     jsr SCREEN_ON
 
+    ; passenger arrived?
+    lda SHIP_HAS_PASSENGER
+    beq +
+    ; have passenger
+    
+
+
+
++
     jmp SCREEN_SYSTEM_GAME_LOOP
 
 SCREEN_SYSTEM_RESHOW:
