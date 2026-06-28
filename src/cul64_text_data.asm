@@ -217,7 +217,7 @@ TEXT_WORD_1
 TEXT_WORD_2
     !scr "friend"
 TEXT_WORD_3
-    !scr "ahn-nyeong-ha-se-yo"
+    !scr "an-nyeong"
 TEXT_WORD_4
     !scr "konnichiwa"
 TEXT_WORD_5
