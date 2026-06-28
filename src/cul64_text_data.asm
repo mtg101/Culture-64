@@ -212,7 +212,7 @@ TEXT_WORD_LUT_HI
 
 ; greetings and formalities
 TEXT_WORD_0
-    !scr ""
+    !scr "--"
 TEXT_WORD_1
     !scr "hello"
 TEXT_WORD_2
@@ -280,6 +280,6 @@ TEXT_WORD_29
 TEXT_WORD_30
     !scr "i will"
 TEXT_WORD_31
-    !scr "---"
+    !scr "check"
 
 
