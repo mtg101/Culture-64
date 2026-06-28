@@ -24,7 +24,7 @@ TEXT_OFFSCREEN
 ; but only ones from TEXT_BITS_TO_CHAR_LUT have values
 ;invalid chars are 161 inverted !
 TEXT_CHAR_TO_BITS_LUT
-    !byte 0 ; null terminator is 0
+    !byte 161 ; invalid 0/null
     !byte 1 ; a
     !byte 2 ; b
     !byte 3 ; c
@@ -71,7 +71,7 @@ TEXT_CHAR_TO_BITS_LUT
 
     !byte 161 ; invalid (
     !byte 161 ; invalid )
-    !byte 161 ; inb=valid *
+    !byte 0 ; *
     !byte 30 ; +
     !byte 161 ; invalid ,
     !byte 31 ; -
@@ -94,7 +94,7 @@ TEXT_CHAR_TO_BITS_LUT
 
 ; 5bit 32 values LUT to char for the code
 TEXT_BITS_TO_CHAR_LUT
-    !byte 0 ; null terminator
+    !byte 42 ; *
     !byte 1 ; a
     !byte 2 ; b
     !byte 3 ; c
@@ -129,6 +129,7 @@ TEXT_BITS_TO_CHAR_LUT
     !byte 57 ; 9
     !byte 43 ; +
     !byte 45 ; -
+
 
 
 TEXT_WORD_LUT_LO
@@ -209,9 +210,9 @@ TEXT_WORD_LUT_HI
 
 
 
-TEXT_WORD_0
-    !byte 0
 ; greetings and formalities
+TEXT_WORD_0
+    !scr ""
 TEXT_WORD_1
     !scr "hello"
 TEXT_WORD_2
