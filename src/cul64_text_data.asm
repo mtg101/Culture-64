@@ -88,7 +88,7 @@ TEXT_CHAR_TO_BITS_LUT
     !byte 27 ; 7
 
     !byte 28 ; 8
-    !byte 39 ; 9
+    !byte 29 ; 9
 
 
 
