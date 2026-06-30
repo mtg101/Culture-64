@@ -114,5 +114,5 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
 }
 
 ; sources with fixed memory locations
-!zone Fata                                  ; for compiler warning / errors
+!zone Font                                  ; for compiler warning / errors
 !source "src/cul64_font.asm"
