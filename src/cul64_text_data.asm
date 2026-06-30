@@ -74,8 +74,8 @@ TEXT_CHAR_TO_BITS_LUT
     !byte 0 ; *
     !byte 30 ; +
     !byte 161 ; invalid ,
-    !byte 31 ; -
-    !byte 161 ; invalid .
+    !byte 161 ; invalid -
+    !byte 31 ; .
     !byte 161 ; invalid /
 
     !byte 161 ; invalid 0
@@ -128,7 +128,7 @@ TEXT_BITS_TO_CHAR_LUT
     !byte 56 ; 8
     !byte 57 ; 9
     !byte 43 ; +
-    !byte 45 ; -
+    !byte 45 ; .
 
 
 
