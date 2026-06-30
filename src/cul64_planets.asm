@@ -395,9 +395,18 @@ PLANET_SHOW_SLOT_8:
 
 
 PLANET_SHOW_ASTEROID_BELT:
-    ; x
+    ; index
     lda ORBITS_CURRENT_SLOT
     tax 
+    ; which color
+    lda ORBITS_SLOT_1_PROPS, x
+    and #%00000111              ; 0-7
+    bne +                       ; not black
+    lda #%00000101              ; fix to green #5 as it's easy... hack
++
+    sta TEXT_COLOR
+
+    ; which column
     lda ORBITS_SLOT_1_X, x
     jsr CLOUDS_SHOW_ASTEROID_BELT
 

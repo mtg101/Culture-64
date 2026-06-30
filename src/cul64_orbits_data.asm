@@ -151,7 +151,7 @@ ORBITS_SLOT_8
     !byte 0
 
 ; properties for slots
-; each type knows how to handle the byte (planets size for now - might need to be word later - or it's seed for simpler LFSR?)
+; each type knows how to handle the byte (planet size, steroid belt colour, etc)
 ORBITS_SLOT_1_PROPS
     !byte 0
 ORBITS_SLOT_2_PROPS
