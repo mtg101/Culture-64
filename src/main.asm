@@ -16,6 +16,8 @@
 ; data in bank 2 full 16k (only rom charset and vic is pointing to bank 1)
 *=MEM_BANK_3
 
+!zone Data                                  ; for compiler warning / errors
+
 !source "src/c64_screen_data.asm"
 !source "src/c64_system_data.asm"
 !source "src/cul64_blue_box_data.asm"
@@ -36,7 +38,6 @@
 !source "src/cul64_theme_music_data.asm"
 
 ; --- End of code section ---
-!zone Data
 !ifndef DATA_PASS1 {
     DATA_PASS1 = 1
 } else {
@@ -56,6 +57,8 @@
 
 ; code in bank 1 full 16k to use
 *=MEM_BANK_2
+
+!zone Code                                  ; for compiler warning / errors
 
 !source "src/c64_screen.asm"
 !source "src/c64_system.asm"
@@ -94,7 +97,6 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
 ; screens have their own game loops
 
 ; --- End of code section ---
-!zone Code
 !ifndef CODE_PASS1 {
     CODE_PASS1 = 1
 } else {
@@ -112,5 +114,5 @@ SYS_NO_BASIC_NO_KERNEL_ROM_DONE
 }
 
 ; sources with fixed memory locations
-!zone Font
+!zone Fata                                  ; for compiler warning / errors
 !source "src/cul64_font.asm"

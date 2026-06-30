@@ -267,9 +267,32 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     lda SCREEN_SYSTEM_BG_COL_SPEED_LUT, x
     sta SCREEN_SYSTEM_BG_COL_SPEED
 
+    ; clouds seed (nebula & oort)
+    jsr LFSR_NEXT_SEED      ; fresh
+    ; copy to cloud seed (yep - cloud seeding 5g Chinese Bill covid chips GAyTES omg!!eleven)
+    lda LFSR_W0
+    sta CLOUDS_SEED_W0
+    lda LFSR_W0+1
+    sta CLOUDS_SEED_W0+1
+    lda LFSR_W1
+    sta CLOUDS_SEED_W1
+    lda LFSR_W1+1
+    sta CLOUDS_SEED_W1+1
+    lda LFSR_W2
+    sta CLOUDS_SEED_W2
+    lda LFSR_W2+1
+    sta CLOUDS_SEED_W2+1
+
+    ; nebula dark colors
+    lda LFSR_W1+1
+    and #%00000011          ; 0-3
+    tax 
+    lda CLOUDS_NEBULA_COLORS_LUT, x 
+    sta CLOUDS_NEBULA_COLOR
+
     ; bg flash
     ; todo: 1 in 32 chance it actually flashes (bit high, but want to see it sometimes!)
-    lda LFSR_W1+1
+    lda LFSR_W2
     and #%00011111
     bne +
     lda #1                          ; on when 0 (1 in 256)
@@ -280,18 +303,18 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     sta SCREEN_SYSTEM_BG_FLASH_ON
 
     ; prob when showing
-    lda LFSR_W2
+    lda LFSR_W2+1
     and #%00000011
     tax 
     lda SCREEN_SYSTEM_BG_FLASH_PROB_LUT, x
     sta SCREEN_SYSTEM_BG_FLASH_PROB
 
+    jsr LFSR_NEXT_SEED          ; new seed needed
+
     ; colour type
-    lda LFSR_W2+1
+    lda LFSR_W0
     and #%00000011
     sta SCREEN_SYSTEM_BG_FLASH_COLOUR_TYPE
-
-    jsr LFSR_NEXT_SEED          ; new seed needed
 
     bne +
     ; 0 sun color
@@ -303,7 +326,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     cmp #1
     bne +
     ; 1 nebula color
-    lda CLOUDS_COLOR
+    lda CLOUDS_NEBULA_COLOR
     sta SCREEN_SYSTEM_BG_FLASH_COLOUR_STATIC
     jmp ++
 +
@@ -313,7 +336,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     ; 2 static random
     ; color not black
 -
-    lda LFSR_W0
+    lda LFSR_W0+1
     and #%00000111              ; 0-7
     bne +++                     ; not black
     jsr LFSR_NEXT_SEED          ; try next
@@ -334,7 +357,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     lda #16                ; regular p
     sta DIPLOMAT_PASSENGER_LABEL
 
-    lda LFSR_W0+1
+    lda LFSR_W1
     clc 
     adc RASTER_FRAME_COUNTER_L0         ; and 'random' factor each time
     and #%00000001

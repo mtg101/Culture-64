@@ -345,9 +345,18 @@ ORBITS_GENERATE_SLOT_DONE:
     bne .no_oort
     lda ORBITS_SLOT_8
     bne .no_oort
-
+    ; have oort
     lda #1
     sta ORBITS_OORT_CLOUD
+
+    ; 
+-
+    lda LFSR_W0
+    and #%00000111              ; 0-7
+    bne +                       ; not black
+    jsr LFSR_NEXT_SEED          ; try next
+    jmp -
++
 
     ; src
     lda #<ORBITS_OORT_CLOUD_LABEL

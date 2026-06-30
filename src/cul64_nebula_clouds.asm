@@ -40,6 +40,9 @@ CLOUDS_SHOW_OORT:
     lda #0
     sta CLOUDS_NEBULA_MODE
 
+    lda CLOUDS_OORT_COLOR
+    sta CLOUDS_RENDER_COLOR
+
     jsr CLOUDS_SHOW
     rts
 
@@ -53,49 +56,14 @@ CLOUDS_SHOW_NEBULA:
     lda #1
     sta CLOUDS_NEBULA_MODE
 
+    lda CLOUDS_NEBULA_COLOR
+    sta CLOUDS_RENDER_COLOR
+
     jsr CLOUDS_SHOW
     rts
 
 
 CLOUDS_SHOW:
-    jsr LFSR_NEXT_SEED      ; fresh
-
-    lda CLOUDS_NEBULA_MODE
-    beq +
-    ; nebula dark colors
-    lda LFSR_W0
-    and #%00000011          ; 0-3
-    tax 
-    lda CLOUDS_NEBULA_COLORS_LUT, x 
-    jmp ++
-+
-    ; asteroids & oort any non black
--
-    lda LFSR_W0+1
-    and #%00000111              ; 0-7
-    bne +                       ; not black
-    jsr LFSR_NEXT_SEED          ; try next
-    jmp -
-+
-++
-    sta TEXT_COLOR
-    sta CLOUDS_COLOR
-
-    jsr LFSR_NEXT_SEED      ; fresh
-    ; copy to cloud seed (yep - cloud seeding 5g Chinese Bill covid chips GAyTES omg!!eleven)
-    lda LFSR_W0
-    sta CLOUDS_SEED_W0
-    lda LFSR_W0+1
-    sta CLOUDS_SEED_W0+1
-    lda LFSR_W1
-    sta CLOUDS_SEED_W1
-    lda LFSR_W1+1
-    sta CLOUDS_SEED_W1+1
-    lda LFSR_W2
-    sta CLOUDS_SEED_W2
-    lda LFSR_W2+1
-    sta CLOUDS_SEED_W2+1
-
     ; steps from seed
     lda CLOUDS_SEED_W0
     and #$07                ; Keep only bits 0-2 (values 0-7)
