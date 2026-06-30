@@ -357,6 +357,7 @@ ORBITS_GENERATE_SLOT_DONE:
     jsr LFSR_NEXT_SEED          ; try next
     jmp -
 +
+    sta CLOUDS_OORT_COLOR
 
     ; src
     lda #<ORBITS_OORT_CLOUD_LABEL
