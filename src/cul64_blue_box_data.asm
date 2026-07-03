@@ -47,6 +47,12 @@ BB_JUMP_WHERE
 BB_JUMP_WHO
     !scr "who you gonna call?", 0
 
+BB_JUMP_SEND
+    !scr "send secure message to whom?", 0
+
+BB_JUMP_READ
+    !scr "enter secure code", 0
+
 BB_TEXT_LOGO
     !byte 0
 

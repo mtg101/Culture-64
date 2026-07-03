@@ -58,9 +58,6 @@ BB_SHOW_TEXT_ENTRY_BOX
     rts
 
 BB_DRAW_BOX
-    ; text always white
-    ldy #WHITE
-
     ; top row border
     ldx #0
 -
@@ -175,6 +172,62 @@ BB_CALL_SHOW:
     bne -
 
     jmp SHIP_SHOW_CALL
+
+BB_SEND_SHOW:
+    ; turn on blue box mode
+    lda #1
+    sta RASTER_BLUE_BOX_STATUS
+
+    ; send string
+    lda #<BB_JUMP_SEND
+    sta TEXT_STRING_PTR
+    lda #>BB_JUMP_SEND
+    sta TEXT_STRING_PTR+1
+
+    jsr BB_SHOW_TEXT_ENTRY_BOX
+
+    ; turn off blue box mode
+    lda #0
+    sta RASTER_BLUE_BOX_STATUS
+
+    ; save friend name
+    ldx #0
+-
+    lda BB_TEXT_ENTRY_BUFFER, x
+    sta SHIP_CALL_NAME_BUFFER, x
+    inx
+    cpx #BB_MAX_CHARS
+    bne -
+
+    jmp MESSAGE_SHOW_SEND
+
+BB_READ_SHOW:
+    ; turn on blue box mode
+    lda #1
+    sta RASTER_BLUE_BOX_STATUS
+
+    ; send string
+    lda #<BB_JUMP_READ
+    sta TEXT_STRING_PTR
+    lda #>BB_JUMP_READ
+    sta TEXT_STRING_PTR+1
+
+    jsr BB_SHOW_TEXT_ENTRY_BOX
+
+    ; turn off blue box mode
+    lda #0
+    sta RASTER_BLUE_BOX_STATUS
+
+    ; save code to friend name
+    ldx #0
+-
+    lda BB_TEXT_ENTRY_BUFFER, x
+    sta SHIP_CALL_NAME_BUFFER, x
+    inx
+    cpx #BB_MAX_CHARS
+    bne -
+
+    jmp MESSAGE_SHOW_READ
 
 BB_JUMP_SHOW:
     ; turn on blue box mode

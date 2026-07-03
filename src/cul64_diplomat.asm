@@ -4,8 +4,6 @@ DIPLOMAT_SHOW:
 -
     lda #$20                    ; space
     sta SCREEN_RAM_250_0, x
-    lda #YELLOW
-    sta SCREEN_COL_RAM_250_0, x
     inx
     cpx #250
     bne -
@@ -14,8 +12,6 @@ DIPLOMAT_SHOW:
 -
     lda #$20                    ; space
     sta SCREEN_RAM_250_1, x
-    lda #YELLOW
-    sta SCREEN_COL_RAM_250_1, x
     inx
     cpx #250
     bne -
@@ -24,8 +20,6 @@ DIPLOMAT_SHOW:
 -
     lda #$20                    ; space
     sta SCREEN_RAM_250_2, x
-    lda #YELLOW
-    sta SCREEN_COL_RAM_250_2, x
     inx
     cpx #100
     bne -
@@ -299,6 +293,35 @@ DIPLOMAT_GAME_LOOP
     beq -
     jmp BB_CALL_SHOW
 +
+
+    ; s send message
+    lda #KEY_S_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_S_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_S_COL  ; check released
+    beq -
+    jmp BB_SEND_SHOW
++
+
+    ; r read message
+    lda #KEY_R_ROW
+    sta CIA1_PRA
+
+    lda CIA1_PRB
+    and #KEY_R_COL  ; check pressed
+    bne +           ; not pressed info
+-
+    lda CIA1_PRB
+    and #KEY_R_COL  ; check released
+    beq -
+    jmp BB_READ_SHOW
++
+
     ; only if passenger
     lda DIPLOMAT_HAS_PASSENGER
     beq ++

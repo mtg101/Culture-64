@@ -12,9 +12,11 @@ DIPLOMAT_CALL_LABEL
     !byte 131
     !scr "all ship", 0
 DIPLOMAT_SEND_LABEL
-    !scr "send message", 0
+    !byte 147
+    !scr "end message", 0
 DIPLOMAT_READ_LABEL
-    !scr "read message", 0
+    !byte 146
+    !scr "ead message", 0
 DIPLOMAT_DEST_LABEL
     !scr "destination", 0
 
