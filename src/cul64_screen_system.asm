@@ -191,7 +191,12 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     cmp #6
     bne +                           ; skip if not neutron pulsar
     lda #BLACK
-    sta SUN_COLOR_2                 ; 'rms' are black normally and flash on with animation
+    sta SUN_COLOR_2                 ; 'arms' are black normally and flash on with animation
+    lda LFSR_W0+1
+    and #%00000111                  ; 8 speeds
+    tax
+    lda SCREEN_SYSTEM_PULSAR_SPEED_LUT, x
+    sta SCREEN_SYSTEM_PULSAR_SPEED
 +
     ; special for binary
     lda SUN_TYPE
@@ -199,20 +204,20 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     bne +                           ; skip if not binary
 
     ; binary so diff sun colour for each one
-    lda LFSR_W0+1
+    lda LFSR_W1
     and #%00000111                  ; 0-7
     tay
     lda (ZP_PTR_1), y               ; a has color
     sta SUN_COLOR
 
-    lda LFSR_W1
+    lda LFSR_W1+1
     and #%00000111                  ; 0-7
     tay
     lda (ZP_PTR_1), y               ; a has color
     sta SUN_COLOR_2
 +
     ; 0-7 planets
-    lda LFSR_W1+1
+    lda LFSR_W2
     and #%00011111              ; 0-31
     tax                         ; offset in x
     lda SCREEN_SYSTEM_NUM_PLANETS_DIST, x
@@ -238,14 +243,16 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     jsr DIPLOMAT_COPY_FROM_LOGO
 
     ; 0-7 tech level
-    lda LFSR_W2
+    lda LFSR_W2+1
     and #%00011111              ; 0-31
     tax                         ; offset in x
     lda SCREEN_SYSTEM_TECH_LEVEL_DIST, x
     sta SCREEN_SYSTEM_TECH_LEVEL
 
+    jsr LFSR_NEXT_SEED          ; new seed needed
+
     ; 0-7 culture status
-    lda LFSR_W2+1
+    lda LFSR_W0
     and #%00011111              ; 0-31
     tax                         ; offset in x
     lda SCREEN_SYSTEM_CUL_STATUS_DIST, x
@@ -254,10 +261,9 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     ; orbits (planets mostly)
     jsr ORBITS_GENERATE
 
-    jsr LFSR_NEXT_SEED          ; new seed needed
     ; incline
 -
-    lda LFSR_W0
+    lda LFSR_W0+1
     and #%01111111              ; 0-127
     cmp #91
     bcc +                       ; it's 0-90
@@ -267,11 +273,11 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     sta SCREEN_SYSTEM_INCLINE
 
     ; kepler
-    lda LFSR_W0+1
+    lda LFSR_W1
     sta SCREEN_SYSTEM_KEPLER
 
     ; bg anim speed
-    lda LFSR_W1
+    lda LFSR_W1+1
     and #%00000011
     tax 
     lda SCREEN_SYSTEM_BG_COL_SPEED_LUT, x
@@ -698,10 +704,58 @@ SCREEN_SYSTEM_ANIMATE:
     beq +
     jsr SCREEN_SYSTEM_FLASH_BG
 +
+    ; pulsar neutron
+    lda SUN_TYPE
+    cmp #6                          ; only for neutron pulsar
+    bne ++
+
+    ; check if animating
+    lda SCREEN_SYSTEM_PULSAR_FRAME
+    beq +
+    jsr SCREEN_SYSTEM_PULSAR_FLASH
++
+    ; check if frame to start
+    lda RASTER_FRAME_COUNTER_L0
+    and SCREEN_SYSTEM_PULSAR_SPEED
+    bne ++
+    lda #0
+    sta SCREEN_SYSTEM_PULSAR_FRAME
+    jsr SCREEN_SYSTEM_PULSAR_FLASH
+++
     lda #0
     sta RASTER_FRAME_FLAG
     rts 
 
+SCREEN_SYSTEM_PULSAR_FLASH:
+    ldx SCREEN_SYSTEM_PULSAR_FRAME
+    lda SCREEN_SYSTEM_PULSAR_FRAME_COLS, x
+
+    ; write colors
+    sta COLOR_RAM+(40*0)+1
+    sta COLOR_RAM+(40*1)+1
+    sta COLOR_RAM+(40*2)+1
+    sta COLOR_RAM+(40*3)+1
+    sta COLOR_RAM+(40*4)+1
+    sta COLOR_RAM+(40*5)+1
+    sta COLOR_RAM+(40*6)+1
+    ; always sun colour
+    sta COLOR_RAM+(40*8)+1
+    sta COLOR_RAM+(40*9)+1
+    sta COLOR_RAM+(40*10)+1
+    sta COLOR_RAM+(40*11)+1
+    sta COLOR_RAM+(40*12)+1
+    sta COLOR_RAM+(40*13)+1
+    sta COLOR_RAM+(40*14)+1
+
+    inc SCREEN_SYSTEM_PULSAR_FRAME
+
+    lda SCREEN_SYSTEM_PULSAR_FRAME
+    cmp #4
+    bne +
+    lda #0
+    sta SCREEN_SYSTEM_PULSAR_FRAME
++
+    rts
 
 SCREEN_SYSTEM_FLASH_BG:
     jsr LFSR_NEXT_SEED
