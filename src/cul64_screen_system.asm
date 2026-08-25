@@ -181,6 +181,18 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     lda (ZP_PTR_1), y               ; a has color
     sta SUN_COLOR
 
+    ; sun colour 2
+    ; default wolf rayet
+    lda #CYAN
+    sta SUN_COLOR_2                 
+
+    ; special for neutron pulsar
+    lda SUN_TYPE
+    cmp #6
+    bne +                           ; skip if not neutron pulsar
+    lda #BLACK
+    sta SUN_COLOR_2                 ; 'rms' are black normally and flash on with animation
++
     ; special for binary
     lda SUN_TYPE
     cmp #7
@@ -198,9 +210,7 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     tay
     lda (ZP_PTR_1), y               ; a has color
     sta SUN_COLOR_2
-
 +
-
     ; 0-7 planets
     lda LFSR_W1+1
     and #%00011111              ; 0-31
