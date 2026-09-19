@@ -406,10 +406,10 @@ PLANET_SHOW_ASTEROID_BELT:
 +
     sta TEXT_COLOR
 
-    ; inc our own seed's W0
-    lda ORBITS_SEED_W0_LUT_LOW, x
+    ; inc our own seed's W1+1 (gives best cheap pretend scroll animation)
+    lda ORBITS_SEED_W1_LUT_LOW, x
     sta ZP_PTR_TEMP_0
-    lda ORBITS_SEED_W0_LUT_HI, x
+    lda ORBITS_SEED_W1_LUT_HI, x
     sta ZP_PTR_TEMP_0_PAIR
     ldy #1
     lda (ZP_PTR_TEMP_0), y
@@ -418,6 +418,12 @@ PLANET_SHOW_ASTEROID_BELT:
     sta (ZP_PTR_TEMP_0), y
     
     ; load our updated seed to cloud seed
+    lda ORBITS_SEED_W0_LUT_LOW, x
+    sta ZP_PTR_TEMP_0
+    lda ORBITS_SEED_W0_LUT_HI, x
+    sta ZP_PTR_TEMP_0_PAIR
+    ldy #0
+    lda (ZP_PTR_TEMP_0), y
     sta CLOUDS_SEED_W0
     ldy #1
     lda (ZP_PTR_TEMP_0), y
