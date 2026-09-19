@@ -399,7 +399,7 @@ PLANET_SHOW_ASTEROID_BELT:
     ldx ORBITS_CURRENT_SLOT
 
     ; which color
-j    lda ORBITS_SLOT_1_PROPS, x
+    lda ORBITS_SLOT_1_PROPS, x
     and #%00000111              ; 0-7
     bne +                       ; not black
     lda #%00000101              ; fix to green #5 as it's easy... hack
