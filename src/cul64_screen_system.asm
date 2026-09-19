@@ -258,6 +258,10 @@ SYSTEM_GEN_SYS                  ; huh 'gen sys' / 'genesis'
     lda SCREEN_SYSTEM_CUL_STATUS_DIST, x
     sta SCREEN_SYSTEM_CUL_STATUS
 
+    ; clear asteroid speed before generating slots
+    lda #0
+    sta SCREEN_SYSTEM_ASTEROID_SPEED    
+
     ; orbits (planets mostly)
     jsr ORBITS_GENERATE
 
@@ -699,6 +703,13 @@ SCREEN_SYSTEM_ANIMATE:
     bne +
     jsr SCREEN_SYSTEM_TOGGLE_SHARED_COLORS
 +
+    ; asteroid animation
+    lda SCREEN_SYSTEM_ASTEROID_SPEED
+    beq +                           ; 0 means no atseroid belts
+    and RASTER_FRAME_COUNTER_L0
+    bne +
+    jsr PLANETS_ANIMATE_ASTEROID_BELTS
++
     ; bg flash
     lda SCREEN_SYSTEM_BG_FLASH_ON
     beq +
@@ -722,6 +733,7 @@ SCREEN_SYSTEM_ANIMATE:
     sta SCREEN_SYSTEM_PULSAR_FRAME
     jsr SCREEN_SYSTEM_PULSAR_FLASH
 ++
+    ; reset to next frame
     lda #0
     sta RASTER_FRAME_FLAG
     rts 

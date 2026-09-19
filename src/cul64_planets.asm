@@ -411,7 +411,7 @@ PLANET_SHOW_ASTEROID_BELT:
     sta ZP_PTR_TEMP_0
     lda ORBITS_SEED_W0_LUT_HI, x
     sta ZP_PTR_TEMP_0_PAIR
-    ldy #0
+    ldy #1
     lda (ZP_PTR_TEMP_0), y
     clc
     adc #1
@@ -445,12 +445,132 @@ PLANET_SHOW_ASTEROID_BELT:
     lda (ZP_PTR_TEMP_0), y
     sta CLOUDS_SEED_W2+1
 
-
     ; which column
     lda ORBITS_SLOT_1_X, x
     jsr CLOUDS_SHOW_ASTEROID_BELT
 
     jmp (ZP_PTR_RETURN)             ; jump back to next orbit
+
+
+PLANETS_ANIMATE_ASTEROID_BELTS:
+    ; check each belt, if its an asteroid, redraw
+    ; the redraw will inc the seed for us
+
+PLANETS_ANIMATE_ASTEROID_BELTS_1
+    lda #0
+    sta ORBITS_CURRENT_SLOT
+
+    lda ORBITS_SLOT_1
+    cmp #2                          ; 2 is asteroid belt
+    bne +
+    lda #<PLANETS_ANIMATE_ASTEROID_BELTS_2
+    sta ZP_PTR_RETURN
+    lda #>PLANETS_ANIMATE_ASTEROID_BELTS_2
+    sta ZP_PTR_RETURN_PAIR    
+    jmp PLANET_SHOW_ASTEROID_BELT
++
+
+PLANETS_ANIMATE_ASTEROID_BELTS_2
+    lda #1
+    sta ORBITS_CURRENT_SLOT
+
+    lda ORBITS_SLOT_2
+    cmp #2                          ; 2 is asteroid belt
+    bne +
+    lda #<PLANETS_ANIMATE_ASTEROID_BELTS_3
+    sta ZP_PTR_RETURN
+    lda #>PLANETS_ANIMATE_ASTEROID_BELTS_3
+    sta ZP_PTR_RETURN_PAIR    
+    jmp PLANET_SHOW_ASTEROID_BELT
++
+
+PLANETS_ANIMATE_ASTEROID_BELTS_3
+    lda #1
+    sta ORBITS_CURRENT_SLOT
+
+    lda ORBITS_SLOT_3
+    cmp #2                          ; 2 is asteroid belt
+    bne +
+    lda #<PLANETS_ANIMATE_ASTEROID_BELTS_4
+    sta ZP_PTR_RETURN
+    lda #>PLANETS_ANIMATE_ASTEROID_BELTS_4
+    sta ZP_PTR_RETURN_PAIR    
+    jmp PLANET_SHOW_ASTEROID_BELT
++
+
+PLANETS_ANIMATE_ASTEROID_BELTS_4
+    lda #1
+    sta ORBITS_CURRENT_SLOT
+
+    lda ORBITS_SLOT_4
+    cmp #2                          ; 2 is asteroid belt
+    bne +
+    lda #<PLANETS_ANIMATE_ASTEROID_BELTS_5
+    sta ZP_PTR_RETURN
+    lda #>PLANETS_ANIMATE_ASTEROID_BELTS_5
+    sta ZP_PTR_RETURN_PAIR    
+    jmp PLANET_SHOW_ASTEROID_BELT
++
+
+PLANETS_ANIMATE_ASTEROID_BELTS_5
+    lda #1
+    sta ORBITS_CURRENT_SLOT
+
+    lda ORBITS_SLOT_5
+    cmp #2                          ; 2 is asteroid belt
+    bne +
+    lda #<PLANETS_ANIMATE_ASTEROID_BELTS_6
+    sta ZP_PTR_RETURN
+    lda #>PLANETS_ANIMATE_ASTEROID_BELTS_6
+    sta ZP_PTR_RETURN_PAIR    
+    jmp PLANET_SHOW_ASTEROID_BELT
++
+
+PLANETS_ANIMATE_ASTEROID_BELTS_6
+    lda #1
+    sta ORBITS_CURRENT_SLOT
+
+    lda ORBITS_SLOT_6
+    cmp #2                          ; 2 is asteroid belt
+    bne +
+    lda #<PLANETS_ANIMATE_ASTEROID_BELTS_7
+    sta ZP_PTR_RETURN
+    lda #>PLANETS_ANIMATE_ASTEROID_BELTS_7
+    sta ZP_PTR_RETURN_PAIR    
+    jmp PLANET_SHOW_ASTEROID_BELT
++
+
+PLANETS_ANIMATE_ASTEROID_BELTS_7
+    lda #1
+    sta ORBITS_CURRENT_SLOT
+
+    lda ORBITS_SLOT_7
+    cmp #2                          ; 2 is asteroid belt
+    bne +
+    lda #<PLANETS_ANIMATE_ASTEROID_BELTS_8
+    sta ZP_PTR_RETURN
+    lda #>PLANETS_ANIMATE_ASTEROID_BELTS_8
+    sta ZP_PTR_RETURN_PAIR    
+    jmp PLANET_SHOW_ASTEROID_BELT
++
+
+PLANETS_ANIMATE_ASTEROID_BELTS_8
+    lda #1
+    sta ORBITS_CURRENT_SLOT
+
+    lda ORBITS_SLOT_8
+    cmp #2                          ; 2 is asteroid belt
+    bne +
+    lda #<PLANETS_ANIMATE_ASTEROID_BELTS_DONE
+    sta ZP_PTR_RETURN
+    lda #>PLANETS_ANIMATE_ASTEROID_BELTS_DONE
+    sta ZP_PTR_RETURN_PAIR    
+    jmp PLANET_SHOW_ASTEROID_BELT
++
+PLANETS_ANIMATE_ASTEROID_BELTS_DONE
+    jsr SCREEN_SYSTEM_COPY_SPACE_TO_SCREEN      ; copy offscreen to showing
+    rts
+
 
 PLANET_SHOW_JUMP_GATE:
     ; color
@@ -755,6 +875,13 @@ PLANET_GENERATE_ASTEROID_BELT_IN_SLOT:
     lda LFSR_W2+1
     ldy #1
     sta (ZP_PTR_TEMP_0), y
+
+    ; speed (last belt in system wins speed)
+    lda LFSR_W0
+    and #%00000111                  ; 8 speeds
+    tax
+    lda SCREEN_SYSTEM_ASTEROID_SPEED_LUT, x
+    sta SCREEN_SYSTEM_ASTEROID_SPEED
 
     ; color
 -
