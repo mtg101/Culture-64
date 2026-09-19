@@ -28,8 +28,26 @@ CLOUDS_SHOW_ASTEROID_BELT:
     lda #0
     sta CLOUDS_NEBULA_MODE
 
+    lda #0
+    sta CLOUDS_DIRECT_MODE
+
     jsr CLOUDS_SHOW
     rts
+
+CLOUDS_SHOW_ASTEROID_BELT_DIRECT:
+    sta CLOUDS_COLS_START 
+    sta CLOUDS_COLS
+    inc CLOUDS_COLS             ; inx before cpx
+
+    lda #0
+    sta CLOUDS_NEBULA_MODE
+
+    lda #1
+    sta CLOUDS_DIRECT_MODE
+
+    jsr CLOUDS_SHOW
+    rts
+
 
 CLOUDS_SHOW_OORT:
     lda #36
@@ -40,6 +58,9 @@ CLOUDS_SHOW_OORT:
 
     lda #0
     sta CLOUDS_NEBULA_MODE
+
+    lda #0
+    sta CLOUDS_DIRECT_MODE
 
     lda CLOUDS_OORT_COLOR
     sta TEXT_COLOR
@@ -56,6 +77,9 @@ CLOUDS_SHOW_NEBULA:
 
     lda #1
     sta CLOUDS_NEBULA_MODE
+
+    lda #0
+    sta CLOUDS_DIRECT_MODE
 
     lda CLOUDS_NEBULA_COLOR
     sta TEXT_COLOR
@@ -151,7 +175,14 @@ CLOUDS_SHOW:
     clc
     adc #CLOUDS_UDG_BASE         ; add base udg for gradient
     sta TEXT_CHAR
+
+    lda CLOUDS_DIRECT_MODE
+    beq +                       ; direct mode off: jump
+    jsr TEXT_DRAW_CHAR         
+    jmp ++
++
     jsr TEXT_DRAW_CHAR_OFF
+++
     jmp +
 
 .clouds_col_nebula:
@@ -163,7 +194,7 @@ CLOUDS_SHOW:
     clc
     adc #CLOUDS_UDG_BASE-11 ; -11 for the offset (assuming 15 not used)
     sta TEXT_CHAR
-    jsr TEXT_DRAW_CHAR_OFF
+    jsr TEXT_DRAW_CHAR_OFF      ; always off for nebula
 +
 
     ; --- ADVANCE 8-BIT INDICES INSTANTLY FOR THE NEXT COLUMN ---
