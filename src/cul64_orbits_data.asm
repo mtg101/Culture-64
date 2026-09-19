@@ -151,7 +151,7 @@ ORBITS_SLOT_8
     !byte 0
 
 ; properties for slots
-; each type knows how to handle the byte (planet size, steroid belt colour, etc)
+; each type knows how to handle the byte (planet size, asteroid belt colour, etc)
 ORBITS_SLOT_1_PROPS
     !byte 0
 ORBITS_SLOT_2_PROPS
@@ -168,6 +168,122 @@ ORBITS_SLOT_7_PROPS
     !byte 0
 ORBITS_SLOT_8_PROPS
     !byte 0
+
+; seeds for slots
+; 8 x 48bits/6bytes = only 48 bytes!
+ORBITS_SLOT_1_SEED_W0
+    !word 0
+ORBITS_SLOT_1_SEED_W1
+    !word 0
+ORBITS_SLOT_1_SEED_W2
+    !word 0
+
+ORBITS_SLOT_2_SEED_W0
+    !word 0
+ORBITS_SLOT_2_SEED_W1
+    !word 0
+ORBITS_SLOT_2_SEED_W2
+    !word 0
+
+ORBITS_SLOT_3_SEED_W0
+    !word 0
+ORBITS_SLOT_3_SEED_W1
+    !word 0
+ORBITS_SLOT_3_SEED_W2
+    !word 0
+
+ORBITS_SLOT_4_SEED_W0
+    !word 0
+ORBITS_SLOT_4_SEED_W1
+    !word 0
+ORBITS_SLOT_4_SEED_W2
+    !word 0
+
+ORBITS_SLOT_5_SEED_W0
+    !word 0
+ORBITS_SLOT_5_SEED_W1
+    !word 0
+ORBITS_SLOT_5_SEED_W2
+    !word 0
+
+ORBITS_SLOT_6_SEED_W0
+    !word 0
+ORBITS_SLOT_6_SEED_W1
+    !word 0
+ORBITS_SLOT_6_SEED_W2
+    !word 0
+
+ORBITS_SLOT_7_SEED_W0
+    !word 0
+ORBITS_SLOT_7_SEED_W1
+    !word 0
+ORBITS_SLOT_7_SEED_W2
+    !word 0
+
+ORBITS_SLOT_8_SEED_W0
+    !word 0
+ORBITS_SLOT_8_SEED_W1
+    !word 0
+ORBITS_SLOT_8_SEED_W2
+    !word 0
+
+ORBITS_SEED_W0_LUT_LOW
+    !byte <ORBITS_SLOT_1_SEED_W0
+    !byte <ORBITS_SLOT_2_SEED_W0
+    !byte <ORBITS_SLOT_3_SEED_W0
+    !byte <ORBITS_SLOT_4_SEED_W0
+    !byte <ORBITS_SLOT_5_SEED_W0
+    !byte <ORBITS_SLOT_6_SEED_W0
+    !byte <ORBITS_SLOT_7_SEED_W0
+    !byte <ORBITS_SLOT_8_SEED_W0
+ORBITS_SEED_W0_LUT_HI
+    !byte >ORBITS_SLOT_1_SEED_W0
+    !byte >ORBITS_SLOT_2_SEED_W0
+    !byte >ORBITS_SLOT_3_SEED_W0
+    !byte >ORBITS_SLOT_4_SEED_W0
+    !byte >ORBITS_SLOT_5_SEED_W0
+    !byte >ORBITS_SLOT_6_SEED_W0
+    !byte >ORBITS_SLOT_7_SEED_W0
+    !byte >ORBITS_SLOT_8_SEED_W0
+
+ORBITS_SEED_W1_LUT_LOW
+    !byte <ORBITS_SLOT_1_SEED_W1
+    !byte <ORBITS_SLOT_2_SEED_W1
+    !byte <ORBITS_SLOT_3_SEED_W1
+    !byte <ORBITS_SLOT_4_SEED_W1
+    !byte <ORBITS_SLOT_5_SEED_W1
+    !byte <ORBITS_SLOT_6_SEED_W1
+    !byte <ORBITS_SLOT_7_SEED_W1
+    !byte <ORBITS_SLOT_8_SEED_W1
+ORBITS_SEED_W1_LUT_HI
+    !byte >ORBITS_SLOT_1_SEED_W1
+    !byte >ORBITS_SLOT_2_SEED_W1
+    !byte >ORBITS_SLOT_3_SEED_W1
+    !byte >ORBITS_SLOT_4_SEED_W1
+    !byte >ORBITS_SLOT_5_SEED_W1
+    !byte >ORBITS_SLOT_6_SEED_W1
+    !byte >ORBITS_SLOT_7_SEED_W1
+    !byte >ORBITS_SLOT_8_SEED_W1
+
+ORBITS_SEED_W2_LUT_LOW
+    !byte <ORBITS_SLOT_1_SEED_W2
+    !byte <ORBITS_SLOT_2_SEED_W2
+    !byte <ORBITS_SLOT_3_SEED_W2
+    !byte <ORBITS_SLOT_4_SEED_W2
+    !byte <ORBITS_SLOT_5_SEED_W2
+    !byte <ORBITS_SLOT_6_SEED_W2
+    !byte <ORBITS_SLOT_7_SEED_W2
+    !byte <ORBITS_SLOT_8_SEED_W2
+ORBITS_SEED_W2_LUT_HI
+    !byte >ORBITS_SLOT_1_SEED_W2
+    !byte >ORBITS_SLOT_2_SEED_W2
+    !byte >ORBITS_SLOT_3_SEED_W2
+    !byte >ORBITS_SLOT_4_SEED_W2
+    !byte >ORBITS_SLOT_5_SEED_W2
+    !byte >ORBITS_SLOT_6_SEED_W2
+    !byte >ORBITS_SLOT_7_SEED_W2
+    !byte >ORBITS_SLOT_8_SEED_W2
+
 
 ORBITS_Y = 7
 

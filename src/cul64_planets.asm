@@ -396,8 +396,8 @@ PLANET_SHOW_SLOT_8:
 
 PLANET_SHOW_ASTEROID_BELT:
     ; index
-    lda ORBITS_CURRENT_SLOT
-    tax 
+    ldx ORBITS_CURRENT_SLOT
+
     ; which color
     lda ORBITS_SLOT_1_PROPS, x
     and #%00000111              ; 0-7
@@ -405,6 +405,46 @@ PLANET_SHOW_ASTEROID_BELT:
     lda #%00000101              ; fix to green #5 as it's easy... hack
 +
     sta TEXT_COLOR
+
+    ; inc our own seed's W0
+    lda ORBITS_SEED_W0_LUT_LOW, x
+    sta ZP_PTR_TEMP_0
+    lda ORBITS_SEED_W0_LUT_HI, x
+    sta ZP_PTR_TEMP_0_PAIR
+    ldy #0
+    lda (ZP_PTR_TEMP_0), y
+    clc
+    adc #1
+    sta (ZP_PTR_TEMP_0), y
+    
+    ; load our updated seed to cloud seed
+    sta CLOUDS_SEED_W0
+    ldy #1
+    lda (ZP_PTR_TEMP_0), y
+    sta CLOUDS_SEED_W0+1
+
+    lda ORBITS_SEED_W1_LUT_LOW, x
+    sta ZP_PTR_TEMP_0
+    lda ORBITS_SEED_W1_LUT_HI, x
+    sta ZP_PTR_TEMP_0_PAIR
+    ldy #0
+    lda (ZP_PTR_TEMP_0), y
+    sta CLOUDS_SEED_W1
+    ldy #1
+    lda (ZP_PTR_TEMP_0), y
+    sta CLOUDS_SEED_W1+1
+
+    lda ORBITS_SEED_W2_LUT_LOW, x
+    sta ZP_PTR_TEMP_0
+    lda ORBITS_SEED_W2_LUT_HI, x
+    sta ZP_PTR_TEMP_0_PAIR
+    ldy #0
+    lda (ZP_PTR_TEMP_0), y
+    sta CLOUDS_SEED_W2
+    ldy #1
+    lda (ZP_PTR_TEMP_0), y
+    sta CLOUDS_SEED_W2+1
+
 
     ; which column
     lda ORBITS_SLOT_1_X, x
@@ -414,8 +454,7 @@ PLANET_SHOW_ASTEROID_BELT:
 
 PLANET_SHOW_JUMP_GATE:
     ; color
-    lda ORBITS_CURRENT_SLOT
-    tax
+    ldx ORBITS_CURRENT_SLOT
     lda ORBITS_SLOT_1_PROPS, x
     ora #%00001000              ; set bit 3 for MCM
     sta TEXT_COLOR
@@ -680,6 +719,42 @@ PLANETS_LOAD_UDGS_BLOCK:
 
 PLANET_GENERATE_ASTEROID_BELT_IN_SLOT:
     jsr LFSR_NEXT_SEED              ; own seed
+
+    ; save seed for animation
+    ldx ORBITS_CURRENT_SLOT
+ 
+    lda ORBITS_SEED_W0_LUT_LOW, x
+    sta ZP_PTR_TEMP_0
+    lda ORBITS_SEED_W0_LUT_HI, x
+    sta ZP_PTR_TEMP_0_PAIR
+    lda LFSR_W0
+    ldy #0
+    sta (ZP_PTR_TEMP_0), y
+    lda LFSR_W0+1
+    ldy #1
+    sta (ZP_PTR_TEMP_0), y
+
+    lda ORBITS_SEED_W1_LUT_LOW, x
+    sta ZP_PTR_TEMP_0
+    lda ORBITS_SEED_W1_LUT_HI, x
+    sta ZP_PTR_TEMP_0_PAIR
+    lda LFSR_W1
+    ldy #0
+    sta (ZP_PTR_TEMP_0), y
+    lda LFSR_W1+1
+    ldy #1
+    sta (ZP_PTR_TEMP_0), y
+
+    lda ORBITS_SEED_W2_LUT_LOW, x
+    sta ZP_PTR_TEMP_0
+    lda ORBITS_SEED_W2_LUT_HI, x
+    sta ZP_PTR_TEMP_0_PAIR
+    lda LFSR_W2
+    ldy #0
+    sta (ZP_PTR_TEMP_0), y
+    lda LFSR_W2+1
+    ldy #1
+    sta (ZP_PTR_TEMP_0), y
 
     ; color
 -

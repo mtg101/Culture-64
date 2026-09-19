@@ -19,6 +19,7 @@ CLOUDS_PATCH_FONT:
     rts 
 
 ; a has x col to draw in
+; cloud seed already set from its own updated seed
 CLOUDS_SHOW_ASTEROID_BELT:
     sta CLOUDS_COLS_START 
     sta CLOUDS_COLS
