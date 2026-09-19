@@ -399,7 +399,7 @@ PLANET_SHOW_ASTEROID_BELT:
     ldx ORBITS_CURRENT_SLOT
 
     ; which color
-    lda ORBITS_SLOT_1_PROPS, x
+j    lda ORBITS_SLOT_1_PROPS, x
     and #%00000111              ; 0-7
     bne +                       ; not black
     lda #%00000101              ; fix to green #5 as it's easy... hack
@@ -485,7 +485,7 @@ PLANETS_ANIMATE_ASTEROID_BELTS_2
 +
 
 PLANETS_ANIMATE_ASTEROID_BELTS_3
-    lda #1
+    lda #2
     sta ORBITS_CURRENT_SLOT
 
     lda ORBITS_SLOT_3
@@ -499,7 +499,7 @@ PLANETS_ANIMATE_ASTEROID_BELTS_3
 +
 
 PLANETS_ANIMATE_ASTEROID_BELTS_4
-    lda #1
+    lda #3
     sta ORBITS_CURRENT_SLOT
 
     lda ORBITS_SLOT_4
@@ -513,7 +513,7 @@ PLANETS_ANIMATE_ASTEROID_BELTS_4
 +
 
 PLANETS_ANIMATE_ASTEROID_BELTS_5
-    lda #1
+    lda #4
     sta ORBITS_CURRENT_SLOT
 
     lda ORBITS_SLOT_5
@@ -527,7 +527,7 @@ PLANETS_ANIMATE_ASTEROID_BELTS_5
 +
 
 PLANETS_ANIMATE_ASTEROID_BELTS_6
-    lda #1
+    lda #5
     sta ORBITS_CURRENT_SLOT
 
     lda ORBITS_SLOT_6
@@ -541,7 +541,7 @@ PLANETS_ANIMATE_ASTEROID_BELTS_6
 +
 
 PLANETS_ANIMATE_ASTEROID_BELTS_7
-    lda #1
+    lda #6
     sta ORBITS_CURRENT_SLOT
 
     lda ORBITS_SLOT_7
@@ -555,7 +555,7 @@ PLANETS_ANIMATE_ASTEROID_BELTS_7
 +
 
 PLANETS_ANIMATE_ASTEROID_BELTS_8
-    lda #1
+    lda #7
     sta ORBITS_CURRENT_SLOT
 
     lda ORBITS_SLOT_8
