@@ -178,6 +178,10 @@ CLOUDS_SHOW:
 
     lda CLOUDS_DIRECT_MODE
     beq +                       ; direct mode off: jump
+
+    ; horribly hacky: in direct mode you never draw forst row...
+    lda TEXT_Y                  ; current loop row
+    beq ++                      ; skip if first row
     jsr TEXT_DRAW_CHAR         
     jmp ++
 +
